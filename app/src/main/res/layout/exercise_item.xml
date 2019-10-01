@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+              xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="100dp">
 
+    <TextView
+            android:text="@string/exercise_text"
+            android:layout_width="320dp"
+            android:layout_height="match_parent"
+            android:id="@+id/exercise_text"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@android:drawable/checkbox_off_background"
+            android:id="@+id/exercise_status"
+            android:contentDescription="@string/exercise_status"/>
 </LinearLayout>
