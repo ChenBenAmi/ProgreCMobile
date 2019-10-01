@@ -1,7 +1,8 @@
-package com.example.progresee
+package com.example.progresee.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.progresee.R
 
 class MainActivity : AppCompatActivity() {
 
