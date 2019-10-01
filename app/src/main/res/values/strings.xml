@@ -8,5 +8,8 @@
     <string name="ownername">ownerName</string>
     <string name="classname">ClassName</string>
     <string name="numberofusersinclassroom">NumberOfUsersInClassRoom</string>
+    <string name="fullname">FullName</string>
+    <string name="email">Email</string>
+    <string name="last_login_date">Last Login Date</string>
 
 </resources>
