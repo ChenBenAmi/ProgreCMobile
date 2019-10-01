@@ -5,4 +5,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="exercise_text">Exercise text</string>
     <string name="exercise_status">Exercise status</string>
+    <string name="ownername">ownerName</string>
+    <string name="classname">ClassName</string>
+    <string name="numberofusersinclassroom">NumberOfUsersInClassRoom</string>
+
 </resources>
