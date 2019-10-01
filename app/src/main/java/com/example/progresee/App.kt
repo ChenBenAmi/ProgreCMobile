@@ -1,19 +1,30 @@
 package com.example.progresee
 
 import android.app.Application
-import com.example.progresee.di.AppComponent
-import com.example.progresee.di.AppModule
-import com.example.progresee.di.DaggerAppComponent
+import com.example.progresee.viewmodels.SplashViewModel
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import timber.log.Timber
 
-class App:Application() {
+class App : Application() {
 
-    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
         Timber.plant()
 
-        appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+
+        val appModule = module {
+            viewModel { SplashViewModel(get()) }
+        }
+
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(appModule)
+        }
     }
 }
