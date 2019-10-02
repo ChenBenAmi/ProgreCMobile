@@ -1,6 +1,12 @@
 package com.example.progresee
 
 import android.app.Application
+import android.util.Log
+import androidx.room.Room
+import com.example.progresee.data.database.AppDatabase
+import com.example.progresee.data.database.AppRepository
+import com.example.progresee.viewmodels.ClassroomViewModel
+import com.example.progresee.viewmodels.LoginViewModel
 import com.example.progresee.viewmodels.SplashViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -17,14 +23,28 @@ class App : Application() {
         Timber.plant()
 
 
+
         val appModule = module {
+            single { Room.databaseBuilder(get(),AppDatabase::class.java,"ProgreSeeDB").build() }
+            single { get<AppDatabase>().userDao() }
+            single { get<AppDatabase>().classroomDao() }
+            single { get<AppDatabase>().taskDao() }
+            single { get<AppDatabase>().exerciseDao() }
+            single { get<AppDatabase>().finishedUsersDao() }
+            single { AppRepository(get()) }
+            viewModel { (appRepository:AppRepository)->ClassroomViewModel(get(),appRepository) }
             viewModel { SplashViewModel(get()) }
+            viewModel { LoginViewModel(get()) }
+
+
+
         }
 
         startKoin {
             androidLogger()
             androidContext(this@App)
             modules(appModule)
+
         }
     }
 }

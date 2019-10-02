@@ -17,11 +17,11 @@ class SplashViewModel constructor(application: Application): AndroidViewModel(ap
     init {
         GlobalScope.launch {
             delay(3000)
-            mutableLiveData.postValue(SplashState.MainActivity())
+            mutableLiveData.postValue(SplashState.MainActivity)
         }
     }
 }
 sealed class SplashState {
-    class MainActivity : SplashState()
+    object MainActivity : SplashState()
 }
 

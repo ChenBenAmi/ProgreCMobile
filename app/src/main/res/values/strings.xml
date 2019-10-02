@@ -12,6 +12,8 @@
     <string name="email">Email</string>
     <string name="last_login_date">Last Login Date</string>
     <string name="your_classrooms">Your classrooms:</string>
+    <string name="logout">Logout</string>
+    <string name="setting">Setting</string>
     <string name="welcome_to_progresee">Welcome to ProgreSee</string>
 
 </resources>
