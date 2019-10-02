@@ -15,7 +15,7 @@
             app:layout_constraintHorizontal_bias="0.023" app:layout_constraintVertical_bias="0.387"/>
 
     <TextView
-            android:text="@string/fullname"
+            android:text="@string/full_name"
             android:layout_width="92dp"
             android:layout_height="21dp"
             android:id="@+id/full_name"

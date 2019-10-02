@@ -8,11 +8,11 @@
 
         <variable
                 name="classroom"
-                type="com.example.progresee.beans.Classroom" />
+                type="com.example.progresee.beans.Classroom"/>
 
         <variable
                 name="clickListener"
-                type="com.example.progresee.adapters.ClassroomClickListener" />
+                type="com.example.progresee.adapters.ClassroomClickListener"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,6 +36,7 @@
                 app:layout_constraintHorizontal_bias="0.023"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:classroomName="@{classroom}"
                 app:layout_constraintVertical_bias="0.0"/>
 
         <TextView
@@ -45,26 +46,28 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/ownername"
+                android:text="@string/owner_name"
+                app:classroomOwner="@{classroom}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.967"
                 app:layout_constraintStart_toEndOf="@+id/class_name"
                 app:layout_constraintTop_toTopOf="parent"
         />
         <TextView
-                android:id="@+id/number_of_users_in_classroom"
+                android:id="@+id/number_of_open_tasks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/numberofusersinclassroom"
+                android:text="@string/number_of_open_tasks"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.961"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.915"/>
+                app:layout_constraintVertical_bias="0.915"
+                app:numberOfOpenTasks="@{classroom}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,10 +5,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="exercise_text">Exercise text</string>
     <string name="exercise_status">Exercise status</string>
-    <string name="ownername">ownerName</string>
+    <string name="owner_name">ownerName</string>
     <string name="classname">ClassName</string>
-    <string name="numberofusersinclassroom">NumberOfUsersInClassRoom</string>
-    <string name="fullname">FullName</string>
+    <string name="number_of_open_tasks">Number of Tasks</string>
+    <string name="full_name">FullName</string>
     <string name="email">Email</string>
     <string name="last_login_date">Last Login Date</string>
     <string name="your_classrooms">Your classrooms:</string>

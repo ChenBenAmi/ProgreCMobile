@@ -10,7 +10,6 @@ import com.example.progresee.R
 import com.example.progresee.viewmodels.SplashState
 import com.example.progresee.viewmodels.SplashViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import javax.inject.Inject
 
 class SplashScreenActivity : AppCompatActivity() {
 

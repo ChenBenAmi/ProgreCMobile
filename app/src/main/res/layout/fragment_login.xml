@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-
+                android:onClick="@{()->logViewModel.navigate()}"
                 android:src="@drawable/btn_facebook"
                 app:layout_constraintBottom_toTopOf="@+id/messages"
                 app:layout_constraintEnd_toEndOf="parent"
