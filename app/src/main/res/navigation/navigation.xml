@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation"
-            app:startDestination="@id/loginFragment">
+        app:startDestination="@id/splashScreenFragment">
 
     <fragment android:id="@+id/loginFragment" android:name="com.example.progresee.views.LoginFragment"
               android:label="fragment_login" tools:layout="@layout/fragment_login">
@@ -14,4 +14,18 @@
               android:label="fragment_setting" tools:layout="@layout/fragment_setting"/>
     <fragment android:id="@+id/classroomFragment" android:name="com.example.progresee.views.ClassroomFragment"
               android:label="fragment_classroom" tools:layout="@layout/fragment_classroom"/>
+    <fragment
+            android:id="@+id/splashScreenFragment"
+            android:name="com.example.progresee.views.SplashScreenFragment"
+            android:label="SplashScreenFragment" >
+        <action
+                android:id="@+id/action_splashScreenFragment_to_loginFragment"
+                app:destination="@id/loginFragment"
+                app:enterAnim="@anim/slide_in_left"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_right"
+                app:popExitAnim="@anim/slide_out_right"
+                app:popUpTo="@+id/navigation"
+                app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -28,13 +28,10 @@ class ClassroomFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
 
-        val binding: FragmentClassroomBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_classroom, container, false)
+       val binding:FragmentClassroomBinding=DataBindingUtil.inflate(inflater,R.layout.fragment_classroom,container,false)
 
         binding.classroomViewModel = classroomViewModel
-        binding.lifecycleOwner = this
 
         val manager = LinearLayoutManager(context)
         binding.classroomList.layoutManager = manager
@@ -43,7 +40,7 @@ class ClassroomFragment : Fragment() {
             classroomViewModel.onClassroomClicked(classroomId)
         })
         binding.classroomList.adapter = adapter
-
+        binding.lifecycleOwner = this
 //        classroomViewModel.insertDummyData()
 
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {

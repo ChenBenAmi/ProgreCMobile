@@ -8,7 +8,7 @@ import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
 
-class ClassroomViewModel constructor(application: Application,  val appRepository: AppRepository) :
+class ClassroomViewModel constructor(application: Application, private val appRepository: AppRepository) :
     AndroidViewModel(application) {
 
     private var viewModelJob = Job()
