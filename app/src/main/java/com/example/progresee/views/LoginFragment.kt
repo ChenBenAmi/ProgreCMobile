@@ -28,7 +28,8 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding: FragmentLoginBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+        val binding: FragmentLoginBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
 
 
         binding.logViewModel = loginViewModel
@@ -37,8 +38,9 @@ class LoginFragment : Fragment() {
 
 
         loginViewModel.navigateToClassRoomFragment.observe(this, Observer {
-            if (it==true) {
-                this.findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
+            if (it == true) {
+                this.findNavController()
+                    .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
                 loginViewModel.doneNavigating()
             }
 
