@@ -8,7 +8,10 @@ import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
 
-class ClassroomViewModel constructor(application: Application, private val appRepository: AppRepository) :
+class ClassroomViewModel constructor(
+    application: Application,
+    private val appRepository: AppRepository
+) :
     AndroidViewModel(application) {
 
     private var viewModelJob = Job()
@@ -19,6 +22,10 @@ class ClassroomViewModel constructor(application: Application, private val appRe
     private val _navigateToTaskFragment = MutableLiveData<Long>()
     val navigateToTaskFragment
         get() = _navigateToTaskFragment
+
+    private val _navigateToCreateClassroomFragment = MutableLiveData<Boolean?>()
+    val navigateToCreateClassroomFragment
+        get() = _navigateToCreateClassroomFragment
 
     fun onClassroomClicked(id: Long) {
         _navigateToTaskFragment.value = id
@@ -32,13 +39,21 @@ class ClassroomViewModel constructor(application: Application, private val appRe
 
     fun insertDummyData() {
         uiScope.launch {
-            insertClassroom(Classroom(1, "java", "me", LocalDateTime.now(),5))
+            insertClassroom(Classroom(1, "java", "me", LocalDateTime.now(), 5))
         }
     }
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    fun navigateToCreateClassroomFragment() {
+        _navigateToCreateClassroomFragment.value = true
+    }
+
+    fun doneNavigateToCreateClassroomFragment() {
+        _navigateToCreateClassroomFragment.value = null
     }
 
 }

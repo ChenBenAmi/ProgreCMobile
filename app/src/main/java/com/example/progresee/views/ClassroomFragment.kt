@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.progresee.R
@@ -48,6 +49,13 @@ class ClassroomFragment : Fragment() {
                 adapter.addHeaderAndSubmitList(it)
             }
         })
+
+        classroomViewModel.navigateToCreateClassroomFragment.observe(viewLifecycleOwner, Observer {
+            if(it==true){
+                this.findNavController().navigate(ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment())
+                classroomViewModel.doneNavigateToCreateClassroomFragment()
+            }
+             })
 
         return binding.root
 
