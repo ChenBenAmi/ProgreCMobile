@@ -20,14 +20,14 @@
                 android:id="@+id/progresee_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="76dp"
+                android:layout_marginTop="75dp"
                 android:src="@drawable/ic_progresee_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0"
+                android:contentDescription="@string/progresee_icon" />
 
         <TextView
                 android:id="@+id/welcome"
@@ -38,10 +38,9 @@
                 android:text="@string/welcome_to_progresee"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/progresee_icon"
-                app:layout_constraintVertical_bias="0.015"/>
+                app:layout_constraintVertical_bias="0.0" />
 
         <TextView
                 android:id="@+id/messages"
@@ -57,35 +56,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.9"
-                tools:text="By signing in you agree to our Terms and Conditions &amp; Privacy Policy "/>
+                tools:text="By signing in you agree to our Terms and Conditions &amp; Privacy Policy " />
 
         <ImageView
                 android:id="@+id/facebook_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:onClick="@{()->logViewModel.navigate()}"
                 android:src="@drawable/btn_facebook"
                 app:layout_constraintBottom_toTopOf="@+id/messages"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.463"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/welcome"
-                app:layout_constraintVertical_bias="0.176"/>
+                app:layout_constraintVertical_bias="0.0"
+                android:contentDescription="@string/facebook_login" />
 
         <ImageView
                 android:id="@+id/google_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:onClick="@{()->logViewModel.navigate()}"
                 android:src="@drawable/btn_google"
                 app:layout_constraintBottom_toTopOf="@+id/messages"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/facebook_button"
-                app:layout_constraintVertical_bias="0.04"/>
+                app:layout_constraintVertical_bias="0.0"
+                android:contentDescription="@string/google_login" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

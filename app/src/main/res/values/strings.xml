@@ -14,5 +14,11 @@
     <string name="logout">Logout</string>
     <string name="setting">Setting</string>
     <string name="welcome_to_progresee">Welcome to ProgreSee</string>
+    <string name="facebook_login">Facebook login</string>
+    <string name="google_login">Google Login</string>
+    <string name="progresee_icon">ProgreSee Icon</string>
+    <string name="task_title">Task Title</string>
+    <string name="due_by">Due by</string>
+    <string name="user_profile">User profile</string>
 
 </resources>
