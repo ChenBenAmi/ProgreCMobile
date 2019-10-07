@@ -20,5 +20,8 @@
     <string name="task_title">Task Title</string>
     <string name="due_by">Due by</string>
     <string name="user_profile">User profile</string>
+    <string name="create_a_classroom_title">Create A Classroom</string>
+    <string name="classroom_description">Classroom Description</string>
+    <string name="classroom_name">Classroom Name</string>
 
 </resources>
