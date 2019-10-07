@@ -2,6 +2,7 @@ package com.example.progresee.utils
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.example.progresee.R
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Task
 
@@ -15,7 +16,7 @@ fun TextView.setClassroomOwner(item: Classroom?) {
 @BindingAdapter("numberOfOpenTasks")
 fun TextView.setNumberOfOpenTasks(item: Classroom?) {
     item?.let {
-        text = item.openTasks.toString()
+        text = context.getString(R.string.number_of_tasks, item.openTasks)
     }
 }
 
@@ -37,7 +38,7 @@ fun TextView.setTaskTitle(item: Task?){
 @BindingAdapter("taskDueDate")
 fun TextView.setTaskDueDate(item: Task?){
     item?.let{
-        text = item.endDate.toString()
+        text = context.getString(R.string.due_by, item.endDate.toString())
     }
 }
 

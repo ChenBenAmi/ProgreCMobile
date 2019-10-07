@@ -6,7 +6,11 @@
 
     <fragment android:id="@+id/loginFragment" android:name="com.example.progresee.views.LoginFragment"
               android:label="fragment_login" tools:layout="@layout/fragment_login">
-        <action android:id="@+id/action_loginFragment_to_classroomFragment" app:destination="@id/classroomFragment"/>
+        <action
+            android:id="@+id/action_loginFragment_to_classroomFragment"
+            app:destination="@id/classroomFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:popEnterAnim="@anim/slide_in_right" />
     </fragment>
     <fragment android:id="@+id/helpFragment" android:name="com.example.progresee.views.HelpFragment"
               android:label="fragment_help" tools:layout="@layout/fragment_help"/>
@@ -15,15 +19,15 @@
     <fragment android:id="@+id/classroomFragment" android:name="com.example.progresee.views.ClassroomFragment"
               android:label="fragment_classroom" tools:layout="@layout/fragment_classroom">
         <action
-                android:id="@+id/action_classroomFragment_to_createClassroomFragment"
-                app:destination="@id/createClassroomFragment" />
+            android:id="@+id/action_classroomFragment_to_createClassroomFragment"
+            app:destination="@id/createClassroomFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:popEnterAnim="@anim/slide_in_right" />
         <action
-                android:id="@+id/action_classroomFragment_to_taskFragment"
-                app:destination="@id/taskFragment"
-                app:enterAnim="@anim/slide_in_left"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
+            android:id="@+id/action_classroomFragment_to_taskFragment"
+            app:destination="@id/taskFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:popEnterAnim="@anim/slide_in_right" />
     </fragment>
     <fragment
             android:id="@+id/splashScreenFragment"

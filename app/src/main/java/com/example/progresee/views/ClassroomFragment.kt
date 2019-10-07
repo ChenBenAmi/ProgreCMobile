@@ -2,22 +2,21 @@ package com.example.progresee.views
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.example.progresee.R
 import com.example.progresee.adapters.ClassroomAdapter
 import com.example.progresee.adapters.ClassroomClickListener
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentClassroomBinding
 import com.example.progresee.viewmodels.ClassroomViewModel
-import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -34,18 +33,21 @@ class ClassroomFragment : Fragment() {
         val binding: FragmentClassroomBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_classroom, container, false)
 
+        val title: String = getString(R.string.progresee)
         binding.lifecycleOwner = this
 
         binding.classroomViewModel = classroomViewModel
-
         val manager = LinearLayoutManager(context)
         binding.classroomList.layoutManager = manager
-
         val adapter = ClassroomAdapter(ClassroomClickListener { classroomId ->
             classroomViewModel.onClassroomClicked(classroomId)
         })
         binding.classroomList.adapter = adapter
-
+        val titleCheck: Boolean? =
+            (activity as? AppCompatActivity)?.supportActionBar?.title?.equals(title)
+        if (titleCheck == false) {
+            (activity as? AppCompatActivity)?.supportActionBar?.title = title
+        }
 //        classroomViewModel.insertDummyData()
 
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {
@@ -69,7 +71,7 @@ class ClassroomFragment : Fragment() {
             })
 
         val fab: View = binding.createClassroomButton
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             this.findNavController()
                 .navigate(ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment())
             classroomViewModel.doneNavigateToCreateClassroomFragment()

@@ -1,17 +1,11 @@
 package com.example.progresee.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.time.DateTimeException
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 class ClassroomViewModel constructor(
@@ -21,6 +15,10 @@ class ClassroomViewModel constructor(
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    init {
+
+    }
 
     val classrooms = appRepository.classrooms
 
@@ -48,7 +46,6 @@ class ClassroomViewModel constructor(
             Timber.wtf(Calendar.getInstance().time.toString())
         }
     }
-
 
     fun navigateToCreateClassroomFragment() {
         _navigateToCreateClassroomFragment.value = true
