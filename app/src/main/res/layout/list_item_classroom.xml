@@ -10,13 +10,13 @@
                 type="com.example.progresee.beans.Classroom"/>
 
         <variable
-                name="clickListener"
+                name="classroomClickListener"
                 type="com.example.progresee.adapters.ClassroomClickListener"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:onClick="@{() -> clickListener.onClick(classroom)}"
+            android:onClick="@{() -> classroomClickListener.onClick(classroom)}"
             android:orientation="vertical">
 
 

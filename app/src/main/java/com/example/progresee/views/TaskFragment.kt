@@ -9,16 +9,17 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.progresee.R
+import com.example.progresee.adapters.TaskAdapter
+import com.example.progresee.adapters.TaskClickListener
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentTaskBinding
-import com.example.progresee.viewmodels.CreateClassroomViewModel
 import com.example.progresee.viewmodels.TaskViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 
 class TaskFragment : Fragment() {
@@ -51,15 +52,34 @@ class TaskFragment : Fragment() {
 
         binding.taskViewModel = taskViewModel
 
+        val manager = LinearLayoutManager(context)
+        binding.taskList.layoutManager = manager
+        val adapter = TaskAdapter(TaskClickListener { taskId ->
+            taskViewModel.onTaskClicked(taskId)
+        })
+        binding.taskList.adapter = adapter
+        //taskViewModel.insertDummyData()
 
-        taskViewModel.getClassroom().observe(viewLifecycleOwner, Observer {
+        taskViewModel.getClassroomName().observe(viewLifecycleOwner, Observer {
             it?.let {
                 (activity as? AppCompatActivity)?.supportActionBar?.title =
-                    taskViewModel.getClassroom().value!!.name
+                    taskViewModel.getClassroomName().value!!.name
             }
         })
 
 
+        taskViewModel.tasks.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
+
+
+        taskViewModel.tasks.observe(viewLifecycleOwner, Observer {
+            it?.let {
+
+            }
+        })
         return binding.root
 
     }

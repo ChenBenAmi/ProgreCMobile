@@ -34,6 +34,8 @@ class ClassroomFragment : Fragment() {
         val binding: FragmentClassroomBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_classroom, container, false)
 
+        binding.lifecycleOwner = this
+
         binding.classroomViewModel = classroomViewModel
 
         val manager = LinearLayoutManager(context)
@@ -43,8 +45,8 @@ class ClassroomFragment : Fragment() {
             classroomViewModel.onClassroomClicked(classroomId)
         })
         binding.classroomList.adapter = adapter
-        binding.lifecycleOwner = this
-        //classroomViewModel.insertDummyData()
+
+//        classroomViewModel.insertDummyData()
 
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {
             it?.let {

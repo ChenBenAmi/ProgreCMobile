@@ -2,6 +2,7 @@ package com.example.progresee.data
 
 import androidx.lifecycle.LiveData
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Task
 import com.example.progresee.data.database.AppDatabase
 import com.example.progresee.data.network.ApiService
 import com.example.progresee.data.network.apicalls.ApiCalls
@@ -17,13 +18,23 @@ class AppRepository constructor(
     private val network: ApiService
 ) {
 
-    val classrooms: LiveData<List<Classroom>> = dataBase.classroomDao().getClassrooms()
+    private val _classrooms: LiveData<List<Classroom>> = dataBase.classroomDao().getClassrooms()
+    val classrooms
+        get() = _classrooms
+
+    private val _tasks: LiveData<List<Task>> = dataBase.taskDao().getTasks()
+    val tasks
+        get() = _tasks
 
     private val apiCalls: ApiCalls = network.retrofit()
 
 
     fun insertClassroom(classroom: Classroom) {
         dataBase.classroomDao().insert(classroom)
+    }
+
+    fun insertTask(task: Task) {
+        dataBase.taskDao().insert(task)
     }
 
     fun getClassroom(classroomId: Long): LiveData<Classroom?> {
@@ -33,9 +44,9 @@ class AppRepository constructor(
     fun loginWithGoogle() {
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
-                try{
+                try {
                     val request = apiCalls.login()
-                    val response=request.await()
+                    val response = request.await()
                     if (response.isSuccessful) {
                         val data = response.body()
                         Timber.i(data.toString())

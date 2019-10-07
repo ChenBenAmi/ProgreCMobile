@@ -4,6 +4,7 @@ import androidx.room.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.LocalDateTime
+import java.util.*
 
 @Entity
 data class Classroom(
@@ -12,7 +13,7 @@ data class Classroom(
     val id: Long,
     val name: String,
     val owner: String,
-    val dateCreated: LocalDateTime,
+    val dateCreated: Date,
     val openTasks:Int)
 
 

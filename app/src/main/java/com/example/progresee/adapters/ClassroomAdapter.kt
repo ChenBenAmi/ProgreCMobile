@@ -9,7 +9,7 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.databinding.ListItemClassroomBinding
 
 class ClassroomAdapter(val clickListener: ClassroomClickListener) : ListAdapter<Classroom,
-        ClassroomAdapter.ViewHolder>(SleepNightDiffCallback()) {
+        ClassroomAdapter.ViewHolder>(ClassroomDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(clickListener, item)
@@ -23,7 +23,7 @@ class ClassroomAdapter(val clickListener: ClassroomClickListener) : ListAdapter<
         RecyclerView.ViewHolder(binding.root) {
         fun bind(clickListener: ClassroomClickListener, item: Classroom) {
             binding.classroom = item
-            binding.clickListener = clickListener
+            binding.classroomClickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -37,7 +37,7 @@ class ClassroomAdapter(val clickListener: ClassroomClickListener) : ListAdapter<
     }
 }
 
-class SleepNightDiffCallback : DiffUtil.ItemCallback<Classroom>() {
+class ClassroomDiffCallback : DiffUtil.ItemCallback<Classroom>() {
     override fun areItemsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
         return oldItem.id == newItem.id
     }

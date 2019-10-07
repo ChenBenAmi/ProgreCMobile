@@ -3,6 +3,7 @@ package com.example.progresee.beans
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
+import java.util.*
 
 @Entity
 data class Task(
@@ -12,7 +13,7 @@ data class Task(
     val title: String,
     val description: String,
     val imageURL: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime
+    val startDate: Date,
+    val endDate: Date
 //    val exercises: Map<Long,Exercise>
 )

@@ -7,7 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.time.DateTimeException
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 class ClassroomViewModel constructor(
     private val appRepository: AppRepository
@@ -39,14 +44,11 @@ class ClassroomViewModel constructor(
 
     fun insertDummyData() {
         uiScope.launch {
-            insertClassroom(Classroom(1, "java", "me", LocalDateTime.now(), 5))
+            insertClassroom(Classroom(1, "java", "me", Calendar.getInstance().time, 5))
+            Timber.wtf(Calendar.getInstance().time.toString())
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
 
     fun navigateToCreateClassroomFragment() {
         _navigateToCreateClassroomFragment.value = true
@@ -60,4 +62,8 @@ class ClassroomViewModel constructor(
         _navigateToTaskFragment.value = null
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 }
