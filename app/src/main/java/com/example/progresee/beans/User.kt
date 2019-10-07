@@ -16,8 +16,8 @@ data class User(
     val email: String,
     val firstName: String,
     val lastName: String,
-    val pictureURL: String,
-//    val classRooms: Map<Long, Classroom>,
-    val dateCreated: LocalDateTime,
-    val lastLoggedIn: LocalDateTime
+    val pictureURL: String
+////    val classRooms: Map<Long, Classroom>,
+//    val dateCreated: LocalDateTime,
+//    val lastLoggedIn: LocalDateTime
 )

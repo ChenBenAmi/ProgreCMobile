@@ -3,16 +3,16 @@ package com.example.progresee.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
 
 class ClassroomViewModel constructor(
-    application: Application,
     private val appRepository: AppRepository
 ) :
-    AndroidViewModel(application) {
+    ViewModel() {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)

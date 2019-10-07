@@ -8,20 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-
 import com.example.progresee.R
+import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentLoginBinding
 import com.example.progresee.viewmodels.LoginViewModel
-import com.example.progresee.viewmodels.SplashViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class LoginFragment : Fragment() {
 
-
-    private val loginViewModel: LoginViewModel by viewModel()
+    private val appRepository: AppRepository by inject()
+    private val loginViewModel: LoginViewModel by viewModel { parametersOf(appRepository) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +37,9 @@ class LoginFragment : Fragment() {
 
         loginViewModel.navigateToClassRoomFragment.observe(this, Observer {
             if (it==true) {
-                this.findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
-                loginViewModel.doneNavigating()
+//                this.findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
+                loginViewModel.loginWithGoogle()
+//                loginViewModel.doneNavigating()
             }
 
         })
