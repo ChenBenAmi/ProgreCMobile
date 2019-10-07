@@ -2,6 +2,8 @@ package com.example.progresee
 
 import android.app.Application
 import androidx.room.Room
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
 import com.example.progresee.data.database.AppDatabase
 import com.example.progresee.data.AppRepository
 import com.example.progresee.data.network.ApiService
@@ -32,9 +34,15 @@ class App : Application() {
             single { get<AppDatabase>().taskDao() }
             single { get<AppDatabase>().exerciseDao() }
             single { get<AppDatabase>().finishedUsersDao() }
-            single { AppRepository(get(),get()) }
+            single { AppRepository(get(), get()) }
             viewModel { (appRepository: AppRepository, classroomId: Long) ->
                 TaskViewModel(
+                    appRepository,
+                    classroomId
+                )
+            }
+            viewModel { (appRepository: AppRepository, classroomId: Long) ->
+                TaskDetailsViewModel(
                     appRepository,
                     classroomId
                 )
@@ -42,7 +50,7 @@ class App : Application() {
             viewModel { (appRepository: AppRepository) -> CreateClassroomViewModel(appRepository) }
             viewModel { (appRepository: AppRepository) -> ClassroomViewModel(appRepository) }
             viewModel { SplashViewModel() }
-            viewModel { (appRepository: AppRepository)->LoginViewModel(appRepository) }
+            viewModel { (appRepository: AppRepository) -> LoginViewModel(appRepository) }
 
 
         }
@@ -54,4 +62,6 @@ class App : Application() {
 
         }
     }
+
+
 }

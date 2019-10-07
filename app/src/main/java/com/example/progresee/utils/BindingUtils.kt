@@ -1,9 +1,12 @@
 package com.example.progresee.utils
 
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 import com.example.progresee.R
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 
 @BindingAdapter("classroomOwner")
@@ -41,6 +44,30 @@ fun TextView.setTaskDueDate(item: Task?){
         text = context.getString(R.string.due_by, item.endDate.toString())
     }
 }
+
+@BindingAdapter("taskDescription")
+fun TextView.setTaskDescription(item: Task?){
+    item?.let{
+        text = item.description
+    }
+}
+
+@BindingAdapter("taskImage")
+fun ImageView.setTaskImage(item: Task){
+    Glide.with(context)
+        .load(item.imageURL)
+        .into(this)
+}
+
+@BindingAdapter("exerciseText")
+fun TextView.setExercistText(item: Exercise?){
+    item?.let{
+        text = item.ex
+    }
+}
+
+
+
 
 
 
