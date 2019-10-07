@@ -47,5 +47,9 @@
             android:id="@+id/taskFragment"
             android:name="com.example.progresee.views.TaskFragment"
             android:label="fragment_task"
-            tools:layout="@layout/fragment_task" />
+        tools:layout="@layout/fragment_task">
+        <argument
+            android:name="classroomId"
+            app:argType="long" />
+    </fragment>
 </navigation>

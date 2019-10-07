@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentLoginBinding

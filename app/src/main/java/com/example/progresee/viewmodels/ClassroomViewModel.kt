@@ -56,4 +56,8 @@ class ClassroomViewModel constructor(
         _navigateToCreateClassroomFragment.value = null
     }
 
+    fun doneNavigateToTaskFragment() {
+        _navigateToTaskFragment.value = null
+    }
+
 }

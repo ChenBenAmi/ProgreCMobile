@@ -26,6 +26,10 @@ class AppRepository constructor(
         dataBase.classroomDao().insert(classroom)
     }
 
+    fun getClassroom(classroomId: Long): LiveData<Classroom?> {
+        return dataBase.classroomDao().getClassroom(classroomId)
+    }
+
     fun loginWithGoogle() {
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {

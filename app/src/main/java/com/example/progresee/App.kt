@@ -33,7 +33,12 @@ class App : Application() {
             single { get<AppDatabase>().exerciseDao() }
             single { get<AppDatabase>().finishedUsersDao() }
             single { AppRepository(get(),get()) }
-            viewModel { (appRepository: AppRepository) -> TaskViewModel(appRepository) }
+            viewModel { (appRepository: AppRepository, classroomId: Long) ->
+                TaskViewModel(
+                    appRepository,
+                    classroomId
+                )
+            }
             viewModel { (appRepository: AppRepository) -> CreateClassroomViewModel(appRepository) }
             viewModel { (appRepository: AppRepository) -> ClassroomViewModel(appRepository) }
             viewModel { SplashViewModel() }

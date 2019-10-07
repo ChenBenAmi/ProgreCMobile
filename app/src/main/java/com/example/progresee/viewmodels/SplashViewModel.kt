@@ -34,7 +34,7 @@ class SplashViewModel  : ViewModel() {
 
     init {
         uiScope.launch {
-            delay(3000)
+            delay(100)
             mutableLiveData.postValue(SplashState.MainActivity)
             navigate()
         }

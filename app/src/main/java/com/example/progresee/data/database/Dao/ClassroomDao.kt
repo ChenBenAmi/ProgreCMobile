@@ -15,4 +15,6 @@ interface ClassroomDao {
     @Insert
     fun insert(classroom: Classroom)
 
+    @Query("select * from classroom where Id = :classroomId")
+    fun getClassroom(classroomId: Long?): LiveData<Classroom?>
 }

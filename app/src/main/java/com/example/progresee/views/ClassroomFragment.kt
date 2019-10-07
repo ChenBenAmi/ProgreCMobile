@@ -44,21 +44,27 @@ class ClassroomFragment : Fragment() {
         })
         binding.classroomList.adapter = adapter
         binding.lifecycleOwner = this
-//        classroomViewModel.insertDummyData()
+        //classroomViewModel.insertDummyData()
 
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.addHeaderAndSubmitList(it)
+                adapter.submitList(it)
             }
         })
 
-//        classroomViewModel.navigateToCreateClassroomFragment.observe(viewLifecycleOwner, Observer {
-//            if (it == true) {
-//                this.findNavController()
-//                    .navigate(ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment())
-//                classroomViewModel.doneNavigateToCreateClassroomFragment()
-//            }
-//        })
+        classroomViewModel.navigateToTaskFragment.observe(
+            viewLifecycleOwner,
+            Observer { classroom ->
+                classroom?.let {
+                    this.findNavController()
+                        .navigate(
+                            ClassroomFragmentDirections.actionClassroomFragmentToTaskFragment(
+                                classroom
+                            )
+                        )
+                    classroomViewModel.doneNavigateToTaskFragment()
+                }
+            })
 
         val fab: View = binding.createClassroomButton
         fab.setOnClickListener { view ->
