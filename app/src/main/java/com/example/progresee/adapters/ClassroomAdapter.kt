@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.progresee.beans.Classroom
 import com.example.progresee.databinding.ListItemClassroomBinding
 
-class ClassroomAdapter(val clickListener: ClassroomClickListener) : ListAdapter<Classroom,
+class ClassroomAdapter(private val clickListener: ClassroomClickListener) : ListAdapter<Classroom,
         ClassroomAdapter.ViewHolder>(ClassroomDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)

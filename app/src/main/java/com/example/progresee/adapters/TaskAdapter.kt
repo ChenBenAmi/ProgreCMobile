@@ -9,7 +9,7 @@ import com.example.progresee.beans.Task
 import com.example.progresee.databinding.ListItemTaskBinding
 
 
-class TaskAdapter(val clickListener: TaskClickListener) : ListAdapter<Task,
+class TaskAdapter(private val clickListener: TaskClickListener) : ListAdapter<Task,
         TaskAdapter.ViewHolder>(TaskDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)

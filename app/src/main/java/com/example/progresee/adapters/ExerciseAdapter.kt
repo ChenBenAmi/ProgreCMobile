@@ -9,7 +9,7 @@ import com.example.progresee.beans.Exercise
 import com.example.progresee.databinding.ListItemExerciseBinding
 
 
-class ExerciseAdapter(val clickListener: ExerciseClickListener) : ListAdapter<Exercise,
+class ExerciseAdapter(private val clickListener: ExerciseClickListener) : ListAdapter<Exercise,
         ExerciseAdapter.ViewHolder>(ExerciseDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)

@@ -16,7 +16,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     ViewModel() {
 
     private val classroom = MediatorLiveData<Classroom>()
-
     fun getClassroomName() = classroom
 
     private var viewModelJob = Job()
@@ -30,7 +29,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
 
     }
 
-    suspend fun insertTask(task: Task) {
+    private suspend fun insertTask(task: Task) {
         withContext(Dispatchers.IO) {
             appRepository.insertTask(task)
         }
@@ -42,8 +41,8 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 Task(
                     100,
                     "java",
-                    "me",
-                    "image",
+                    "ZrrcYvrGgxakww8qHeDWdN3YC1OOEQimJd7zlObnCDkdwtpU3XjniOqGGU4fT91quvOtbzjIH9r7SuMbB0NgdKZ6FBHEzLGBp7X52gefZ7TS973leFJbUsmVXnGVZ8nYExsu27iQdnxLjsN2wDBhmIGrmfHP8T4jyweZ8wvI0V0EAcYnrRPmiFBltWcdMSZ9osdRCDGM0Ew8xX4PT5TmFW5Fvm0GfnOigcYL0mK2mjmqWflp0CNQHK9hJgeM7Bs",
+                    "https://i.imgur.com/V9mmwJN.jpg",
                     Calendar.getInstance().time,
                     Calendar.getInstance().time
                 )

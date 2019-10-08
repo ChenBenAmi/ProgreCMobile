@@ -2,6 +2,7 @@ package com.example.progresee.data
 
 import androidx.lifecycle.LiveData
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 import com.example.progresee.data.database.AppDatabase
 import com.example.progresee.data.network.ApiService
@@ -26,6 +27,10 @@ class AppRepository constructor(
     val tasks
         get() = _tasks
 
+    private val _exercises: LiveData<List<Exercise>> = dataBase.exerciseDao().getExercises()
+    val exercises
+        get() = _exercises
+
     private val apiCalls: ApiCalls = network.retrofit()
 
 
@@ -33,13 +38,22 @@ class AppRepository constructor(
         dataBase.classroomDao().insert(classroom)
     }
 
+    fun getClassroom(classroomId: Long): LiveData<Classroom?> {
+        return dataBase.classroomDao().getClassroom(classroomId)
+    }
+
     fun insertTask(task: Task) {
         dataBase.taskDao().insert(task)
     }
 
-    fun getClassroom(classroomId: Long): LiveData<Classroom?> {
-        return dataBase.classroomDao().getClassroom(classroomId)
+    fun getTask(taskId: Long): LiveData<Task> {
+        return dataBase.taskDao().getTask(taskId)
     }
+
+    fun insertExercise(exercise: Exercise) {
+        dataBase.exerciseDao().insertExercise(exercise)
+    }
+
 
     fun loginWithGoogle() {
         CoroutineScope(Dispatchers.IO).launch {

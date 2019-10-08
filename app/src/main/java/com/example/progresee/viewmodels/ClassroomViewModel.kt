@@ -16,10 +16,6 @@ class ClassroomViewModel constructor(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    init {
-
-    }
-
     val classrooms = appRepository.classrooms
 
     private val _navigateToTaskFragment = MutableLiveData<Long>()
@@ -42,7 +38,7 @@ class ClassroomViewModel constructor(
 
     fun insertDummyData() {
         uiScope.launch {
-            insertClassroom(Classroom(1, "java", "me", Calendar.getInstance().time, 5))
+            insertClassroom(Classroom(1, "java110", "chen", Calendar.getInstance().time, 5))
             Timber.wtf(Calendar.getInstance().time.toString())
         }
     }

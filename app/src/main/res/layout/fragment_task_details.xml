@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="task"
+            type="com.example.progresee.beans.Task" />
+
+        <variable
             name="exercise"
             type="com.example.progresee.beans.Exercise" />
 
@@ -23,13 +27,14 @@
             android:id="@+id/desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:text="@string/description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.08"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.08" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
 
@@ -37,14 +42,16 @@
             android:layout_width="380dp"
             android:layout_height="125dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/shape"
-            android:text="@string/task_desc_long_255"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/desc"
-            app:layout_constraintVertical_bias="0.041" />
+            app:layout_constraintVertical_bias="0.0"
+            app:taskDescription="@{task}"
+            tools:text="@string/task_desc_long_255" />
 
         <TextView
             android:id="@+id/task_due_by"
@@ -52,13 +59,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/due_by"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/exercise_list"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.954"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.96" />
+            app:layout_constraintVertical_bias="1.0"
+            app:taskDueDate="@{task}"
+            tools:text="@string/due_by" />
 
         <TextView
             android:id="@+id/image"
@@ -76,29 +85,45 @@
             android:id="@+id/task_image"
             android:layout_width="141dp"
             android:layout_height="70dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/shape"
             android:contentDescription="@string/task_image"
             android:src="@android:drawable/ic_menu_camera"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.485"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image"
-            app:layout_constraintVertical_bias="0.044" />
+            app:layout_constraintVertical_bias="0.0"
+            app:taskImage="@{task}" />
+
+        <TextView
+            android:id="@+id/exercises"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/exercise_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="@string/number_of_exercises" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exercise_list"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.92" />
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

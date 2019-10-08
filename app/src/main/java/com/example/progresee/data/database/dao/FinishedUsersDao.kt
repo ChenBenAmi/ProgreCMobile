@@ -1,4 +1,4 @@
-package com.example.progresee.data.database.Dao
+package com.example.progresee.data.database.dao
 
 import androidx.room.Dao
 

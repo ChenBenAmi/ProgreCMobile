@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.progresee.R
 import com.example.progresee.adapters.TaskAdapter
@@ -43,8 +44,6 @@ class TaskFragment : Fragment() {
             )
         }
 
-
-
         binding.taskViewModel = taskViewModel
 
         val manager = LinearLayoutManager(context)
@@ -68,6 +67,20 @@ class TaskFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
+
+        taskViewModel.navigateToTaskDetailsFragment.observe(
+            viewLifecycleOwner,
+            Observer { taskId ->
+                taskId?.let {
+                    this.findNavController()
+                        .navigate(
+                            TaskFragmentDirections.actionTaskFragmentToTaskDetailsFragment(
+                                taskId
+                            )
+                        )
+                    taskViewModel.doneNavigateToTaskDetailsFragment()
+                }
+            })
 
         return binding.root
 
