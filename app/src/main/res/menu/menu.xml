@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:icon="@drawable/setting_24px"
-          android:id="@+id/setting_menu_item"
-          android:title="@string/setting"
-    />
-    <item android:icon="@drawable/ic_exit_to_app_24px"
-          android:id="@+id/logout_menu_item"
-          android:title="@string/logout"
-    />
+
+    <item
+        android:id="@+id/logout_menu_item"
+        android:icon="@drawable/ic_exit_to_app_24px"
+        android:title="@string/logout"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/setting_menu_item"
+        android:icon="@drawable/setting_24px"
+        android:title="@string/setting"
+        app:showAsAction="never" />
 </menu>

@@ -12,26 +12,64 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 
-class TaskViewModel(private val appRepository: AppRepository, private val classroomId: Long) :
+class TaskViewModel(private val appRepository: AppRepository, classroomId: Long) :
     ViewModel() {
 
-    private val classroom = MediatorLiveData<Classroom>()
-    fun getClassroomName() = classroom
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    private val classroom = MediatorLiveData<Classroom>()
+    fun getClassroom() = classroom
 
     val tasks = appRepository.tasks
 
     init {
         Timber.wtf(classroomId.toString())
-        classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
+        uiScope.launch {
+            classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
+        }
 
+    }
+
+    private val _navigateTooTaskDetailsFragment = MutableLiveData<Long>()
+    val navigateToTaskDetailsFragment
+        get() = _navigateTooTaskDetailsFragment
+
+    private val _navigateBackToClassroomFragment = MutableLiveData<Boolean?>()
+    val navigateBackToClassroomFragment
+        get() = _navigateBackToClassroomFragment
+
+
+
+    fun onTaskClicked(id: Long) {
+        _navigateTooTaskDetailsFragment.value = id
+    }
+
+    fun doneNavigateToTaskDetailsFragment() {
+        _navigateTooTaskDetailsFragment.value = null
+    }
+
+    private fun onClassroomDeleted() {
+        _navigateBackToClassroomFragment.value=true
+    }
+    fun doneNavigateToClassroomFragment() {
+        _navigateBackToClassroomFragment.value=null
     }
 
     private suspend fun insertTask(task: Task) {
         withContext(Dispatchers.IO) {
             appRepository.insertTask(task)
+        }
+    }
+
+    fun deleteClassRoom() {
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                appRepository.deleteClassroom(getClassroom().value)
+
+            }
+            onClassroomDeleted()
         }
     }
 
@@ -50,20 +88,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
             Timber.wtf(Calendar.getInstance().time.toString())
         }
     }
-    private val _navigateTooTaskDetailsFragment = MutableLiveData<Long>()
-    val navigateToTaskDetailsFragment
-        get() = _navigateTooTaskDetailsFragment
-
-    fun onTaskClicked(id: Long) {
-        _navigateTooTaskDetailsFragment.value = id
-    }
-
-    fun doneNavigateToTaskDetailsFragment() {
-        _navigateTooTaskDetailsFragment.value = null
-    }
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
+
+
 }

@@ -20,9 +20,10 @@
         tools:context=".views.CreateClassroomFragment">
 
         <TextView
-            android:id="@+id/createClassroomTitle"
+            android:id="@+id/create_classroom_title"
             android:layout_width="276dp"
             android:layout_height="37dp"
+            android:gravity="center"
             android:layout_marginTop="32dp"
             android:text="@string/create_classroom_title"
             android:textColor="@android:color/black"
@@ -48,7 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createClassroomTitle"
+            app:layout_constraintTop_toBottomOf="@+id/create_classroom_title"
             app:layout_constraintVertical_bias="0.0" />
 
 
@@ -71,6 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:gravity="center"
             android:text="@string/generated_classroom_invite_link"
             android:textColor="@android:color/black"
             android:textSize="20sp"

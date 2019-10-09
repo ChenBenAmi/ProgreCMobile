@@ -3,18 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/edit_menu_item"
+        android:id="@+id/edit_task_item"
         android:icon="@drawable/ic_edit_24px"
         app:showAsAction="ifRoom"
         android:title="@string/edit" />
     <item
-        android:id="@+id/delete_menu_item"
+        android:id="@+id/delete_task_item"
         android:icon="@drawable/ic_delete_24px"
         app:showAsAction="ifRoom"
         android:title="@string/delete" />
 
-    <item
-        android:id="@+id/info_menu_item"
-        android:icon="@drawable/ic_info_24px"
-        android:title="@string/info" />
 </menu>

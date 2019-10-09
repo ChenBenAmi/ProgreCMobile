@@ -68,6 +68,13 @@ fun TextView.setExerciseText(item: Exercise?){
     }
 }
 
+@BindingAdapter("classroomId")
+fun TextView.setClassroomId(item:Classroom?) {
+    item?.let {
+        text=item.id.toString()
+    }
+}
+
 
 
 

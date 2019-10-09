@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_createClassroomFragment_to_classroomFragment"
             app:destination="@id/classroomFragment" />
+        <argument
+            android:name="classroomId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/taskFragment"
@@ -75,6 +78,12 @@
         <action
             android:id="@+id/action_taskFragment_to_taskDetailsFragment"
             app:destination="@id/taskDetailsFragment" />
+        <action
+            android:id="@+id/action_taskFragment_to_createClassroomFragment"
+            app:destination="@+id/createClassroomFragment"/>
+        <action
+            android:id="@+id/action_taskFragment_to_classroomFragment"
+            app:destination="@id/classroomFragment" />
     </fragment>
     <fragment
         android:id="@+id/taskDetailsFragment"

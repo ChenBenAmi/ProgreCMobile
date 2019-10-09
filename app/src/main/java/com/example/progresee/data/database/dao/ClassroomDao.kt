@@ -1,9 +1,7 @@
 package com.example.progresee.data.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.progresee.beans.Classroom
 
 @Dao
@@ -17,4 +15,10 @@ interface ClassroomDao {
 
     @Query("select * from classroom where Id = :classroomId")
     fun getClassroom(classroomId: Long?): LiveData<Classroom?>
+
+    @Update
+    fun updateClassroom(classroom: Classroom)
+
+    @Delete
+    fun deleteClassroom(classroom: Classroom?)
 }

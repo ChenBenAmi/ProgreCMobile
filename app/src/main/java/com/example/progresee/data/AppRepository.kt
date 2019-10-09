@@ -38,6 +38,14 @@ class AppRepository constructor(
         dataBase.classroomDao().insert(classroom)
     }
 
+    fun updateClassroom(classroom: Classroom) {
+        dataBase.classroomDao().updateClassroom(classroom)
+    }
+
+    fun deleteClassroom(classroom: Classroom?) {
+        dataBase.classroomDao().deleteClassroom(classroom)
+    }
+
     fun getClassroom(classroomId: Long): LiveData<Classroom?> {
         return dataBase.classroomDao().getClassroom(classroomId)
     }
