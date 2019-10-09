@@ -25,6 +25,7 @@ class ClassroomFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
     private val classroomViewModel: ClassroomViewModel by viewModel { parametersOf(appRepository) }
+    private lateinit var adapter: ClassroomAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -39,9 +40,11 @@ class ClassroomFragment : Fragment() {
         binding.classroomViewModel = classroomViewModel
         val manager = LinearLayoutManager(context)
         binding.classroomList.layoutManager = manager
-        val adapter = ClassroomAdapter(ClassroomClickListener { classroomId ->
+        adapter = ClassroomAdapter(ClassroomClickListener { classroomId ->
             classroomViewModel.onClassroomClicked(classroomId)
         })
+
+
         binding.classroomList.adapter = adapter
         val titleCheck: Boolean? =
             (activity as? AppCompatActivity)?.supportActionBar?.title?.equals(title)
@@ -70,15 +73,15 @@ class ClassroomFragment : Fragment() {
                 }
             })
 
-        val fab: View = binding.createClassroomButton
-        fab.setOnClickListener {
-            this.findNavController()
-                .navigate(ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment())
-            classroomViewModel.doneNavigateToCreateClassroomFragment()
-        }
+        classroomViewModel.navigateToCreateClassroomFragment.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                this.findNavController()
+                    .navigate(ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment())
+                classroomViewModel.doneNavigateToCreateClassroomFragment()
+            }
+        })
+
         return binding.root
 
     }
-
-
 }

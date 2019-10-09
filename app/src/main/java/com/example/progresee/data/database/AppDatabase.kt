@@ -8,7 +8,11 @@ import com.example.progresee.data.database.dao.*
 import com.example.progresee.utils.ConverterUtils
 
 @TypeConverters(ConverterUtils::class)
-@Database(entities = [Classroom::class,User::class,FinishedUsers::class,Task::class,Exercise::class], version = 5, exportSchema = false)
+@Database(
+    entities = [Classroom::class, User::class, FinishedUsers::class, Task::class, Exercise::class],
+    version = 6,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun classroomDao(): ClassroomDao

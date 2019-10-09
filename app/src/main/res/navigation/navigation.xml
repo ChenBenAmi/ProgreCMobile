@@ -59,7 +59,11 @@
     <fragment
         android:id="@+id/createClassroomFragment"
         android:name="com.example.progresee.views.CreateClassroomFragment"
-        android:label="CreateClassroomFragment" />
+        android:label="CreateClassroomFragment">
+        <action
+            android:id="@+id/action_createClassroomFragment_to_classroomFragment"
+            app:destination="@id/classroomFragment" />
+    </fragment>
     <fragment
         android:id="@+id/taskFragment"
         android:name="com.example.progresee.views.TaskFragment"

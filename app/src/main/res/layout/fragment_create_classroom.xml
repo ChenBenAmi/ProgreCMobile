@@ -23,48 +23,78 @@
             android:id="@+id/createClassroomTitle"
             android:layout_width="276dp"
             android:layout_height="37dp"
-            android:text="@string/create_a_classroom_title"
+            android:layout_marginTop="32dp"
+            android:text="@string/create_classroom_title"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.444"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.067" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <EditText
             android:id="@+id/editText_classroom_name"
             android:layout_width="219dp"
             android:layout_height="47dp"
+            android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/classroom_name"
-            android:inputType="textPersonName"
+            android:importantForAutofill="no"
+            android:inputType="textCapWords"
             android:singleLine="true"
-            android:textSize="16dp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.313"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/createClassroomTitle"
-            app:layout_constraintVertical_bias="0.036" />
+            app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/editText_classroom_description"
-            android:layout_width="219dp"
-            android:layout_height="47dp"
-            android:ems="10"
-            android:hint="@string/classroom_description"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            android:textSize="16dp"
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:onClick="@{()->createClassroomViewModel.onSavePressed(editTextClassroomName.getText().toString())}"
+            android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.312"
+            app:layout_constraintHorizontal_bias="0.52"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_classroom_name"
-            app:layout_constraintVertical_bias="0.031" />
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/generated_link_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/generated_classroom_invite_link"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/save_button"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/generated_link"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/shape"
+            android:text="@string/generated_classroom_invite_link"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/generated_link_text"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

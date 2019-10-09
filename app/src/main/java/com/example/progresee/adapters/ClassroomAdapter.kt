@@ -15,12 +15,16 @@ class ClassroomAdapter(private val clickListener: ClassroomClickListener) : List
         holder.bind(clickListener, item)
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ListItemClassroomBinding) :
+
+    class ViewHolder constructor(val binding: ListItemClassroomBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+
         fun bind(clickListener: ClassroomClickListener, item: Classroom) {
             binding.classroom = item
             binding.classroomClickListener = clickListener
@@ -35,6 +39,7 @@ class ClassroomAdapter(private val clickListener: ClassroomClickListener) : List
             }
         }
     }
+
 }
 
 class ClassroomDiffCallback : DiffUtil.ItemCallback<Classroom>() {

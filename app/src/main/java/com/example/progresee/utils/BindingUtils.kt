@@ -8,7 +8,6 @@ import com.example.progresee.R
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
-import timber.log.Timber
 
 @BindingAdapter("classroomOwner")
 fun TextView.setClassroomOwner(item: Classroom?) {
@@ -55,9 +54,11 @@ fun TextView.setTaskDescription(item: Task?){
 
 @BindingAdapter("taskImage")
 fun ImageView.setTaskImage(item: Task?){
-    Glide.with(context)
-        .load(item?.imageURL)
-        .into(this)
+    item?.let {
+        Glide.with(context)
+            .load(item.imageURL)
+            .into(this)
+    }
 }
 
 @BindingAdapter("exerciseText")
@@ -66,6 +67,7 @@ fun TextView.setExerciseText(item: Exercise?){
         text = item.ex
     }
 }
+
 
 
 
