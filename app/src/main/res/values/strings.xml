@@ -48,5 +48,6 @@
     <string name="sign_in_cancelled">Sign In cancelled</string>
     <string name="no_internet_connection">No Internet Found</string>
     <string name="signed_in">Signed In successfully</string>
+    <string name="login">Login</string>
 
 </resources>

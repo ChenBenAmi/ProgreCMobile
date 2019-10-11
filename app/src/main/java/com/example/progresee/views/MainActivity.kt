@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         when{
-            navController.currentDestination?.id == R.id.loginFragment -> exitApp()
+            navController.currentDestination?.id == R.id.homeFragment -> exitApp()
             else ->return navController.navigateUp()
         }
         return true
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         when {
-            navController.currentDestination?.id == R.id.loginFragment -> exitApp()
+            navController.currentDestination?.id == R.id.homeFragment -> exitApp()
             else -> super.onBackPressed()
         }
     }

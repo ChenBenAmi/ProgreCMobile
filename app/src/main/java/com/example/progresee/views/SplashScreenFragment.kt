@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ class SplashScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
         val binding: FragmentSplashScreenBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_splash_screen, container, false)
 
@@ -39,7 +41,7 @@ class SplashScreenFragment : Fragment() {
 
         splashViewModel.navigateToLoginFragment.observe(this, Observer {
             if (it == true) {
-                this.findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToFirebaseLogin())
+                this.findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToHomeFragment())
                 splashViewModel.doneNavigating()
             }
         })

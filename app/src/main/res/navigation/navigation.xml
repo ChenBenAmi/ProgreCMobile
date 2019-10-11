@@ -6,15 +6,13 @@
     app:startDestination="@id/splashScreenFragment">
 
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.example.progresee.views.LoginFragment"
+        android:id="@+id/homeFragment"
+        android:name="com.example.progresee.views.HomeFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login">
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_loginFragment_to_classroomFragment"
-            app:destination="@id/classroomFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:popEnterAnim="@anim/slide_in_right" />
+            android:id="@+id/action_homeFragment_to_firebaseLogin"
+            app:destination="@id/firebaseLogin" />
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
@@ -42,25 +40,20 @@
             app:enterAnim="@anim/slide_in_left"
             app:popEnterAnim="@anim/slide_in_right" />
         <action
-            android:id="@+id/action_classroomFragment_to_firebaseLogin"
-            app:destination="@id/firebaseLogin" />
+            android:id="@+id/action_classroomFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.example.progresee.views.SplashScreenFragment"
         android:label="SplashScreenFragment">
         <action
-            android:id="@+id/action_splashScreenFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
+            android:id="@+id/action_splashScreenFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@+id/navigation"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_splashScreenFragment_to_firebaseLogin"
-            app:destination="@id/firebaseLogin"
             app:popUpTo="@+id/navigation"
             app:popUpToInclusive="true" />
     </fragment>

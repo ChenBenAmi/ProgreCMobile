@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
 import com.firebase.ui.auth.AuthUI
@@ -33,6 +34,7 @@ class FirebaseLogin : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
         val auth = FirebaseAuth.getInstance()
         val cureentUser: FirebaseUser?=auth.currentUser
         if (auth.currentUser != null) {

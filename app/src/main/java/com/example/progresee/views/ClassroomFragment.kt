@@ -124,10 +124,10 @@ class ClassroomFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun logout() {
+    private fun logout() {
         AuthUI.getInstance().signOut(context!!.applicationContext)
-            .addOnCanceledListener {
-                this.findNavController().navigate(ClassroomFragmentDirections.actionClassroomFragmentToFirebaseLogin())
+            .addOnCompleteListener {
+                this.findNavController().navigate(ClassroomFragmentDirections.actionClassroomFragmentToHomeFragment())
                 Snackbar.make(
                     activity!!.findViewById(android.R.id.content),
                     "logout",
