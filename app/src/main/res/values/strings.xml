@@ -43,5 +43,10 @@
     <string name="exit">Exit</string>
     <string name="exit_app">Are you sure you want to exit the application?</string>
     <string name="name_cant_be_empty">Name can not be empty</string>
+    <string name="unknown_sign_in_response">Unknown Response</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="sign_in_cancelled">Sign In cancelled</string>
+    <string name="no_internet_connection">No Internet Found</string>
+    <string name="signed_in">Signed In successfully</string>
 
 </resources>

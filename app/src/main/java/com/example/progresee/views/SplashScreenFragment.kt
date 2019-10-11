@@ -39,7 +39,7 @@ class SplashScreenFragment : Fragment() {
 
         splashViewModel.navigateToLoginFragment.observe(this, Observer {
             if (it == true) {
-                this.findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToLoginFragment())
+                this.findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToFirebaseLogin())
                 splashViewModel.doneNavigating()
             }
         })

@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'com.android.application'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
     defaultConfig {
+        resConfigs "en"
         vectorDrawables.useSupportLibrary = true
         applicationId "com.example.progresee"
         minSdkVersion 21
@@ -103,9 +104,15 @@ dependencies {
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
     //firebase
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
 
 
+    // FirebaseUI for Cloud Firestore
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
+    implementation 'com.firebaseui:firebase-ui-firestore:6.0.2'
+
+    implementation 'com.firebaseui:firebase-ui-auth:6.0.2'
+
+    implementation 'com.facebook.android:facebook-login:4.41.0'
 }
 apply plugin: 'com.google.gms.google-services'
