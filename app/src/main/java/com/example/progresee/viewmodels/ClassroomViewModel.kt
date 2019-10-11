@@ -2,7 +2,10 @@ package com.example.progresee.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import com.example.progresee.data.AppRepository
+import com.example.progresee.views.ClassroomFragmentDirections
+import com.firebase.ui.auth.AuthUI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

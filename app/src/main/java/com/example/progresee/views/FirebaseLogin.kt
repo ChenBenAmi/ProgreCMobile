@@ -18,7 +18,8 @@ import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.IdpResponse.fromResultIntent
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_firebase_login.*
+import com.google.firebase.auth.FirebaseUser
+import timber.log.Timber
 
 
 class FirebaseLogin : Fragment() {
@@ -33,7 +34,10 @@ class FirebaseLogin : Fragment() {
     ): View? {
 
         val auth = FirebaseAuth.getInstance()
+        val cureentUser: FirebaseUser?=auth.currentUser
         if (auth.currentUser != null) {
+            Timber.wtf(cureentUser?.displayName)
+
             this.findNavController().navigate(FirebaseLoginDirections.actionFirebaseLoginToClassroomFragment())
         } else {
             startActivityForResult(
@@ -50,7 +54,7 @@ class FirebaseLogin : Fragment() {
         return inflater.inflate(R.layout.fragment_firebase_login, container, false)
     }
 
-    fun showSnackbar(id: Int) {
+    private fun showSnackBar(id: Int) {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
             "yay",
@@ -63,21 +67,20 @@ class FirebaseLogin : Fragment() {
             val response: IdpResponse? = fromResultIntent(data)
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                //TODO
                 this.findNavController().navigate(FirebaseLoginDirections.actionFirebaseLoginToClassroomFragment())
             } else {
                 if (response == null) {
                     // User pressed back button
-                    showSnackbar(R.string.sign_in_cancelled)
+                    showSnackBar(R.string.sign_in_cancelled)
                     return
                 }
 
                 if (response.error!!.errorCode == ErrorCodes.NO_NETWORK) {
-                    showSnackbar(R.string.no_internet_connection)
+                    showSnackBar(R.string.no_internet_connection)
                     return
                 }
 
-                showSnackbar(R.string.unknown_error)
+                showSnackBar(R.string.unknown_error)
             }
         }
     }

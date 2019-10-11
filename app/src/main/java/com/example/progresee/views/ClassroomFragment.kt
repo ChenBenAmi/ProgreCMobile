@@ -12,7 +12,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.progresee.R
 import com.example.progresee.adapters.ClassroomAdapter
 import com.example.progresee.adapters.ClassroomClickListener
 import com.example.progresee.data.AppRepository
@@ -22,6 +21,14 @@ import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import android.content.Intent
+import androidx.annotation.NonNull
+import com.firebase.ui.auth.AuthUI
+import android.content.Context
+import com.example.progresee.R
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+
 
 class ClassroomFragment : Fragment() {
 
@@ -107,11 +114,7 @@ class ClassroomFragment : Fragment() {
                 return true
             }
             R.id.logout_menu_item -> {
-                Snackbar.make(
-                    activity!!.findViewById(android.R.id.content),
-                    "logout",
-                    Snackbar.LENGTH_LONG
-                ).show()
+                logout()
                 return true
             }
             android.R.id.home-> {
@@ -119,6 +122,18 @@ class ClassroomFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun logout() {
+        AuthUI.getInstance().signOut(context!!.applicationContext)
+            .addOnCanceledListener {
+                this.findNavController().navigate(ClassroomFragmentDirections.actionClassroomFragmentToFirebaseLogin())
+                Snackbar.make(
+                    activity!!.findViewById(android.R.id.content),
+                    "logout",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
     }
 
 }
