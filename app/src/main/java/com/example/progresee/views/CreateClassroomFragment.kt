@@ -94,6 +94,7 @@ class CreateClassroomFragment : Fragment() {
         createClassroomViewModel.snackBarShown()
     }
 
+    //TODO change to util file
     fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
     }

@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'androidx.navigation.safeargs'
-
+apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
@@ -36,7 +36,7 @@ android {
     }
 }
 ext {
-    room_version = "2.2.0-rc01"
+    room_version = "2.2.0"
     nav_version = "2.1.0"
     lifecycle_version = "2.1.0"
     retrofit_version = "2.5.0"
@@ -102,5 +102,10 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
+    //firebase
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+
+
 
 }
+apply plugin: 'com.google.gms.google-services'
