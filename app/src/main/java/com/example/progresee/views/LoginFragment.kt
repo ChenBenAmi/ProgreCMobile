@@ -1,11 +1,9 @@
 package com.example.progresee.views
 
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +11,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
+import com.example.progresee.data.AppRepository
+import com.example.progresee.viewmodels.HomeViewModel
+import com.example.progresee.viewmodels.LoginViewModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
@@ -20,14 +21,19 @@ import com.firebase.ui.auth.IdpResponse.fromResultIntent
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 
-class FirebaseLogin : Fragment() {
+class LoginFragment : Fragment() {
 
     private val RC_SIGN_IN = 123
     val auth = FirebaseAuth.getInstance()
 
+    private val appRepository: AppRepository by inject()
+    private val loginViewModel: LoginViewModel by viewModel { parametersOf(appRepository) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +42,18 @@ class FirebaseLogin : Fragment() {
 
         (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
         val auth = FirebaseAuth.getInstance()
-        val cureentUser: FirebaseUser?=auth.currentUser
-        if (auth.currentUser != null) {
-            Timber.wtf(cureentUser?.displayName)
-
-            this.findNavController().navigate(FirebaseLoginDirections.actionFirebaseLoginToClassroomFragment())
+        val currentUser: FirebaseUser? = auth.currentUser
+        if (currentUser != null) {
+            Timber.wtf(currentUser.displayName)
+            currentUser.getIdToken(true).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Timber.wtf(it.result?.signInProvider)
+                    Timber.wtf(it.result?.token)
+                    loginViewModel.getCurrentUser(it.result?.token)
+                }
+            }
+            this.findNavController()
+                .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
         } else {
             startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
@@ -52,15 +65,15 @@ class FirebaseLogin : Fragment() {
                 RC_SIGN_IN
             )
         }
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_firebase_login, container, false)
     }
 
     private fun showSnackBar(id: Int) {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            "yay",
-            Snackbar.LENGTH_LONG).show()
+            context!!.getString(id),
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -69,23 +82,21 @@ class FirebaseLogin : Fragment() {
             val response: IdpResponse? = fromResultIntent(data)
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                this.findNavController().navigate(FirebaseLoginDirections.actionFirebaseLoginToClassroomFragment())
+                this.findNavController()
+                    .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
             } else {
                 if (response == null) {
                     // User pressed back button
                     showSnackBar(R.string.sign_in_cancelled)
                     return
                 }
-
                 if (response.error!!.errorCode == ErrorCodes.NO_NETWORK) {
                     showSnackBar(R.string.no_internet_connection)
                     return
                 }
-
                 showSnackBar(R.string.unknown_error)
             }
         }
     }
-
 
 }

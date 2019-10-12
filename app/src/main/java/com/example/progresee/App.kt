@@ -45,6 +45,7 @@ class App : Application() {
                     classroomId
                 )
             }
+            viewModel { (appRepository: AppRepository) -> LoginViewModel(appRepository) }
             viewModel { (appRepository: AppRepository,classroomId: Long) -> CreateClassroomViewModel(appRepository,classroomId) }
             viewModel { (appRepository: AppRepository) -> ClassroomViewModel(appRepository) }
             viewModel { SplashViewModel() }

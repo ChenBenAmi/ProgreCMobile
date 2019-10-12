@@ -44,6 +44,10 @@ class ClassroomViewModel constructor(
         _navigateToCreateClassroomFragment.value = null
     }
 
+    fun getCurrentUser(token:String) {
+        appRepository.getCurrentUser(token)
+    }
+
 
     override fun onCleared() {
         super.onCleared()

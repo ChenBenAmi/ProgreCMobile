@@ -11,8 +11,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_firebaseLogin"
-            app:destination="@id/firebaseLogin" />
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
@@ -95,11 +95,11 @@
             app:argType="long" />
     </fragment>
     <fragment
-        android:id="@+id/firebaseLogin"
-        android:name="com.example.progresee.views.FirebaseLogin"
-        android:label="FirebaseLogin" >
+        android:id="@+id/loginFragment"
+        android:name="com.example.progresee.views.LoginFragment"
+        android:label="LoginFragment" >
         <action
-            android:id="@+id/action_firebaseLogin_to_classroomFragment"
+            android:id="@+id/action_loginFragment_to_classroomFragment"
             app:destination="@id/classroomFragment" />
     </fragment>
 </navigation>

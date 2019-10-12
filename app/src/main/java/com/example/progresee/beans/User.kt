@@ -11,11 +11,12 @@ import java.time.LocalDateTime
 data class User(
     @PrimaryKey
     val id: Long,
-    val facebookId: String,
-    val googleId: String,
+    val uid:String,
     val email: String,
-    val firstName: String,
-    val lastName: String,
-    val pictureURL: String
+    val fullName: String,
+    val pictureURL: String,
+    val role:String,
+    val dateCreated:String,
+    val lastLoggedIn:String
 
 )

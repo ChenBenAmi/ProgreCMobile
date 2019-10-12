@@ -22,7 +22,7 @@ import org.koin.core.parameter.parametersOf
 class HomeFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
-    private val loginViewModel: HomeViewModel by viewModel { parametersOf(appRepository) }
+    private val homeViewModel: HomeViewModel by viewModel { parametersOf(appRepository) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,16 +34,16 @@ class HomeFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
 
-        binding.homeViewModel = loginViewModel
+        binding.homeViewModel = homeViewModel
         setHasOptionsMenu(true)
         binding.lifecycleOwner = this
 
 
-        loginViewModel.navigateToFirebaseLoginFragment.observe(this, Observer {
+        homeViewModel.navigateToFirebaseLoginFragment.observe(this, Observer {
             if (it == true) {
                 this.findNavController()
-                    .navigate(HomeFragmentDirections.actionHomeFragmentToFirebaseLogin())
-                loginViewModel.doneNavigating()
+                    .navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
+                homeViewModel.doneNavigating()
             }
 
         })

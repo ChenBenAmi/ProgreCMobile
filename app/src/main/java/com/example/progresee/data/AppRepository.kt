@@ -63,17 +63,16 @@ class AppRepository constructor(
     }
 
 
-    fun loginWithGoogle() {
+    fun getCurrentUser(token:String?) {
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val request = apiCalls.login()
-                    val response = request.await()
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        Timber.i(data.toString())
+                    val request = apiCalls.getCurrentUserAsync(token).await()
+                    if (request.isSuccessful) {
+                        val data = request.body()
+                        Timber.wtf(data.toString())
                     } else {
-                        Timber.e(response.code().toString())
+                        Timber.e(request.code().toString()+request.errorBody())
                     }
                 } catch (e: Exception) {
                     Timber.e(e.printStackTrace().toString())
