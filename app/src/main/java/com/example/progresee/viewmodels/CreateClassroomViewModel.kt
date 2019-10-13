@@ -9,15 +9,14 @@ import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.lang.Exception
-import java.util.*
 
 class CreateClassroomViewModel(
     private val appRepository: AppRepository,
     private val classroomId: Long
-) : ViewModel() {
+) : BaseViewModel() {
 
 
-    private lateinit var token: LiveData<String?>
+    private var token: LiveData<String?>
 
 
     private var viewModelJob = Job()
@@ -34,6 +33,10 @@ class CreateClassroomViewModel(
     val stringLength: LiveData<Int?>
         get() = _stringLength
 
+    private val _showProgressBar=MutableLiveData<Boolean?>()
+    val showProgressBar
+    get() = _showProgressBar
+
     init {
         if (classroomId > 0) {
             classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
@@ -46,52 +49,40 @@ class CreateClassroomViewModel(
             name.length > 60 -> _stringLength.value = 1
             name.isEmpty() -> _stringLength.value = 2
             else -> uiScope.launch {
+                showProgressBar()
                 withContext(Dispatchers.IO) {
-                    Timber.wtf("value is ${token.value} & ${token} ")
                     if (classroom.value == null) {
                         try {
-                            Timber.wtf("w8ing")
-                            val request = appRepository.createClassroom(token.value, "hey").await()
-                            Timber.wtf(request.message())
+                            val request = appRepository.createClassroomAsync(token.value, name).await()
                             if (request.isSuccessful) {
-                                Timber.wtf("hey123123123123")
                                 val data = request.body()
-                                val tempClassroom=Classroom(data!!.id,data.name,data.owner,data.dateCreated,0)
-                                appRepository.insertClassroom(tempClassroom)
+                                appRepository.insertClassroom(data)
                                 withContext(Dispatchers.Main) {
+                                    hideProgressBar()
                                     _navigateBackToClassroomFragment.value = 0
                                 }
                             }
-                            Timber.wtf("WHY?!")
                         } catch (e: Exception) {
-                            Timber.wtf(e.message+e.printStackTrace())
+                            Timber.wtf("${e.message}${e.printStackTrace()}")
                         }
                     } else {
-
-                        val classroom = appRepository.getClassroom(classroomId)
-                        Timber.wtf("classroom value is ${classroom} & ${classroom.value}")
-                        val tempClassroom = classroom.value
-                        Timber.wtf("tempCLASSROOM $tempClassroom")
-                        if (tempClassroom != null) {
+                        val classroom = getClassroom().value
+                        if (classroom!=null) {
                             try {
-                                Timber.wtf("try2")
-
-                                val request =
-                                    appRepository.updateClassroom(token.value, tempClassroom)
-                                        .await()
+                                classroom.name=name
+                                val request = appRepository.updateClassroomAsync(token.value, classroom).await()
                                 if (request.isSuccessful) {
-                                    Timber.wtf("sucxxxxx")
-
                                     val data = request.body()
-                                    val tempClassroom=Classroom(data!!.id,data.name,data.owner,data.dateCreated,0)
-                                    appRepository.updateClassroom(tempClassroom)
+                                    appRepository.updateClassroom(data)
                                     withContext(Dispatchers.Main) {
-                                        //Timber.wtf("classroom object is ffs and ${classroom.value}")
+                                        hideProgressBar()
                                         _navigateBackToClassroomFragment.value = 0
                                     }
+                                } else {
+                                    Timber.wtf("${request.code()}${request.raw()}")
                                 }
                             } catch (e: Exception) {
-                                Timber.wtf("oh no kenny is dead")
+                                Timber.wtf("oh no something went wrong!")
                             }
                         }
                     }
@@ -100,11 +91,21 @@ class CreateClassroomViewModel(
         }
     }
 
-    fun snackBarShown() {
+
+
+    override fun showProgressBar(){
+        _showProgressBar.value=true
+    }
+
+     override fun hideProgressBar() {
+        _showProgressBar.value=null
+    }
+
+     override fun snackBarShown() {
         _stringLength.value = null
     }
 
-    fun onDoneNavigating() {
+    override fun onDoneNavigating() {
         _navigateBackToClassroomFragment.value = null
     }
 

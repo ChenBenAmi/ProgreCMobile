@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
             if (it == true) {
                 this.findNavController()
                     .navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
-                homeViewModel.doneNavigating()
+                homeViewModel.onDoneNavigating()
             }
 
         })

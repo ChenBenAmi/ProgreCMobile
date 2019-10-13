@@ -49,5 +49,7 @@
     <string name="no_internet_connection">No Internet Found</string>
     <string name="signed_in">Signed In successfully</string>
     <string name="login">Login</string>
+    <string name="please_wait">Please wait ...</string>
+    <string name="saving">Saving...</string>
 
 </resources>

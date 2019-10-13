@@ -9,8 +9,8 @@ data class Exercise (
 
     @PrimaryKey
     val id : Long,
-    val ex : String,
-    val taskId : Long
+    var ex : String,
+    var taskId : Long
 //    val finishedUsers : Map<Long,FinishedUsers>
 
 ):Serializable

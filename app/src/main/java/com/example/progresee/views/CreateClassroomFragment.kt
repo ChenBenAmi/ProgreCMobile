@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentCreateClassroomBinding
+import com.example.progresee.viewmodels.BaseViewModel
 import com.example.progresee.viewmodels.CreateClassroomViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_create_classroom.*
@@ -28,7 +29,7 @@ class CreateClassroomFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
     private var classroomId: Long = 0
-    private lateinit var createClassroomViewModel:CreateClassroomViewModel
+    private lateinit var createClassroomViewModel: CreateClassroomViewModel
 
 
     override fun onCreateView(
@@ -51,7 +52,7 @@ class CreateClassroomFragment : Fragment() {
                 classroomId
             )
         }
-        this.createClassroomViewModel=createClassroomViewModel
+        this.createClassroomViewModel = createClassroomViewModel
         binding.createClassroomViewModel = createClassroomViewModel
 
 
@@ -59,7 +60,7 @@ class CreateClassroomFragment : Fragment() {
             it?.let {
                 (activity as? AppCompatActivity)?.supportActionBar?.title =
                     context?.getString(R.string.edit_classroom)
-                create_classroom_title.text=context?.getString(R.string.edit_classroom)
+                create_classroom_title.text = context?.getString(R.string.edit_classroom)
                 editText_classroom_name.setText(it.name)
 
             }
@@ -68,24 +69,32 @@ class CreateClassroomFragment : Fragment() {
             viewLifecycleOwner,
             Observer {
                 if (it == 0L) {
-                    hideKeyboard()
                     this.findNavController()
                         .navigate(CreateClassroomFragmentDirections.actionCreateClassroomFragmentToClassroomFragment())
                     createClassroomViewModel.onDoneNavigating()
                 }
             })
 
+        createClassroomViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                hideKeyboard()
+                layout_progress_bar.visibility = View.VISIBLE
+                save_button.isEnabled = false
+                save_button.text = getString(R.string.saving)
+            }
+        })
+
         createClassroomViewModel.stringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
                 showSnackBar(R.string.name_too_long)
-            } else if (it==2) {
+            } else if (it == 2) {
                 showSnackBar(R.string.name_cant_be_empty)
             }
         })
         return binding.root
     }
 
-    private fun showSnackBar(id:Int) {
+    private fun showSnackBar(id: Int) {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
             getString(id),
@@ -95,14 +104,14 @@ class CreateClassroomFragment : Fragment() {
     }
 
     //TODO change to util file
-    fun Fragment.hideKeyboard() {
+    private fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
     }
 
-    fun Context.hideKeyboard(view: View) {
-        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
-
 
 }

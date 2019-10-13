@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 
-class SplashViewModel  : ViewModel() {
+class SplashViewModel  : BaseViewModel() {
 
 
     private val _navigateToLoginFragment = MutableLiveData<Boolean?>()
@@ -22,7 +22,7 @@ class SplashViewModel  : ViewModel() {
     }
 
 
-    fun navigate() {
+    override fun navigate() {
         _navigateToLoginFragment.value = true
     }
 

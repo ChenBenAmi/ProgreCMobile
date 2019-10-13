@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.progresee.data.AppRepository
 
-class HomeViewModel constructor(private val appRepository: AppRepository): ViewModel() {
+class HomeViewModel constructor(private val appRepository: AppRepository): BaseViewModel() {
 
 
     private val _navigateToFirebaseLoginFragment = MutableLiveData<Boolean?>()
@@ -18,11 +18,11 @@ class HomeViewModel constructor(private val appRepository: AppRepository): ViewM
 
 
 
-    fun doneNavigating() {
+    override fun onDoneNavigating() {
         _navigateToFirebaseLoginFragment.value = null
     }
 
-    fun navigate() {
+    override fun navigate() {
         _navigateToFirebaseLoginFragment.value = true
     }
 }

@@ -9,10 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
 import com.example.progresee.data.AppRepository
-import com.example.progresee.viewmodels.HomeViewModel
 import com.example.progresee.viewmodels.LoginViewModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
@@ -21,6 +21,8 @@ import com.firebase.ui.auth.IdpResponse.fromResultIntent
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.fragment_classroom.*
+import kotlinx.android.synthetic.main.fragment_create_classroom.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -44,16 +46,13 @@ class LoginFragment : Fragment() {
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (currentUser != null) {
-            Timber.wtf(currentUser.displayName)
             currentUser.getIdToken(true).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Timber.wtf(it.result?.signInProvider)
                     Timber.wtf(it.result?.token)
                     loginViewModel.getCurrentUser(it.result?.token)
                 }
             }
-            this.findNavController()
-                .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
+
         } else {
             startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
@@ -65,7 +64,18 @@ class LoginFragment : Fragment() {
                 RC_SIGN_IN
             )
         }
-        return inflater.inflate(R.layout.fragment_firebase_login, container, false)
+        loginViewModel.navigateToClassroomFragment.observe(viewLifecycleOwner, Observer {
+            if (it==true) {
+                this.findNavController()
+                    .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
+            }
+        })
+
+        loginViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                layout_progress_bar.visibility = View.VISIBLE
+        })
+        return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     private fun showSnackBar(id: Int) {

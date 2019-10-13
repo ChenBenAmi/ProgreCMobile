@@ -1,10 +1,7 @@
 package com.example.progresee.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.bumptech.glide.Glide.init
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
@@ -13,7 +10,7 @@ import timber.log.Timber
 import java.util.*
 
 class TaskViewModel(private val appRepository: AppRepository, classroomId: Long) :
-    ViewModel() {
+    BaseViewModel() {
 
 
     private var viewModelJob = Job()

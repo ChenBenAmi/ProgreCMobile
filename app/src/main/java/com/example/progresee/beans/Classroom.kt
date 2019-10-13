@@ -11,11 +11,10 @@ data class Classroom(
 
     @PrimaryKey
     val id: Long,
-    @Json(name="name")
-    val name: String,
-    val owner: String,
-    val dateCreated: String,
-    val openTasks:Int): Serializable
+    var name: String,
+    var owner: String,
+    var dateCreated: String,
+    var openTasks:Int): Serializable
 
 
 

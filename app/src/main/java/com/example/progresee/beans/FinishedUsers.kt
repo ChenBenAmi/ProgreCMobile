@@ -10,7 +10,7 @@ import java.util.*
 data class FinishedUsers(
     @PrimaryKey
     val id: Long,
-    val fullName: String,
-    val dateCompleted: Date
+    var fullName: String,
+    var dateCompleted: Date
 
 ):Serializable

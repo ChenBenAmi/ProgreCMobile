@@ -13,11 +13,11 @@ data class User(
     @PrimaryKey
     val id: Long,
     val uid:String,
-    val email: String,
-    val fullName: String,
-    val pictureURL: String,
-    val role:String,
-    val dateCreated:String,
-    val lastLoggedIn:String
+    var email: String,
+    var fullName: String,
+    var pictureURL: String,
+    var role:String,
+    var dateCreated:String,
+    var lastLoggedIn:String
 
 ):Serializable

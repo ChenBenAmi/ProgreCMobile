@@ -21,17 +21,18 @@ class AppRepository constructor(
     private val network: ApiService
 ) {
 
-    private val _currentToken = MutableLiveData<String?>()
+    private val firebaseAuth = FirebaseAuth.getInstance()
+
+    private var _currentToken = MutableLiveData<String?>()
+
     val currentToken: LiveData<String?>
         get() = _currentToken
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    fun setToken(token:String?) {
+        _currentToken.value=token
+    }
     private val user = MediatorLiveData<User?>()
     fun getUser() = user
-
-    private val token = MediatorLiveData<String?>()
-    fun getToken() = token
-
 
     private val _classrooms: LiveData<List<Classroom?>> = dataBase.classroomDao().getClassrooms()
     val classrooms
@@ -48,6 +49,17 @@ class AppRepository constructor(
     private val apiCalls: ApiCalls = network.retrofit()
 
 
+    fun isUserExist(userId: Long):Boolean {
+        return dataBase.userDao().isUserExist(userId)
+    }
+
+    fun insertUser(user: User) {
+        dataBase.userDao().insertUser(user)
+    }
+
+    fun getUser(userId: Long) :LiveData<User?>{
+        return dataBase.userDao().getUser(userId)
+    }
     fun insertClassroom(classroom: Classroom?) {
         dataBase.classroomDao().insert(classroom)
     }
@@ -80,75 +92,46 @@ class AppRepository constructor(
         val currentUser = firebaseAuth.currentUser
         currentUser?.getIdToken(true)?.addOnCompleteListener {
             if (it.isSuccessful) {
-                Timber.wtf("yay i have a tokenz ${it.result!!.token}")
                 _currentToken.value = it.result!!.token
-
-//                currentToken.value = it.result!!.token
-//                token.addSource(currentToken, token::setValue)
             }
         }
     }
 
-    fun getCurrentUser(token: String?) {
-        CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    val request = apiCalls.getCurrentUserAsync(token).await()
-                    if (request.isSuccessful) {
-                        val data = request.body()
-                        if (dataBase.userDao().isUserExist(data!!.id)) {
-                            withContext(Dispatchers.Main) {
-                                user.addSource(dataBase.userDao().getUser(data.id), user::setValue)
-                                getCurrentUserToken()
-                            }
-                        } else {
-                            dataBase.userDao().insertUser(data)
-                            withContext(Dispatchers.Main) {
-                                user.addSource(dataBase.userDao().getUser(data.id), user::setValue)
-                                getCurrentUserToken()
+    fun getCurrentUserAsync(token: String?):Deferred<Response<User>> {
+       return apiCalls.getCurrentUserAsync(token)
 
-                            }
-                        }
-                    } else {
-                        Timber.wtf("${request.code()}${request.errorBody()}")
-                    }
-                } catch (e: Exception) {
-                    Timber.e(e.printStackTrace().toString())
-                }
-            }
-        }
     }
 
     fun updateUser(token: String?, user: User): Deferred<Response<User>> {
-        return apiCalls.updateUser(token, user)
+        return apiCalls.updateUserAsync(token, user)
     }
 
-    fun createClassroom(token: String?, name: String): Deferred<Response<Classroom>> {
-        return apiCalls.createClassroom(token,name)
+    fun createClassroomAsync(token: String?, name: String): Deferred<Response<Classroom>> {
+        return apiCalls.createClassroomAsync(token,name)
     }
 
     fun addToClassroom(token: String?, userId: Long, classroomId: Long): Deferred<Response<User>> {
-        return apiCalls.addToClassroom(token, userId, classroomId)
+        return apiCalls.addToClassroomAsync(token, userId, classroomId)
     }
 
     fun getUsersInClassroom(token: String?, classroomId: Long): Deferred<Response<List<User>>> {
-        return apiCalls.getUsersInClassroom(token, classroomId)
+        return apiCalls.getUsersInClassroomAsync(token, classroomId)
     }
 
-    fun updateClassroom(token: String?, classroom: Classroom): Deferred<Response<Classroom>> {
-        return apiCalls.updateClassroom(token, classroom)
+    fun updateClassroomAsync(token: String?, classroom: Classroom): Deferred<Response<Classroom>> {
+        return apiCalls.updateClassroomAsync(token, classroom)
     }
 
     fun leaveClassroom(token: String?, classroomId: Long) : Deferred<Response<User>> {
-        return apiCalls.leaveClassRoom(token, classroomId)
+        return apiCalls.leaveClassRoomAsync(token, classroomId)
     }
 
     fun removeUser(token: String?, userId: Long, classroomId: Long): Deferred<Response<String>>  {
-       return apiCalls.removeUser(token, userId, classroomId)
+       return apiCalls.removeUserAsync(token, userId, classroomId)
     }
 
     fun transferClassroom(token: String?, classroomId: Long, email: String): Deferred<Response<Classroom>>{
-        return apiCalls.transferClassroom(token, classroomId, email)
+        return apiCalls.transferClassroomAsync(token, classroomId, email)
     }
 
 

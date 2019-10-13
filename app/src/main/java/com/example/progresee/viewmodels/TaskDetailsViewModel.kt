@@ -12,7 +12,7 @@ import timber.log.Timber
 import java.util.*
 
 class TaskDetailsViewModel constructor(private val appRepository: AppRepository, private val taskId: Long) :
-    ViewModel() {
+    BaseViewModel() {
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
