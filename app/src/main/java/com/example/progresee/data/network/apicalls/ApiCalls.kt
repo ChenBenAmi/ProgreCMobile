@@ -12,4 +12,8 @@ interface ApiCalls {
 
     @GET("/user/getCurrentUser")
     fun getCurrentUserAsync(@Header("Authorization") token:String?):Deferred<Response<User>>
+
+    
+
+
 }

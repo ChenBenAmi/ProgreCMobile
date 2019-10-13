@@ -130,7 +130,7 @@ class ClassroomFragment : Fragment() {
                 this.findNavController().navigate(ClassroomFragmentDirections.actionClassroomFragmentToHomeFragment())
                 Snackbar.make(
                     activity!!.findViewById(android.R.id.content),
-                    "Logged out successfully ",
+                    "Logged out successfully",
                     Snackbar.LENGTH_LONG
                 ).show()
             }
