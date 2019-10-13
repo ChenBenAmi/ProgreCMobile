@@ -2,6 +2,7 @@ package com.example.progresee.beans
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.time.LocalDateTime
 import java.util.*
 
@@ -12,4 +13,4 @@ data class FinishedUsers(
     val fullName: String,
     val dateCompleted: Date
 
-)
+):Serializable

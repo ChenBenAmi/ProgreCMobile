@@ -20,6 +20,8 @@ class ClassroomViewModel constructor(
 
     val classrooms = appRepository.classrooms
 
+    val user = appRepository.getUser()
+
     private val _navigateToTaskFragment = MutableLiveData<Long>()
     val navigateToTaskFragment
         get() = _navigateToTaskFragment

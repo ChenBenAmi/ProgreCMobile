@@ -14,26 +14,23 @@ interface ApiCalls {
     @GET("/user/getCurrentUser")
     fun getCurrentUserAsync(@Header("Authorization") token: String?): Deferred<Response<User>>
 
-    @POST("/user/createClassroom")
-    fun createClassroom(@Header("Authorization") token: String?, @Query("name") name: String): Deferred<Response<Classroom>>
-
-    @PUT("/user/updateClassroom")
-    fun updateClassroom(@Header("Authorization") token: String?, @Body classroom: Classroom): Deferred<Response<Classroom>>
-
     @PUT("user/updateUser")
     fun updateUser(@Header("Authorization") token: String?, @Body user: User): Deferred<Response<User>>
 
-    @PUT("/user/transferClassroom")
-    fun updateClassroom(
-        @Header("Authorization") token: String?, @Query("classroomId") classroomId: Long,
-        @Query("email") email: String
-    ): Deferred<Response<Classroom>>
+    @POST("/user/createClassroom/{name}")
+    fun createClassroom(@Header("Authorization") token: String?, @Path("name") name: String): Deferred<Response<Classroom>>
 
     @PUT("user/addToClassroom")
     fun addToClassroom(
         @Header("Authorization") token: String?, @Query("userId") userId: Long,
         @Query("classroomId") classroomId: Long
     ): Deferred<Response<User>>
+
+    @GET("/user/getUsersInClassroom")
+    fun getUsersInClassroom(@Header("Authorization") token: String?, classroomId: Long): Deferred<Response<List<User>>>
+
+    @PUT("/user/updateClassroom")
+    fun updateClassroom(@Header("Authorization") token: String?, @Body classroom: Classroom): Deferred<Response<Classroom>>
 
     @PUT("user/leaveClassroom")
     fun leaveClassRoom(
@@ -44,10 +41,13 @@ interface ApiCalls {
     fun removeUser(
         @Header("Authorization") token: String?, @Query("userId") userId: Long,
         @Query("classroomId") classroomId: Long
-    ): Deferred<Response<User>>
+    ): Deferred<Response<String>>
 
-
-
+    @PUT("/user/transferClassroom")
+    fun transferClassroom(
+        @Header("Authorization") token: String?, @Query("classroomId") classroomId: Long,
+        @Query("email") email: String
+    ): Deferred<Response<Classroom>>
 
 
 }

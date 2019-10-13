@@ -8,12 +8,16 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.lang.Exception
 import java.util.*
 
 class CreateClassroomViewModel(
     private val appRepository: AppRepository,
-    classroomId: Long
+    private val classroomId: Long
 ) : ViewModel() {
+
+
+    private lateinit var token: LiveData<String?>
 
 
     private var viewModelJob = Job()
@@ -34,24 +38,64 @@ class CreateClassroomViewModel(
         if (classroomId > 0) {
             classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
         }
+        token = appRepository.currentToken
     }
 
     fun onSavePressed(name: String) {
-        if (name.length > 60) {
-            _stringLength.value = 1
-        } else if(name.isEmpty()) {
-            _stringLength.value = 2
-        } else {
-            uiScope.launch {
-                //TODO change to network logic
-                if (classroom.value == null) {
-                    insertClassroom(Classroom(0, name, "chen", Calendar.getInstance().time, 0))
-                    _navigateBackToClassroomFragment.value = 0
-                } else {
-                    updateClassroom(name)
-                    _navigateBackToClassroomFragment.value = 0
-                }
+        when {
+            name.length > 60 -> _stringLength.value = 1
+            name.isEmpty() -> _stringLength.value = 2
+            else -> uiScope.launch {
+                withContext(Dispatchers.IO) {
+                    Timber.wtf("value is ${token.value} & ${token} ")
+                    if (classroom.value == null) {
+                        try {
+                            Timber.wtf("w8ing")
+                            val request = appRepository.createClassroom(token.value, "hey").await()
+                            Timber.wtf(request.message())
+                            if (request.isSuccessful) {
+                                Timber.wtf("hey123123123123")
+                                val data = request.body()
+                                val tempClassroom=Classroom(data!!.id,data.name,data.owner,data.dateCreated,0)
+                                appRepository.insertClassroom(tempClassroom)
+                                withContext(Dispatchers.Main) {
+                                    _navigateBackToClassroomFragment.value = 0
+                                }
+                            }
+                            Timber.wtf("WHY?!")
+                        } catch (e: Exception) {
+                            Timber.wtf(e.message+e.printStackTrace())
+                        }
+                    } else {
 
+                        val classroom = appRepository.getClassroom(classroomId)
+                        Timber.wtf("classroom value is ${classroom} & ${classroom.value}")
+                        val tempClassroom = classroom.value
+                        Timber.wtf("tempCLASSROOM $tempClassroom")
+                        if (tempClassroom != null) {
+                            try {
+                                Timber.wtf("try2")
+
+                                val request =
+                                    appRepository.updateClassroom(token.value, tempClassroom)
+                                        .await()
+                                if (request.isSuccessful) {
+                                    Timber.wtf("sucxxxxx")
+
+                                    val data = request.body()
+                                    val tempClassroom=Classroom(data!!.id,data.name,data.owner,data.dateCreated,0)
+                                    appRepository.updateClassroom(tempClassroom)
+                                    withContext(Dispatchers.Main) {
+                                        //Timber.wtf("classroom object is ffs and ${classroom.value}")
+                                        _navigateBackToClassroomFragment.value = 0
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Timber.wtf("oh no kenny is dead")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -64,11 +108,6 @@ class CreateClassroomViewModel(
         _navigateBackToClassroomFragment.value = null
     }
 
-    private suspend fun insertClassroom(classroom: Classroom) {
-        withContext(Dispatchers.IO) {
-            appRepository.insertClassroom(classroom)
-        }
-    }
 
     override fun onCleared() {
         super.onCleared()
@@ -76,23 +115,6 @@ class CreateClassroomViewModel(
     }
 
 
-    private fun updateClassroom(name: String) {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                if (classroom.value != null) {
-                    appRepository.updateClassroom(
-                        Classroom(
-                            classroom.value!!.id,
-                            name,
-                            "hey1",
-                            Calendar.getInstance().time,
-                            0
-                        )
-                    )
-                }
-            }
-        }
-    }
 
 
 }

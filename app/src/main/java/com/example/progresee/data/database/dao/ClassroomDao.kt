@@ -8,16 +8,16 @@ import com.example.progresee.beans.Classroom
 interface ClassroomDao {
 
     @Query("select * from classroom")
-    fun getClassrooms(): LiveData<List<Classroom>>
+    fun getClassrooms(): LiveData<List<Classroom?>>
 
     @Insert
-    fun insert(classroom: Classroom)
+    fun insert(classroom: Classroom?)
 
     @Query("select * from classroom where Id = :classroomId")
     fun getClassroom(classroomId: Long?): LiveData<Classroom?>
 
     @Update
-    fun updateClassroom(classroom: Classroom)
+    fun updateClassroom(classroom: Classroom?)
 
     @Delete
     fun deleteClassroom(classroom: Classroom?)

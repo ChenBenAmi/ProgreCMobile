@@ -2,6 +2,7 @@ package com.example.progresee.beans
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.time.LocalDateTime
 import java.util.*
 
@@ -16,4 +17,4 @@ data class Task(
     val startDate: Date,
     val endDate: Date
 //    val exercises: Map<Long,Exercise>
-)
+):Serializable

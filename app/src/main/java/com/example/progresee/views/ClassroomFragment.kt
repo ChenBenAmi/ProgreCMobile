@@ -28,6 +28,7 @@ import android.content.Context
 import com.example.progresee.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import timber.log.Timber
 
 
 class ClassroomFragment : Fragment() {
@@ -88,8 +89,18 @@ class ClassroomFragment : Fragment() {
         classroomViewModel.navigateToCreateClassroomFragment.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 this.findNavController()
-                    .navigate(ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment(0))
+                    .navigate(
+                        ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment(
+                            0
+                        )
+                    )
                 classroomViewModel.doneNavigateToCreateClassroomFragment()
+            }
+        })
+
+        classroomViewModel.user.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.wtf(it.toString())
             }
         })
 
@@ -117,8 +128,8 @@ class ClassroomFragment : Fragment() {
                 logout()
                 return true
             }
-            android.R.id.home-> {
-                return NavigationUI.onNavDestinationSelected(item,view!!.findNavController())
+            android.R.id.home -> {
+                return NavigationUI.onNavDestinationSelected(item, view!!.findNavController())
             }
         }
         return super.onOptionsItemSelected(item)
@@ -127,7 +138,8 @@ class ClassroomFragment : Fragment() {
     private fun logout() {
         AuthUI.getInstance().signOut(context!!.applicationContext)
             .addOnCompleteListener {
-                this.findNavController().navigate(ClassroomFragmentDirections.actionClassroomFragmentToHomeFragment())
+                this.findNavController()
+                    .navigate(ClassroomFragmentDirections.actionClassroomFragmentToHomeFragment())
                 Snackbar.make(
                     activity!!.findViewById(android.R.id.content),
                     "Logged out successfully ",

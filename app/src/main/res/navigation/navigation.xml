@@ -100,6 +100,7 @@
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_classroomFragment"
-            app:destination="@id/classroomFragment" />
+            app:destination="@id/classroomFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

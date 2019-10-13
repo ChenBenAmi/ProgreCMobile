@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.progresee.beans.Classroom
 import com.example.progresee.utils.ConverterUtils
+import java.io.Serializable
 import java.time.LocalDateTime
 
 @Entity
@@ -19,4 +20,4 @@ data class User(
     val dateCreated:String,
     val lastLoggedIn:String
 
-)
+):Serializable

@@ -2,6 +2,7 @@ package com.example.progresee.beans
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity
 data class Exercise (
@@ -12,4 +13,4 @@ data class Exercise (
     val taskId : Long
 //    val finishedUsers : Map<Long,FinishedUsers>
 
-)
+):Serializable

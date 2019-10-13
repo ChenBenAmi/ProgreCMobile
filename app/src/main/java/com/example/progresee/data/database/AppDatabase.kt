@@ -10,7 +10,7 @@ import com.example.progresee.utils.ConverterUtils
 @TypeConverters(ConverterUtils::class)
 @Database(
     entities = [Classroom::class, User::class, FinishedUsers::class, Task::class, Exercise::class],
-    version = 7,
+    version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
