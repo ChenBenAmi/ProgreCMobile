@@ -47,6 +47,7 @@ class LoginFragment : Fragment() {
             Timber.wtf(currentUser.displayName)
             currentUser.getIdToken(true).addOnCompleteListener {
                 if (it.isSuccessful) {
+                    Timber.wtf(it.result?.signInProvider)
                     Timber.wtf(it.result?.token)
                     loginViewModel.getCurrentUser(it.result?.token)
                 }

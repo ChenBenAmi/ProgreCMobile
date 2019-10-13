@@ -72,7 +72,7 @@ class AppRepository constructor(
                         val data = request.body()
                         Timber.wtf(data.toString())
                     } else {
-                        Timber.wtf("${request.code()}${request.errorBody()}")
+                        Timber.e(request.code().toString()+request.errorBody())
                     }
                 } catch (e: Exception) {
                     Timber.e(e.printStackTrace().toString())
