@@ -39,6 +39,7 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = this
 
 
+
         homeViewModel.navigateToFirebaseLoginFragment.observe(this, Observer {
             if (it == true) {
                 this.findNavController()
