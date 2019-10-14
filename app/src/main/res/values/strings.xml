@@ -37,7 +37,7 @@
     <string name="name_too_long">Classroom name can not be longer than 60 characters</string>
     <string name="info">Info</string>
     <string name="edit_classroom">Edit classroom</string>
-    <string name="delete_are_you_sure">Are you sure you want to delete this classroom?</string>
+    <string name="delete_are_you_sure">Are you sure you want to delete this classroom? Deleting the classroom will also delete all the tasks within it.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="exit">Exit</string>
@@ -51,5 +51,7 @@
     <string name="login">Login</string>
     <string name="please_wait">Please wait ...</string>
     <string name="saving">Saving...</string>
+    <string name="owner">Owner</string>
+    <string name="add_person">Add person</string>
 
 </resources>

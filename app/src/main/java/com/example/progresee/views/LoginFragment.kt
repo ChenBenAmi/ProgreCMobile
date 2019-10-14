@@ -42,7 +42,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
+//        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (currentUser != null) {

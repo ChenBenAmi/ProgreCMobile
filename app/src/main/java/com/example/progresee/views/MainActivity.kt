@@ -5,29 +5,31 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.example.progresee.R
+import kotlinx.android.synthetic.main.activity_main.*
+
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
+        setSupportActionBar(progresee_toolbar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        progresee_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24px)
         navController = this.findNavController(R.id.myNavHostFragment)
-        NavigationUI.setupActionBarWithNavController(this, navController)
+        progresee_toolbar.elevation= 4.0F
+        progresee_toolbar.setNavigationOnClickListener {
+            when {
+                navController.currentDestination?.id == R.id.homeFragment -> exitApp()
+                else -> navController.navigateUp()
+            }
 
-
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        when{
-            navController.currentDestination?.id == R.id.homeFragment -> exitApp()
-            else ->return navController.navigateUp()
         }
-        return true
     }
+
 
     override fun onBackPressed() {
         when {

@@ -4,6 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Task
+import com.example.progresee.beans.User
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -19,15 +20,11 @@ class TaskViewModel(private val appRepository: AppRepository, classroomId: Long)
     private val classroom = MediatorLiveData<Classroom>()
     fun getClassroom() = classroom
 
+    private val _showProgressBar = MutableLiveData<Boolean?>()
+    val showProgressBar
+        get() = _showProgressBar
+
     val tasks = appRepository.tasks
-
-    init {
-        Timber.wtf(classroomId.toString())
-        uiScope.launch {
-            classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
-        }
-
-    }
 
     private val _navigateTooTaskDetailsFragment = MutableLiveData<Long>()
     val navigateToTaskDetailsFragment
@@ -37,6 +34,56 @@ class TaskViewModel(private val appRepository: AppRepository, classroomId: Long)
     val navigateBackToClassroomFragment
         get() = _navigateBackToClassroomFragment
 
+    private val _navigateToClassroomUsersFragment = MutableLiveData<Boolean?>()
+    val navigateToClassroomUsersFragment
+        get() = _navigateToClassroomUsersFragment
+
+    private val _checkOwnerShip = MutableLiveData<Boolean?>()
+    val checkOwnerShip
+        get() = _checkOwnerShip
+
+    init {
+        uiScope.launch {
+            classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
+        }
+    }
+
+    fun deleteClassRoom() {
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                try {
+                    val response = appRepository.deleteClassroomAsync(
+                        appRepository.currentToken.value,
+                        classroom.value!!.id
+                    ).await()
+                    if (response.isSuccessful) {
+                        val data = response.body()
+                        Timber.wtf(data.toString())
+                        appRepository.deleteClassroomById(data)
+                    }
+                } catch (e: Exception) {
+                    Timber.wtf("Something went wrong")
+                }
+            }
+            hideProgressBar()
+            onClassroomDeleted()
+        }
+    }
+
+    fun checkClassroomOwnerShip(classroom: Classroom?) {
+        val user = appRepository.getUser().value
+        user?.let {
+            classroom?.let {
+                if (user.email == classroom.owner)
+                    _checkOwnerShip.value=true
+            }
+        }
+    }
+
+    fun checkedClassroomOwnerShip() {
+        _checkOwnerShip.value=null
+    }
 
 
     fun onTaskClicked(id: Long) {
@@ -48,25 +95,25 @@ class TaskViewModel(private val appRepository: AppRepository, classroomId: Long)
     }
 
     private fun onClassroomDeleted() {
-        _navigateBackToClassroomFragment.value=true
+        _navigateBackToClassroomFragment.value = true
     }
+
     fun doneNavigateToClassroomFragment() {
-        _navigateBackToClassroomFragment.value=null
+        _navigateBackToClassroomFragment.value = null
     }
+
+    fun navigateToClassroomUsersPage() {
+        navigateToClassroomUsersFragment.value = true
+    }
+
+    fun navigateToClassroomUsersPageDone() {
+        navigateToClassroomUsersFragment.value = null
+    }
+
 
     private suspend fun insertTask(task: Task) {
         withContext(Dispatchers.IO) {
             appRepository.insertTask(task)
-        }
-    }
-
-    fun deleteClassRoom() {
-        uiScope.launch {
-            withContext(Dispatchers.IO) {
-                appRepository.deleteClassroom(getClassroom().value)
-
-            }
-            onClassroomDeleted()
         }
     }
 
@@ -84,6 +131,14 @@ class TaskViewModel(private val appRepository: AppRepository, classroomId: Long)
             )
             Timber.wtf(Calendar.getInstance().time.toString())
         }
+    }
+
+    override fun showProgressBar() {
+        _showProgressBar.value = true
+    }
+
+    override fun hideProgressBar() {
+        _showProgressBar.value = null
     }
 
     override fun onCleared() {

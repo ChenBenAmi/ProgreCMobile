@@ -28,9 +28,10 @@ class AppRepository constructor(
     val currentToken: LiveData<String?>
         get() = _currentToken
 
-    fun setToken(token:String?) {
-        _currentToken.value=token
+    fun setToken(token: String?) {
+        _currentToken.value = token
     }
+
     private val user = MediatorLiveData<User?>()
     fun getUser() = user
 
@@ -49,7 +50,7 @@ class AppRepository constructor(
     private val apiCalls: ApiCalls = network.retrofit()
 
 
-    fun isUserExist(userId: Long):Boolean {
+    fun isUserExist(userId: Long): Boolean {
         return dataBase.userDao().isUserExist(userId)
     }
 
@@ -57,9 +58,10 @@ class AppRepository constructor(
         dataBase.userDao().insertUser(user)
     }
 
-    fun getUser(userId: Long) :LiveData<User?>{
+    fun getUser(userId: Long): LiveData<User?> {
         return dataBase.userDao().getUser(userId)
     }
+
     fun insertClassroom(classroom: Classroom?) {
         dataBase.classroomDao().insert(classroom)
     }
@@ -70,6 +72,10 @@ class AppRepository constructor(
 
     fun deleteClassroom(classroom: Classroom?) {
         dataBase.classroomDao().deleteClassroom(classroom)
+    }
+
+    fun deleteClassroomById(classroomId: Long?) {
+        dataBase.classroomDao().deleteClassroomById(classroomId)
     }
 
     fun getClassroom(classroomId: Long): LiveData<Classroom?> {
@@ -97,8 +103,8 @@ class AppRepository constructor(
         }
     }
 
-    fun getCurrentUserAsync(token: String?):Deferred<Response<User>> {
-       return apiCalls.getCurrentUserAsync(token)
+    fun getCurrentUserAsync(token: String?): Deferred<Response<User>> {
+        return apiCalls.getCurrentUserAsync(token)
 
     }
 
@@ -107,7 +113,11 @@ class AppRepository constructor(
     }
 
     fun createClassroomAsync(token: String?, name: String): Deferred<Response<Classroom>> {
-        return apiCalls.createClassroomAsync(token,name)
+        return apiCalls.createClassroomAsync(token, name)
+    }
+
+    fun deleteClassroomAsync(token: String?, classroomId: Long):Deferred<Response<Long>> {
+        return apiCalls.deleteClassroomAsync(token,classroomId)
     }
 
     fun addToClassroom(token: String?, userId: Long, classroomId: Long): Deferred<Response<User>> {
@@ -122,17 +132,23 @@ class AppRepository constructor(
         return apiCalls.updateClassroomAsync(token, classroom)
     }
 
-    fun leaveClassroom(token: String?, classroomId: Long) : Deferred<Response<User>> {
+    fun leaveClassroom(token: String?, classroomId: Long): Deferred<Response<User>> {
         return apiCalls.leaveClassRoomAsync(token, classroomId)
     }
 
-    fun removeUser(token: String?, userId: Long, classroomId: Long): Deferred<Response<String>>  {
-       return apiCalls.removeUserAsync(token, userId, classroomId)
+    fun removeUser(token: String?, userId: Long, classroomId: Long): Deferred<Response<String>> {
+        return apiCalls.removeUserAsync(token, userId, classroomId)
     }
 
-    fun transferClassroom(token: String?, classroomId: Long, email: String): Deferred<Response<Classroom>>{
+    fun transferClassroom(
+        token: String?,
+        classroomId: Long,
+        email: String
+    ): Deferred<Response<Classroom>> {
         return apiCalls.transferClassroomAsync(token, classroomId, email)
     }
+
+
 
 
 }

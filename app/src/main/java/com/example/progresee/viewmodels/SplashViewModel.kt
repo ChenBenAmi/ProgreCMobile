@@ -16,16 +16,6 @@ class SplashViewModel  : BaseViewModel() {
     val navigateToLoginFragment: LiveData<Boolean?>
         get() = _navigateToLoginFragment
 
-
-    fun doneNavigating() {
-        _navigateToLoginFragment.value = null
-    }
-
-
-    override fun navigate() {
-        _navigateToLoginFragment.value = true
-    }
-
     val liveData: LiveData<SplashState>
         get() = mutableLiveData
     private val mutableLiveData = MutableLiveData<SplashState>()
@@ -37,6 +27,14 @@ class SplashViewModel  : BaseViewModel() {
             navigate()
         }
 
+    }
+
+    fun doneNavigating() {
+        _navigateToLoginFragment.value = null
+    }
+
+    override fun navigate() {
+        _navigateToLoginFragment.value = true
     }
 
     override fun onCleared() {

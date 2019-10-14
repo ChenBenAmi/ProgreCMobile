@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progresee.beans.Task
+import com.example.progresee.beans.User
 import com.example.progresee.databinding.ListItemTaskBinding
+import com.example.progresee.databinding.ListItemUserBinding
 
 
-class TaskAdapter(private val clickListener: TaskClickListener) : ListAdapter<Task,
-        TaskAdapter.ViewHolder>(TaskDiffCallback()) {
+class UsersAdapter(private val clickListener: UserClickListener) : ListAdapter<User,
+        UsersAdapter.ViewHolder>(UserDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(clickListener, item)
@@ -20,10 +22,10 @@ class TaskAdapter(private val clickListener: TaskClickListener) : ListAdapter<Ta
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ListItemTaskBinding) :
+    class ViewHolder private constructor(val binding: ListItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(clickListener: TaskClickListener, item: Task) {
-            binding.task = item
+        fun bind(clickListener: UserClickListener, item: User) {
+            binding.user = item
             binding.taskClickListener = clickListener
             binding.executePendingBindings()
         }
@@ -31,23 +33,23 @@ class TaskAdapter(private val clickListener: TaskClickListener) : ListAdapter<Ta
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListItemTaskBinding.inflate(layoutInflater, parent, false)
+                val binding = ListItemUserBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
     }
 }
 
-class TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
-    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+class UserDiffCallback : DiffUtil.ItemCallback<User>() {
+    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
         return oldItem == newItem
     }
 }
 
-class TaskClickListener(val clickListener: (taskId: Long) -> Unit) {
-    fun onClick(task: Task) = clickListener(task.id)
+class UserClickListener(val clickListener: (userId: Long) -> Unit) {
+    fun onClick(user: User) = clickListener(user.id)
 }

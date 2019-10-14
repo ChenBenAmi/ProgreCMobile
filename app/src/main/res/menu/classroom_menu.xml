@@ -3,18 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:visible="false"
         android:id="@+id/edit_menu_item"
         android:icon="@drawable/ic_edit_24px"
         app:showAsAction="ifRoom"
         android:title="@string/edit" />
     <item
+        android:visible="false"
         android:id="@+id/delete_menu_item"
         android:icon="@drawable/ic_delete_24px"
         app:showAsAction="ifRoom"
         android:title="@string/delete" />
 
     <item
+        android:visible="false"
+        android:id="@+id/add_user_menu_item"
+        android:icon="@drawable/ic_person_add_24px"
+        app:showAsAction="ifRoom"
+        android:title="@string/add_person" />
+
+    <item
         android:id="@+id/info_menu_item"
         android:icon="@drawable/ic_info_24px"
         android:title="@string/info" />
+
+
 </menu>

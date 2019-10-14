@@ -8,6 +8,39 @@ import com.example.progresee.R
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
+import com.example.progresee.beans.User
+
+
+@BindingAdapter("setFullName")
+fun TextView.setFullName(user: User?) {
+    user?.let {
+        text = user.fullName
+    }
+}
+
+@BindingAdapter("setEmail")
+fun TextView.setEmail(user: User?) {
+    user?.let {
+        text = user.email
+    }
+}
+
+@BindingAdapter("setLastLoggedIn")
+fun TextView.setLastLoggedIn(user: User?) {
+    user?.let {
+        text = user.lastLoggedIn
+    }
+}
+
+@BindingAdapter("setProfilePic")
+fun ImageView.setProfilePic(user: User?) {
+    user?.let {
+        Glide.with(context)
+            .load(user.pictureURL)
+            .into(this)
+    }
+}
+
 
 @BindingAdapter("classroomOwner")
 fun TextView.setClassroomOwner(item: Classroom?) {
@@ -32,28 +65,28 @@ fun TextView.setClassroomName(item: Classroom?) {
 }
 
 @BindingAdapter("taskTitle")
-fun TextView.setTaskTitle(item: Task?){
+fun TextView.setTaskTitle(item: Task?) {
     item?.let {
         text = item.title
     }
 }
 
 @BindingAdapter("taskDueDate")
-fun TextView.setTaskDueDate(item: Task?){
-    item?.let{
+fun TextView.setTaskDueDate(item: Task?) {
+    item?.let {
         text = context.getString(R.string.due_by, item.endDate.toString())
     }
 }
 
 @BindingAdapter("taskDescription")
-fun TextView.setTaskDescription(item: Task?){
-    item?.let{
+fun TextView.setTaskDescription(item: Task?) {
+    item?.let {
         text = item.description
     }
 }
 
 @BindingAdapter("taskImage")
-fun ImageView.setTaskImage(item: Task?){
+fun ImageView.setTaskImage(item: Task?) {
     item?.let {
         Glide.with(context)
             .load(item.imageURL)
@@ -62,16 +95,16 @@ fun ImageView.setTaskImage(item: Task?){
 }
 
 @BindingAdapter("exerciseText")
-fun TextView.setExerciseText(item: Exercise?){
-    item?.let{
+fun TextView.setExerciseText(item: Exercise?) {
+    item?.let {
         text = item.ex
     }
 }
 
 @BindingAdapter("classroomId")
-fun TextView.setClassroomId(item:Classroom?) {
+fun TextView.setClassroomId(item: Classroom?) {
     item?.let {
-        text=item.id.toString()
+        text = item.id.toString()
     }
 }
 

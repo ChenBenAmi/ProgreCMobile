@@ -85,6 +85,9 @@
         <action
             android:id="@+id/action_taskFragment_to_classroomFragment"
             app:destination="@id/classroomFragment" />
+        <action
+            android:id="@+id/action_taskFragment_to_userFragment"
+            app:destination="@id/userFragment" />
     </fragment>
     <fragment
         android:id="@+id/taskDetailsFragment"
@@ -102,5 +105,13 @@
             android:id="@+id/action_loginFragment_to_classroomFragment"
             app:destination="@id/classroomFragment"
             app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.example.progresee.views.UserFragment"
+        android:label="UserFragment" >
+        <argument
+            android:name="classroomId"
+            app:argType="long" />
     </fragment>
 </navigation>

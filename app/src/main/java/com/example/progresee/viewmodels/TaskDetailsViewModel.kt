@@ -20,19 +20,16 @@ class TaskDetailsViewModel constructor(private val appRepository: AppRepository,
     private val task = MediatorLiveData<Task>()
     fun getTask() = task
 
-    val exercises=appRepository.exercises
+    private val _changeExerciseStatus = MutableLiveData<Long?>()
+    val changeExerciseStatus
+        get() = _changeExerciseStatus
 
+    val exercises=appRepository.exercises
 
     init {
         Timber.wtf(taskId.toString())
         task.addSource(appRepository.getTask(taskId), task::setValue)
-
-
     }
-
-    private val _changeExerciseStatus = MutableLiveData<Long?>()
-    val changeExerciseStatus
-        get() = _changeExerciseStatus
 
     fun onTaskClicked(exerciseId: Long) {
         _changeExerciseStatus.value = exerciseId

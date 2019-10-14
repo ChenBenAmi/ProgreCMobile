@@ -21,4 +21,6 @@ interface ClassroomDao {
 
     @Delete
     fun deleteClassroom(classroom: Classroom?)
+    @Query("delete from classroom where Id= :classroomId ")
+    fun deleteClassroomById(classroomId: Long?)
 }

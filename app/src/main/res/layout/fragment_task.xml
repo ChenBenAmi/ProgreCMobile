@@ -19,6 +19,14 @@
         android:layout_height="match_parent"
         tools:context=".views.TaskFragment">
 
+        <include
+            android:id="@+id/layout_progress_bar"
+            layout="@layout/progress_bar_layout"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/task_list"
@@ -32,7 +40,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/createClassroom_button"
+            android:id="@+id/create_task_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"

@@ -3,7 +3,6 @@ package com.example.progresee.views
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,13 +20,9 @@ import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import android.content.Intent
-import androidx.annotation.NonNull
 import com.firebase.ui.auth.AuthUI
-import android.content.Context
 import com.example.progresee.R
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 
@@ -46,9 +41,13 @@ class ClassroomFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        val title: String = getString(R.string.progresee)
 
-        setHasOptionsMenu(true)
+        val title: String = getString(R.string.progresee)
+        (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
+        (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.main_menu)
+        (activity as? AppCompatActivity)?.progresee_toolbar?.title=title
+        setItems()
+
 
         binding.classroomViewModel = classroomViewModel
         val manager = LinearLayoutManager(context)
@@ -56,15 +55,8 @@ class ClassroomFragment : Fragment() {
         adapter = ClassroomAdapter(ClassroomClickListener { classroomId ->
             classroomViewModel.onClassroomClicked(classroomId)
         })
-
-
         binding.classroomList.adapter = adapter
-        val titleCheck: Boolean? =
-            (activity as? AppCompatActivity)?.supportActionBar?.title?.equals(title)
-        if (titleCheck == false) {
-            (activity as? AppCompatActivity)?.supportActionBar?.title = title
-        }
-//        classroomViewModel.insertDummyData()
+
 
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -108,32 +100,26 @@ class ClassroomFragment : Fragment() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    //TODO change when network layer is ready
+    private fun setItems() {
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener{
+            when (it.itemId) {
+                R.id.setting_menu_item-> {
+                    Snackbar.make(
+                        activity!!.findViewById(android.R.id.content),
+                        "setting",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+                R.id.logout_menu_item -> {
+                    logout()
+                }
+            }
+            true
+        }
     }
 
-    //TODO change when network layer is ready
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.setting_menu_item -> {
-                Snackbar.make(
-                    activity!!.findViewById(android.R.id.content),
-                    "setting",
-                    Snackbar.LENGTH_LONG
-                ).show()
-                return true
-            }
-            R.id.logout_menu_item -> {
-                logout()
-                return true
-            }
-            android.R.id.home -> {
-                return NavigationUI.onNavDestinationSelected(item, view!!.findNavController())
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+
 
     private fun logout() {
         AuthUI.getInstance().signOut(context!!.applicationContext)
@@ -147,5 +133,7 @@ class ClassroomFragment : Fragment() {
                 ).show()
             }
     }
+
+
 
 }

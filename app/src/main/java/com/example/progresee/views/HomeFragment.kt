@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
+//        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
         val binding: FragmentHomeBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 

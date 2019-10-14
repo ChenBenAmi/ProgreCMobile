@@ -62,6 +62,11 @@ class App : Application() {
                     classroomId
                 )
             }
+            viewModel {(appRepository: AppRepository, classroomId: Long) ->
+                UserViewModel(
+                    appRepository,
+                    classroomId
+                )  }
 
 
         }

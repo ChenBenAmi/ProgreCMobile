@@ -18,9 +18,12 @@ import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentTaskBinding
 import com.example.progresee.viewmodels.TaskViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_task.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 
 class TaskFragment : Fragment() {
@@ -28,6 +31,7 @@ class TaskFragment : Fragment() {
     private val appRepository: AppRepository by inject()
     private var classroomId: Long = 0
     private lateinit var taskViewModel: TaskViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +42,11 @@ class TaskFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        setHasOptionsMenu(true)
+        (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
+        setItems()
+        (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.classroom_menu)
+
+
 
         val arguments = TaskFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId
@@ -58,12 +66,34 @@ class TaskFragment : Fragment() {
         })
         binding.taskList.adapter = adapter
 
+        taskViewModel.checkOwnerShip.observe(viewLifecycleOwner, Observer { })
+
 //        taskViewModel.insertDummyData()
+
+        taskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                layout_progress_bar.visibility = View.VISIBLE
+                create_task_button.isEnabled = false
+            }
+        })
 
         taskViewModel.getClassroom().observe(viewLifecycleOwner, Observer {
             it?.let {
-                (activity as? AppCompatActivity)?.supportActionBar?.title =
+                (activity as? AppCompatActivity)?.progresee_toolbar?.title =
                     taskViewModel.getClassroom().value!!.name
+                taskViewModel.checkClassroomOwnerShip(it)
+            }
+        })
+
+        taskViewModel.checkOwnerShip.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(0)?.isVisible =
+                    true
+                (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(1)?.isVisible =
+                    true
+                (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(2)?.isVisible =
+                    true
+                taskViewModel.checkedClassroomOwnerShip()
             }
         })
 
@@ -94,43 +124,45 @@ class TaskFragment : Fragment() {
             }
         })
 
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener {
+            this.findNavController().navigate(TaskFragmentDirections.actionTaskFragmentToUserFragment(classroomId))
+        }
+
         return binding.root
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.classroom_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     //TODO change when network layer is ready
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.edit_menu_item -> {
-                Snackbar.make(
-                    activity!!.findViewById(android.R.id.content),
-                    "edit",
-                    Snackbar.LENGTH_LONG
-                ).show()
-                this.findNavController().navigate(
-                    TaskFragmentDirections.actionTaskFragmentToCreateClassroomFragment(classroomId)
-                )
-                return true
+    private fun setItems() {
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.edit_menu_item -> {
+                    this.findNavController().navigate(
+                        TaskFragmentDirections.actionTaskFragmentToCreateClassroomFragment(
+                            classroomId
+                        )
+                    )
+                }
+                R.id.delete_menu_item -> {
+                    deleteAlert()
+                }
+                R.id.add_user_menu_item -> {
+                    Snackbar.make(
+                        activity!!.findViewById(android.R.id.content),
+                        "add",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+                R.id.info_menu_item -> {
+                    Snackbar.make(
+                        activity!!.findViewById(android.R.id.content),
+                        "info",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
             }
-            R.id.delete_menu_item -> {
-                deleteAlert()
-                return true
-            }
-            R.id.info_menu_item -> {
-                Snackbar.make(
-                    activity!!.findViewById(android.R.id.content),
-                    "info",
-                    Snackbar.LENGTH_LONG
-                ).show()
-                return true
-            }
+             true
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun deleteAlert() {
@@ -148,4 +180,6 @@ class TaskFragment : Fragment() {
 
         dialog.show()
     }
+
+
 }

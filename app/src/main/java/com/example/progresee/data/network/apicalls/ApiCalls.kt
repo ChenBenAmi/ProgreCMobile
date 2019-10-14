@@ -32,6 +32,9 @@ interface ApiCalls {
     @PUT("/user/updateClassroom")
     fun updateClassroomAsync(@Header("Authorization") token: String?, @Body classroom: Classroom): Deferred<Response<Classroom>>
 
+    @DELETE("/user/deleteClassroom")
+    fun deleteClassroomAsync(@Header("Authorization") token: String?,@Query("classroomId") classroomId:Long):Deferred<Response<Long>>
+
     @PUT("user/leaveClassroom")
     fun leaveClassRoomAsync(
         @Header("Authorization") token: String?, @Query("classroomId") classroomId: Long

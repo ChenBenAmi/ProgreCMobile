@@ -19,6 +19,7 @@ import com.example.progresee.databinding.FragmentCreateClassroomBinding
 import com.example.progresee.viewmodels.BaseViewModel
 import com.example.progresee.viewmodels.CreateClassroomViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_classroom.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,7 +59,7 @@ class CreateClassroomFragment : Fragment() {
 
         createClassroomViewModel.getClassroom().observe(viewLifecycleOwner, Observer {
             it?.let {
-                (activity as? AppCompatActivity)?.supportActionBar?.title =
+                (activity as? AppCompatActivity)?.progresee_toolbar?.title =
                     context?.getString(R.string.edit_classroom)
                 create_classroom_title.text = context?.getString(R.string.edit_classroom)
                 editText_classroom_name.setText(it.name)
