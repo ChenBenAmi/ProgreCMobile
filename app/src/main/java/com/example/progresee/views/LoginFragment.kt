@@ -32,10 +32,10 @@ import timber.log.Timber
 class LoginFragment : Fragment() {
 
     private val RC_SIGN_IN = 123
-    val auth = FirebaseAuth.getInstance()
-
     private val appRepository: AppRepository by inject()
     private val loginViewModel: LoginViewModel by viewModel { parametersOf(appRepository) }
+    private val auth = FirebaseAuth.getInstance()
+    private val currentUser: FirebaseUser? = auth.currentUser
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +43,7 @@ class LoginFragment : Fragment() {
     ): View? {
 
 //        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
-        val auth = FirebaseAuth.getInstance()
-        val currentUser: FirebaseUser? = auth.currentUser
+
         if (currentUser != null) {
             currentUser.getIdToken(true).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -60,7 +59,8 @@ class LoginFragment : Fragment() {
                         AuthUI.IdpConfig.GoogleBuilder().build(),
                         AuthUI.IdpConfig.EmailBuilder().build()
                     )
-                ).build(),
+                ).setIsSmartLockEnabled(false)
+                    .build(),
                 RC_SIGN_IN
             )
         }
@@ -88,10 +88,17 @@ class LoginFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == RC_SIGN_IN) {
             val response: IdpResponse? = fromResultIntent(data)
             // Successfully signed in
             if (resultCode == RESULT_OK) {
+                currentUser!!.getIdToken(true).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Timber.wtf(it.result?.token)
+                        loginViewModel.getCurrentUser(it.result?.token)
+                    }
+                }
                 this.findNavController()
                     .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
             } else {

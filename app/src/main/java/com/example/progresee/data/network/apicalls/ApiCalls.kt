@@ -22,9 +22,9 @@ interface ApiCalls {
 
     @PUT("user/addToClassroom")
     fun addToClassroomAsync(
-        @Header("Authorization") token: String?, @Query("userId") userId: Long,
+        @Header("Authorization") token: String?, @Query("userEmail") userEmail: String,
         @Query("classroomId") classroomId: Long
-    ): Deferred<Response<User>>
+    ): Deferred<Response<Long>>
 
     @GET("/user/getUsersInClassroom")
     fun getUsersInClassroomAsync(@Header("Authorization") token: String?, classroomId: Long): Deferred<Response<List<User>>>

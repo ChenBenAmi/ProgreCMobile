@@ -11,7 +11,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 class ApiService {
 
-    private var BASE_URL="http://192.168.43.210:5000"
+    private var BASE_URL="http://192.168.56.1:5000"
 
     private val client = OkHttpClient().newBuilder()
         .build()

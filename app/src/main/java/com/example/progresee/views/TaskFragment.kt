@@ -3,7 +3,9 @@ package com.example.progresee.views
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.view.*
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -31,7 +33,7 @@ class TaskFragment : Fragment() {
     private val appRepository: AppRepository by inject()
     private var classroomId: Long = 0
     private lateinit var taskViewModel: TaskViewModel
-
+    private lateinit var emailText: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,9 +47,8 @@ class TaskFragment : Fragment() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
         setItems()
         (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.classroom_menu)
-
-
-
+        emailText = EditText(context)
+        emailText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         val arguments = TaskFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId
         val taskViewModel: TaskViewModel by viewModel {
@@ -124,8 +125,14 @@ class TaskFragment : Fragment() {
             }
         })
 
+        taskViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
+            ShowUserAdded()
+            taskViewModel.snackBarShown()
+        })
+
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener {
-            this.findNavController().navigate(TaskFragmentDirections.actionTaskFragmentToUserFragment(classroomId))
+            this.findNavController()
+                .navigate(TaskFragmentDirections.actionTaskFragmentToUserFragment(classroomId))
         }
 
         return binding.root
@@ -147,11 +154,7 @@ class TaskFragment : Fragment() {
                     deleteAlert()
                 }
                 R.id.add_user_menu_item -> {
-                    Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        "add",
-                        Snackbar.LENGTH_LONG
-                    ).show()
+                    addAlert()
                 }
                 R.id.info_menu_item -> {
                     Snackbar.make(
@@ -161,7 +164,7 @@ class TaskFragment : Fragment() {
                     ).show()
                 }
             }
-             true
+            true
         }
     }
 
@@ -173,6 +176,31 @@ class TaskFragment : Fragment() {
             taskViewModel.deleteClassRoom()
         }
         builder.setNegativeButton("No") { dialog, which ->
+
+        }
+
+        val dialog: AlertDialog = builder.create()
+
+        dialog.show()
+    }
+
+    private fun ShowUserAdded() {
+        Snackbar.make(
+            activity!!.findViewById(android.R.id.content),
+            "User added",
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
+
+    private fun addAlert() {
+        val builder = AlertDialog.Builder(context!!)
+        builder.setTitle(R.string.add_person)
+        builder.setMessage(R.string.enter_user_email)
+        builder.setView(emailText)
+        builder.setPositiveButton("Confirm") { dialog, which ->
+            taskViewModel.addToClassRoom(emailText.text.toString())
+        }
+        builder.setNegativeButton("Cancel") { dialog, which ->
 
         }
 

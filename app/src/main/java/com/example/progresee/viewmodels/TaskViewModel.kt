@@ -4,13 +4,12 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Task
-import com.example.progresee.beans.User
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 
-class TaskViewModel(private val appRepository: AppRepository, classroomId: Long) :
+class TaskViewModel(private val appRepository: AppRepository, private val classroomId: Long) :
     BaseViewModel() {
 
 
@@ -23,6 +22,10 @@ class TaskViewModel(private val appRepository: AppRepository, classroomId: Long)
     private val _showProgressBar = MutableLiveData<Boolean?>()
     val showProgressBar
         get() = _showProgressBar
+
+    private val _showSnackBar = MutableLiveData<Boolean?>()
+    val showSnackBar
+        get() = _showSnackBar
 
     val tasks = appRepository.tasks
 
@@ -76,13 +79,49 @@ class TaskViewModel(private val appRepository: AppRepository, classroomId: Long)
         user?.let {
             classroom?.let {
                 if (user.email == classroom.owner)
-                    _checkOwnerShip.value=true
+                    _checkOwnerShip.value = true
             }
         }
     }
 
+    fun addToClassRoom(text: String) {
+        Timber.wtf(text)
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                try {
+                    Timber.wtf("hey")
+                    val response = appRepository.addToClassroomAsync(
+                        appRepository.currentToken.value,
+                        text,
+                        classroomId
+                    ).await()
+                    Timber.wtf("${appRepository.currentToken.value} $text $classroomId")
+                    Timber.wtf("hey1")
+                    if (response.isSuccessful) {
+                        Timber.wtf("hey2")
+                        val data = response.body()
+                        if (data != null)
+                            Timber.wtf("hey3")
+                            hideProgressBar()
+                        _showSnackBar.value = true
+
+                    } else {
+                        Timber.wtf("${response.code()}${response.errorBody()}")
+                    }
+                } catch (e: Exception) {
+                    Timber.wtf("${e.message}${e.printStackTrace()}")
+                }
+
+            }
+
+        }
+
+    }
+
+
     fun checkedClassroomOwnerShip() {
-        _checkOwnerShip.value=null
+        _checkOwnerShip.value = null
     }
 
 
@@ -139,6 +178,10 @@ class TaskViewModel(private val appRepository: AppRepository, classroomId: Long)
 
     override fun hideProgressBar() {
         _showProgressBar.value = null
+    }
+
+    override fun snackBarShown() {
+        _showSnackBar.value = null
     }
 
     override fun onCleared() {

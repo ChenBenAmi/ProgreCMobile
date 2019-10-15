@@ -125,8 +125,8 @@ class AppRepository constructor(
         return apiCalls.deleteClassroomAsync(token, classroomId)
     }
 
-    fun addToClassroom(token: String?, userId: Long, classroomId: Long): Deferred<Response<User>> {
-        return apiCalls.addToClassroomAsync(token, userId, classroomId)
+    fun addToClassroomAsync(token: String?, userEmail: String, classroomId: Long): Deferred<Response<Long>> {
+        return apiCalls.addToClassroomAsync(token, userEmail, classroomId)
     }
 
     fun getUsersInClassroom(token: String?, classroomId: Long): Deferred<Response<List<User>>> {
