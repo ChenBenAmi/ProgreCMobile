@@ -102,9 +102,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         Timber.wtf("hey2")
                         val data = response.body()
                         if (data != null)
-                            Timber.wtf("hey3")
-                            hideProgressBar()
-                        _showSnackBar.value = true
+                            withContext(Dispatchers.Main) {
+                                Timber.wtf("hey3")
+                                hideProgressBar()
+                                _showSnackBar.value = true
+                            }
 
                     } else {
                         Timber.wtf("${response.code()}${response.errorBody()}")

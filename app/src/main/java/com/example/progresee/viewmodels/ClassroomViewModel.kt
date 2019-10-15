@@ -35,55 +35,57 @@ class ClassroomViewModel constructor(
     fun getCurrentUser() {
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
-        currentUser!!.getIdToken(true).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Timber.wtf(it.result?.token)
-                uiScope.launch {
-                    showProgressBar()
-                    appRepository.setToken(it.result?.token)
-                    withContext(Dispatchers.IO) {
-                        try {
-                            val request =
-                                appRepository.getCurrentUserAsync(it.result?.token).await()
-                            if (request.isSuccessful) {
-                                val data = request.body()
-                                if (appRepository.isUserExist(data!!.id)) {
-                                    withContext(Dispatchers.Main) {
-                                        appRepository.getUser().addSource(
-                                            appRepository.getUser(data.id),
-                                            appRepository.getUser()::setValue
-                                        )
-                                        hideProgressBar()
+        if (appRepository.currentToken.value == null) {
+            currentUser!!.getIdToken(true).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Timber.wtf(it.result?.token)
+                    uiScope.launch {
+                        showProgressBar()
+                        appRepository.setToken(it.result?.token)
+                        withContext(Dispatchers.IO) {
+                            try {
+                                val request =
+                                    appRepository.getCurrentUserAsync(it.result?.token).await()
+                                if (request.isSuccessful) {
+                                    val data = request.body()
+                                    if (appRepository.isUserExist(data!!.id)) {
+                                        withContext(Dispatchers.Main) {
+                                            appRepository.getUser().addSource(
+                                                appRepository.getUser(data.id),
+                                                appRepository.getUser()::setValue
+                                            )
+                                            hideProgressBar()
+                                        }
+                                    } else {
+                                        appRepository.insertUser(data)
+                                        withContext(Dispatchers.Main) {
+                                            appRepository.getUser().addSource(
+                                                appRepository.getUser(data.id),
+                                                appRepository.getUser()::setValue
+                                            )
+                                            hideProgressBar()
+
+                                        }
                                     }
                                 } else {
-                                    appRepository.insertUser(data)
-                                    withContext(Dispatchers.Main) {
-                                        appRepository.getUser().addSource(
-                                            appRepository.getUser(data.id),
-                                            appRepository.getUser()::setValue
-                                        )
-                                        hideProgressBar()
-
+                                    Timber.wtf("${request.code()}${request.errorBody()}")
+                                }
+                            } catch (e: Exception) {
+                                Timber.e(e.printStackTrace().toString())
+                            }
+                            try {
+                                val request = appRepository.getClassrooms(it.result?.token).await()
+                                if (request.isSuccessful) {
+                                    val data = request.body()
+                                    Timber.wtf("data -------->  $data")
+                                    if (data != null) {
+                                        appRepository.insertClassrooms(data)
                                     }
+                                } else {
                                 }
-                            } else {
-                                Timber.wtf("${request.code()}${request.errorBody()}")
+                            } catch (e: Exception) {
+                                Timber.wtf("${e.message}${e.printStackTrace()}")
                             }
-                        } catch (e: Exception) {
-                            Timber.e(e.printStackTrace().toString())
-                        }
-                        try {
-                            val request = appRepository.getClassrooms(it.result?.token).await()
-                            if (request.isSuccessful) {
-                                val data = request.body()
-                                Timber.wtf("data -------->  $data")
-                                if (data != null) {
-                                    appRepository.insertClassrooms(data)
-                                }
-                            } else {
-                            }
-                        } catch (e: Exception) {
-                            Timber.wtf("${e.message}${e.printStackTrace()}")
                         }
                     }
                 }
