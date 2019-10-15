@@ -3,29 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:visible="false"
         android:id="@+id/edit_menu_item"
         android:icon="@drawable/ic_edit_24px"
-        app:showAsAction="ifRoom"
-        android:title="@string/edit" />
-    <item
+        android:title="@string/edit"
         android:visible="false"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/delete_menu_item"
         android:icon="@drawable/ic_delete_24px"
-        app:showAsAction="ifRoom"
-        android:title="@string/delete" />
+        android:title="@string/delete"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:visible="false"
         android:id="@+id/add_user_menu_item"
         android:icon="@drawable/ic_person_add_24px"
-        app:showAsAction="ifRoom"
-        android:title="@string/add_person" />
+        android:title="@string/add_person"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/info_menu_item"
-        android:icon="@drawable/ic_info_24px"
-        android:title="@string/info" />
+        android:id="@+id/leave_menu_item"
+        android:title="@string/leave_classroom"
+        android:visible="false"
+        app:showAsAction="never" />
+
 
 
 </menu>

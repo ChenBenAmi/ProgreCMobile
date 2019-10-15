@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="classroomViewModel"
             type="com.example.progresee.viewmodels.ClassroomViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
+        android:id="@+id/classroom_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".views.ClassroomFragment">
@@ -23,6 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/classroom_list"
             android:layout_width="0dp"
@@ -40,8 +42,8 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/fab"
             android:onClick="@{()->classroomViewModel.navigateToCreateClassroomFragment()}"
+            android:src="@drawable/fab"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.923"

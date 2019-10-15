@@ -26,6 +26,5 @@ interface ClassroomDao {
     fun deleteClassroomById(classroomId: Long?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    @JvmSuppressWildcards
     fun insertAll(data: List<Classroom>)
 }

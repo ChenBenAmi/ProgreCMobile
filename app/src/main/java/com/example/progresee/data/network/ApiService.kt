@@ -6,12 +6,11 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 class ApiService {
 
-    private var BASE_URL="http://192.168.56.1:5000"
+    private var BASE_URL = "http://192.168.0.13:5000"
 
     private val client = OkHttpClient().newBuilder()
         .build()
@@ -20,12 +19,12 @@ class ApiService {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    fun retrofit():ApiCalls {
-        val retrofit=Retrofit.Builder().baseUrl(BASE_URL)
+    fun retrofit(): ApiCalls {
+        val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
-        return  retrofit.create(ApiCalls::class.java)
+        return retrofit.create(ApiCalls::class.java)
     }
 }

@@ -27,7 +27,7 @@ interface ApiCalls {
     ): Deferred<Response<Long>>
 
     @GET("/user/getUsersInClassroom")
-    fun getUsersInClassroomAsync(@Header("Authorization") token: String?, classroomId: Long): Deferred<Response<List<User>>>
+    fun getUsersInClassroomAsync(@Header("Authorization") token: String?, @Query("classroomId") classroomId: Long): Deferred<Response<List<User>>>
 
     @PUT("/user/updateClassroom")
     fun updateClassroomAsync(@Header("Authorization") token: String?, @Body classroom: Classroom): Deferred<Response<Classroom>>

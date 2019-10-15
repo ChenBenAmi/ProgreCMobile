@@ -39,10 +39,9 @@ class AppRepository constructor(
     val classrooms
         get() = _classrooms
 
-    fun loadClassroomsFromDB() {
-//        _classrooms.addSource(dataBase.classroomDao().getClassrooms(),_classrooms::setValue)
-        Timber.wtf("classrooms are $_classrooms")
-    }
+    private var _users = dataBase.userDao().getAllUsers()
+    val users
+        get() = _users
 
     private val _tasks: LiveData<List<Task>> = dataBase.taskDao().getTasks()
     val tasks
@@ -55,12 +54,20 @@ class AppRepository constructor(
     private val apiCalls: ApiCalls = network.retrofit()
 
 
+    fun fetchClassroomsFromDb() {
+        _classrooms=dataBase.classroomDao().getClassrooms()
+        Timber.wtf(dataBase.classroomDao().getClassrooms().toString())
+    }
     fun isUserExist(userId: Long): Boolean {
         return dataBase.userDao().isUserExist(userId)
     }
 
     fun insertUser(user: User) {
         dataBase.userDao().insertUser(user)
+    }
+
+    fun insertUsers(data: List<User>?) {
+        dataBase.userDao().insertUsers(data)
     }
 
     fun getUser(userId: Long): LiveData<User?> {
@@ -99,15 +106,6 @@ class AppRepository constructor(
         dataBase.exerciseDao().insertExercise(exercise)
     }
 
-    fun getCurrentUserToken() {
-        val currentUser = firebaseAuth.currentUser
-        currentUser?.getIdToken(true)?.addOnCompleteListener {
-            if (it.isSuccessful) {
-                _currentToken.value = it.result!!.token
-            }
-        }
-    }
-
     fun getCurrentUserAsync(token: String?): Deferred<Response<User>> {
         return apiCalls.getCurrentUserAsync(token)
 
@@ -125,11 +123,15 @@ class AppRepository constructor(
         return apiCalls.deleteClassroomAsync(token, classroomId)
     }
 
-    fun addToClassroomAsync(token: String?, userEmail: String, classroomId: Long): Deferred<Response<Long>> {
+    fun addToClassroomAsync(
+        token: String?,
+        userEmail: String,
+        classroomId: Long
+    ): Deferred<Response<Long>> {
         return apiCalls.addToClassroomAsync(token, userEmail, classroomId)
     }
 
-    fun getUsersInClassroom(token: String?, classroomId: Long): Deferred<Response<List<User>>> {
+    fun getUsersInClassroomAsync(token: String?, classroomId: Long): Deferred<Response<List<User>>> {
         return apiCalls.getUsersInClassroomAsync(token, classroomId)
     }
 
@@ -157,11 +159,13 @@ class AppRepository constructor(
         return apiCalls.getClassroom(token, classroomId)
     }
 
-    fun getClassrooms(token: String?): Deferred<Response<List<Classroom>>> {
+    fun getClassroomsAsync(token: String?): Deferred<Response<List<Classroom>>> {
         return apiCalls.getClassrooms(token)
     }
 
     fun insertClassrooms(data: List<Classroom>) {
         dataBase.classroomDao().insertAll(data)
     }
+
+
 }

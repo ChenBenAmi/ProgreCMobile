@@ -54,5 +54,6 @@
     <string name="saving">Saving...</string>
     <string name="owner">Owner</string>
     <string name="add_person">Add person</string>
+    <string name="leave_classroom">Leave classroom</string>
 
 </resources>

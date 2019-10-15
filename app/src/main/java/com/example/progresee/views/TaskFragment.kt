@@ -156,13 +156,6 @@ class TaskFragment : Fragment() {
                 R.id.add_user_menu_item -> {
                     addAlert()
                 }
-                R.id.info_menu_item -> {
-                    Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        "info",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
             }
             true
         }

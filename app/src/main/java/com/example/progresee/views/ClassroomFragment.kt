@@ -23,7 +23,9 @@ import org.koin.core.parameter.parametersOf
 import com.firebase.ui.auth.AuthUI
 import com.example.progresee.R
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_classroom.*
 import kotlinx.android.synthetic.main.fragment_create_classroom.*
+import kotlinx.android.synthetic.main.fragment_create_classroom.layout_progress_bar
 import timber.log.Timber
 
 
@@ -42,6 +44,11 @@ class ClassroomFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
+        classroomViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                layout_progress_bar.visibility = View.VISIBLE
+
+        })
 
         val title: String = getString(R.string.progresee)
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
@@ -64,6 +71,7 @@ class ClassroomFragment : Fragment() {
                 adapter.submitList(it)
             }
         })
+
 
         classroomViewModel.navigateToTaskFragment.observe(
             viewLifecycleOwner,
@@ -98,10 +106,7 @@ class ClassroomFragment : Fragment() {
             }
         })
 
-        classroomViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
-            if (it == true)
-                layout_progress_bar.visibility = View.VISIBLE
-        })
+
         return binding.root
 
     }

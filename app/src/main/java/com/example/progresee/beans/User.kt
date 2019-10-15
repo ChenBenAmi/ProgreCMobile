@@ -18,6 +18,7 @@ data class User(
     var pictureURL: String,
     var role:String,
     var dateCreated:String,
-    var lastLoggedIn:String
+    var lastLoggedIn:String,
+    var  classrooms:Map<Long,Classroom>
 
 ):Serializable

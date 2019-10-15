@@ -74,7 +74,7 @@ class ClassroomViewModel constructor(
                                 Timber.e(e.printStackTrace().toString())
                             }
                             try {
-                                val request = appRepository.getClassrooms(it.result?.token).await()
+                                val request = appRepository.getClassroomsAsync(it.result?.token).await()
                                 if (request.isSuccessful) {
                                     val data = request.body()
                                     Timber.wtf("data -------->  $data")
