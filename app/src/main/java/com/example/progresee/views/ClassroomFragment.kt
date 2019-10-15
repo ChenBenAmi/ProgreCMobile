@@ -23,6 +23,7 @@ import org.koin.core.parameter.parametersOf
 import com.firebase.ui.auth.AuthUI
 import com.example.progresee.R
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_create_classroom.*
 import timber.log.Timber
 
 
@@ -45,7 +46,7 @@ class ClassroomFragment : Fragment() {
         val title: String = getString(R.string.progresee)
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
         (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.main_menu)
-        (activity as? AppCompatActivity)?.progresee_toolbar?.title=title
+        (activity as? AppCompatActivity)?.progresee_toolbar?.title = title
         setItems()
 
 
@@ -57,7 +58,7 @@ class ClassroomFragment : Fragment() {
         })
         binding.classroomList.adapter = adapter
 
-
+        classroomViewModel.getCurrentUser()
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
@@ -92,19 +93,24 @@ class ClassroomFragment : Fragment() {
 
         classroomViewModel.user.observe(viewLifecycleOwner, Observer {
             it?.let {
+                layout_progress_bar.visibility = View.GONE
                 Timber.wtf(it.toString())
             }
         })
 
+        classroomViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                layout_progress_bar.visibility = View.VISIBLE
+        })
         return binding.root
 
     }
 
     //TODO change when network layer is ready
     private fun setItems() {
-        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener{
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.setting_menu_item-> {
+                R.id.setting_menu_item -> {
                     Snackbar.make(
                         activity!!.findViewById(android.R.id.content),
                         "setting",
@@ -120,7 +126,6 @@ class ClassroomFragment : Fragment() {
     }
 
 
-
     private fun logout() {
         AuthUI.getInstance().signOut(context!!.applicationContext)
             .addOnCompleteListener {
@@ -133,7 +138,6 @@ class ClassroomFragment : Fragment() {
                 ).show()
             }
     }
-
 
 
 }

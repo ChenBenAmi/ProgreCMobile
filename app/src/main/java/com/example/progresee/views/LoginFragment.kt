@@ -42,16 +42,10 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-//        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.app_name)
 
         if (currentUser != null) {
-            currentUser.getIdToken(true).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Timber.wtf(it.result?.token)
-                    loginViewModel.getCurrentUser(it.result?.token)
-                }
-            }
-
+            this.findNavController()
+                .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
         } else {
             startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(
@@ -65,16 +59,12 @@ class LoginFragment : Fragment() {
             )
         }
         loginViewModel.navigateToClassroomFragment.observe(viewLifecycleOwner, Observer {
-            if (it==true) {
+            if (it == true) {
                 this.findNavController()
                     .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
             }
         })
 
-        loginViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
-            if (it == true)
-                layout_progress_bar.visibility = View.VISIBLE
-        })
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
@@ -93,12 +83,6 @@ class LoginFragment : Fragment() {
             val response: IdpResponse? = fromResultIntent(data)
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                currentUser!!.getIdToken(true).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Timber.wtf(it.result?.token)
-                        loginViewModel.getCurrentUser(it.result?.token)
-                    }
-                }
                 this.findNavController()
                     .navigate(LoginFragmentDirections.actionLoginFragmentToClassroomFragment())
             } else {
