@@ -33,7 +33,7 @@ interface ApiCalls {
     fun updateClassroomAsync(@Header("Authorization") token: String?, @Body classroom: Classroom): Deferred<Response<Classroom>>
 
     @DELETE("/user/deleteClassroom")
-    fun deleteClassroomAsync(@Header("Authorization") token: String?,@Query("classroomId") classroomId:Long):Deferred<Response<Long>>
+    fun deleteClassroomAsync(@Header("Authorization") token: String?, @Query("classroomId") classroomId: Long): Deferred<Response<Long>>
 
     @PUT("user/leaveClassroom")
     fun leaveClassRoomAsync(
@@ -52,5 +52,15 @@ interface ApiCalls {
         @Query("email") email: String
     ): Deferred<Response<Classroom>>
 
+    @GET("user/getClassroom")
+    fun getClassroom(
+        @Header("Authorization") token: String?, @Query("classroomId") classroomId: Long
+    ): Deferred<Response<Classroom>>
+
+
+    @GET("user/getClassrooms")
+    fun getClassrooms(
+        @Header("Authorization") token: String?
+    ): Deferred<Response<List<Classroom>>>
 
 }

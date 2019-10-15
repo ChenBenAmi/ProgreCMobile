@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import retrofit2.Response
 import timber.log.Timber
-import java.lang.Exception
 
 class AppRepository constructor(
     private val dataBase: AppDatabase,
@@ -35,9 +34,15 @@ class AppRepository constructor(
     private val user = MediatorLiveData<User?>()
     fun getUser() = user
 
-    private val _classrooms: LiveData<List<Classroom?>> = dataBase.classroomDao().getClassrooms()
+
+    private var _classrooms = MediatorLiveData<List<Classroom?>>()
     val classrooms
         get() = _classrooms
+
+    fun loadClassroomsFromDB() {
+        _classrooms.addSource(dataBase.classroomDao().getClassrooms(),_classrooms::setValue)
+        Timber.wtf("classrooms are $_classrooms")
+    }
 
     private val _tasks: LiveData<List<Task>> = dataBase.taskDao().getTasks()
     val tasks
@@ -116,8 +121,8 @@ class AppRepository constructor(
         return apiCalls.createClassroomAsync(token, name)
     }
 
-    fun deleteClassroomAsync(token: String?, classroomId: Long):Deferred<Response<Long>> {
-        return apiCalls.deleteClassroomAsync(token,classroomId)
+    fun deleteClassroomAsync(token: String?, classroomId: Long): Deferred<Response<Long>> {
+        return apiCalls.deleteClassroomAsync(token, classroomId)
     }
 
     fun addToClassroom(token: String?, userId: Long, classroomId: Long): Deferred<Response<User>> {
@@ -148,7 +153,15 @@ class AppRepository constructor(
         return apiCalls.transferClassroomAsync(token, classroomId, email)
     }
 
+    fun getClassroom(token: String?, classroomId: Long): Deferred<Response<Classroom>> {
+        return apiCalls.getClassroom(token, classroomId)
+    }
 
+    fun getClassrooms(token: String?): Deferred<Response<List<Classroom>>> {
+        return apiCalls.getClassrooms(token)
+    }
 
-
+    fun insertClassrooms(data: List<Classroom>) {
+        dataBase.classroomDao().insertAll(data)
+    }
 }

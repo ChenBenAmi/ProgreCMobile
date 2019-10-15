@@ -15,7 +15,6 @@ class ClassroomViewModel constructor(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     val classrooms = appRepository.classrooms
-
     val user = appRepository.getUser()
 
     private val _navigateToTaskFragment = MutableLiveData<Long>()
