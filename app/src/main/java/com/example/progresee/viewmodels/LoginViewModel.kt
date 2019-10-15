@@ -66,12 +66,11 @@ class LoginViewModel(private val appRepository: AppRepository) : BaseViewModel()
                         Timber.wtf("data -------->  $data")
                         if (data != null) {
                             appRepository.insertClassrooms(data)
-                            appRepository.loadClassroomsFromDB()
-                            Timber.wtf("loaded classes")
                         }
+                    } else {
                     }
                 } catch (e: Exception) {
-
+                    Timber.wtf("${e.message}${e.printStackTrace()}")
                 }
             }
         }

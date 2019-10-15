@@ -35,12 +35,12 @@ class AppRepository constructor(
     fun getUser() = user
 
 
-    private var _classrooms = MediatorLiveData<List<Classroom?>>()
+    private var _classrooms = dataBase.classroomDao().getClassrooms()
     val classrooms
         get() = _classrooms
 
     fun loadClassroomsFromDB() {
-        _classrooms.addSource(dataBase.classroomDao().getClassrooms(),_classrooms::setValue)
+//        _classrooms.addSource(dataBase.classroomDao().getClassrooms(),_classrooms::setValue)
         Timber.wtf("classrooms are $_classrooms")
     }
 
