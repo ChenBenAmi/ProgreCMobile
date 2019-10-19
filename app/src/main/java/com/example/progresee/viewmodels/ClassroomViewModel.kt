@@ -19,7 +19,7 @@ class ClassroomViewModel constructor(
     val classrooms = appRepository.classrooms
     val user = appRepository.getUser()
 
-    private val _navigateToTaskFragment = MutableLiveData<Long>()
+    private val _navigateToTaskFragment = MutableLiveData<String>()
     val navigateToTaskFragment
         get() = _navigateToTaskFragment
 
@@ -48,10 +48,10 @@ class ClassroomViewModel constructor(
                                     appRepository.getCurrentUserAsync(it.result?.token).await()
                                 if (request.isSuccessful) {
                                     val data = request.body()
-                                    if (appRepository.isUserExist(data!!.id)) {
+                                    if (appRepository.isUserExist(data!!.uid)) {
                                         withContext(Dispatchers.Main) {
                                             appRepository.getUser().addSource(
-                                                appRepository.getUser(data.id),
+                                                appRepository.getUser(data.uid),
                                                 appRepository.getUser()::setValue
                                             )
                                             hideProgressBar()
@@ -60,7 +60,7 @@ class ClassroomViewModel constructor(
                                         appRepository.insertUser(data)
                                         withContext(Dispatchers.Main) {
                                             appRepository.getUser().addSource(
-                                                appRepository.getUser(data.id),
+                                                appRepository.getUser(data.uid),
                                                 appRepository.getUser()::setValue
                                             )
                                             hideProgressBar()
@@ -93,8 +93,8 @@ class ClassroomViewModel constructor(
         }
     }
 
-    fun onClassroomClicked(id: Long) {
-        _navigateToTaskFragment.value = id
+    fun onClassroomClicked(uid: String) {
+        _navigateToTaskFragment.value = uid
     }
 
     fun doneNavigateToTaskFragment() {

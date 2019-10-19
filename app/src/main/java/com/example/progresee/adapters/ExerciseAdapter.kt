@@ -40,7 +40,7 @@ class ExerciseAdapter(private val clickListener: ExerciseClickListener) : ListAd
 
 class ExerciseDiffCallback : DiffUtil.ItemCallback<Exercise>() {
     override fun areItemsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.uid == newItem.uid
     }
 
     override fun areContentsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
@@ -48,6 +48,6 @@ class ExerciseDiffCallback : DiffUtil.ItemCallback<Exercise>() {
     }
 }
 
-class ExerciseClickListener(val clickListener: (exerciseId: Long) -> Unit) {
-    fun onClick(exercise: Exercise) = clickListener(exercise.id)
+class ExerciseClickListener(val clickListener: (exerciseId: String) -> Unit) {
+    fun onClick(exercise: Exercise) = clickListener(exercise.uid)
 }

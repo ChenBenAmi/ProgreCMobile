@@ -28,7 +28,7 @@ fun TextView.setEmail(user: User?) {
 @BindingAdapter("setLastLoggedIn")
 fun TextView.setLastLoggedIn(user: User?) {
     user?.let {
-        text = user.lastLoggedIn
+        text = user.signedIn.toString()
     }
 }
 
@@ -36,7 +36,7 @@ fun TextView.setLastLoggedIn(user: User?) {
 fun ImageView.setProfilePic(user: User?) {
     user?.let {
         Glide.with(context)
-            .load(user.pictureURL)
+            .load(user.profilePictureUrl)
             .into(this)
     }
 }
@@ -49,12 +49,13 @@ fun TextView.setClassroomOwner(item: Classroom?) {
     }
 }
 
-@BindingAdapter("numberOfOpenTasks")
-fun TextView.setNumberOfOpenTasks(item: Classroom?) {
-    item?.let {
-        text = context.getString(R.string.number_of_tasks, item.openTasks)
-    }
-}
+//TODO find a way to get the number of open tasks
+//@BindingAdapter("numberOfOpenTasks")
+//fun TextView.setNumberOfOpenTasks(item: Classroom?) {
+//    item?.let {
+//        text = context.getString(R.string.number_of_tasks, item.openTasks)
+//    }
+//}
 
 
 @BindingAdapter("classroomName")
@@ -89,7 +90,7 @@ fun TextView.setTaskDescription(item: Task?) {
 fun ImageView.setTaskImage(item: Task?) {
     item?.let {
         Glide.with(context)
-            .load(item.imageURL)
+            .load(item.imageUrls[0])
             .into(this)
     }
 }
@@ -97,14 +98,14 @@ fun ImageView.setTaskImage(item: Task?) {
 @BindingAdapter("exerciseText")
 fun TextView.setExerciseText(item: Exercise?) {
     item?.let {
-        text = item.ex
+        text = item.exerciseTitle
     }
 }
 
 @BindingAdapter("classroomId")
 fun TextView.setClassroomId(item: Classroom?) {
     item?.let {
-        text = item.id.toString()
+        text = item.uid.toString()
     }
 }
 

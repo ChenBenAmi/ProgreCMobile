@@ -29,7 +29,7 @@ import org.koin.core.parameter.parametersOf
 class CreateClassroomFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
-    private var classroomId: Long = 0
+    private lateinit var classroomId: String
     private lateinit var createClassroomViewModel: CreateClassroomViewModel
 
 

@@ -13,11 +13,11 @@ interface UserDao {
     @Insert
     fun insertUser(data: User?)
 
-    @Query("select * from User where id = :userId")
-    fun getUser(userId: Long?): LiveData<User?>
+    @Query("select * from User where uid = :userId")
+    fun getUser(userId: String?): LiveData<User?>
 
-    @Query("select * from User where id = :userId")
-    fun isUserExist(userId: Long?): Boolean
+    @Query("select * from User where uid = :userId")
+    fun isUserExist(userId: String?): Boolean
 
     //TODO: maybe OneToMany relationship for classroom lists of users
     @Query("select * from User")

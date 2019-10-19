@@ -10,8 +10,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 class ApiService {
 
-    private var BASE_URL = "http://192.168.0.13:5000"
-
     private val client = OkHttpClient().newBuilder()
         .build()
 
@@ -20,11 +18,15 @@ class ApiService {
         .build()
 
     fun retrofit(): ApiCalls {
-        val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
+        val retrofit = Retrofit.Builder().baseUrl(Companion.BASE_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
         return retrofit.create(ApiCalls::class.java)
+    }
+
+    companion object {
+        private const val  BASE_URL = "http://192.168.0.13:5000"
     }
 }

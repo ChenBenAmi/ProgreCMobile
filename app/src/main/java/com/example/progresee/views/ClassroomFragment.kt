@@ -92,7 +92,7 @@ class ClassroomFragment : Fragment() {
                 this.findNavController()
                     .navigate(
                         ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment(
-                            0
+                            null
                         )
                     )
                 classroomViewModel.doneNavigateToCreateClassroomFragment()

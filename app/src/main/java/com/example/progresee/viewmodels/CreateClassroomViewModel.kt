@@ -12,7 +12,7 @@ import java.lang.Exception
 
 class CreateClassroomViewModel(
     private val appRepository: AppRepository,
-    private val classroomId: Long
+    private val classroomId: String?
 ) : BaseViewModel() {
 
 
@@ -38,7 +38,7 @@ class CreateClassroomViewModel(
     get() = _showProgressBar
 
     init {
-        if (classroomId > 0) {
+        if (classroomId !=null) {
             classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
         }
         token = appRepository.currentToken

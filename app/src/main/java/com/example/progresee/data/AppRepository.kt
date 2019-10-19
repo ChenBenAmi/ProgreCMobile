@@ -58,7 +58,7 @@ class AppRepository constructor(
         _classrooms=dataBase.classroomDao().getClassrooms()
         Timber.wtf(dataBase.classroomDao().getClassrooms().toString())
     }
-    fun isUserExist(userId: Long): Boolean {
+    fun isUserExist(userId: String): Boolean {
         return dataBase.userDao().isUserExist(userId)
     }
 
@@ -70,7 +70,7 @@ class AppRepository constructor(
         dataBase.userDao().insertUsers(data)
     }
 
-    fun getUser(userId: Long): LiveData<User?> {
+    fun getUser(userId: String): LiveData<User?> {
         return dataBase.userDao().getUser(userId)
     }
 
@@ -86,11 +86,11 @@ class AppRepository constructor(
         dataBase.classroomDao().deleteClassroom(classroom)
     }
 
-    fun deleteClassroomById(classroomId: Long?) {
+    fun deleteClassroomById(classroomId: String?) {
         dataBase.classroomDao().deleteClassroomById(classroomId)
     }
 
-    fun getClassroom(classroomId: Long): LiveData<Classroom?> {
+    fun getClassroom(classroomId: String): LiveData<Classroom?> {
         return dataBase.classroomDao().getClassroom(classroomId)
     }
 
@@ -98,7 +98,7 @@ class AppRepository constructor(
         dataBase.taskDao().insert(task)
     }
 
-    fun getTask(taskId: Long): LiveData<Task> {
+    fun getTask(taskId: String): LiveData<Task> {
         return dataBase.taskDao().getTask(taskId)
     }
 
@@ -119,19 +119,19 @@ class AppRepository constructor(
         return apiCalls.createClassroomAsync(token, name)
     }
 
-    fun deleteClassroomAsync(token: String?, classroomId: Long): Deferred<Response<Long>> {
+    fun deleteClassroomAsync(token: String?, classroomId: String): Deferred<Response<String>> {
         return apiCalls.deleteClassroomAsync(token, classroomId)
     }
 
     fun addToClassroomAsync(
         token: String?,
         userEmail: String,
-        classroomId: Long
-    ): Deferred<Response<Long>> {
+        classroomId: String
+    ): Deferred<Response<String>> {
         return apiCalls.addToClassroomAsync(token, userEmail, classroomId)
     }
 
-    fun getUsersInClassroomAsync(token: String?, classroomId: Long): Deferred<Response<List<User>>> {
+    fun getUsersInClassroomAsync(token: String?, classroomId: String): Deferred<Response<List<User>>> {
         return apiCalls.getUsersInClassroomAsync(token, classroomId)
     }
 
@@ -139,28 +139,28 @@ class AppRepository constructor(
         return apiCalls.updateClassroomAsync(token, classroom)
     }
 
-    fun leaveClassroom(token: String?, classroomId: Long): Deferred<Response<User>> {
+    fun leaveClassroom(token: String?, classroomId: String): Deferred<Response<User>> {
         return apiCalls.leaveClassRoomAsync(token, classroomId)
     }
 
-    fun removeUser(token: String?, userId: Long, classroomId: Long): Deferred<Response<String>> {
+    fun removeUser(token: String?, userId: String, classroomId: String): Deferred<Response<String>> {
         return apiCalls.removeUserAsync(token, userId, classroomId)
     }
 
     fun transferClassroom(
         token: String?,
-        classroomId: Long,
+        classroomId: String,
         email: String
     ): Deferred<Response<Classroom>> {
         return apiCalls.transferClassroomAsync(token, classroomId, email)
     }
 
-    fun getClassroom(token: String?, classroomId: Long): Deferred<Response<Classroom>> {
-        return apiCalls.getClassroom(token, classroomId)
+    fun getClassroom(token: String?, classroomId: String): Deferred<Response<Classroom>> {
+        return apiCalls.getClassroomAsync(token, classroomId)
     }
 
     fun getClassroomsAsync(token: String?): Deferred<Response<List<Classroom>>> {
-        return apiCalls.getClassrooms(token)
+        return apiCalls.getClassroomsAsync(token)
     }
 
     fun insertClassrooms(data: List<Classroom>) {

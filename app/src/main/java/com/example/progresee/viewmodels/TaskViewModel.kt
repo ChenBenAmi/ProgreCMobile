@@ -9,7 +9,7 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 
-class TaskViewModel(private val appRepository: AppRepository, private val classroomId: Long) :
+class TaskViewModel(private val appRepository: AppRepository, private val classroomId: String) :
     BaseViewModel() {
 
 
@@ -29,7 +29,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
 
     val tasks = appRepository.tasks
 
-    private val _navigateTooTaskDetailsFragment = MutableLiveData<Long>()
+    private val _navigateTooTaskDetailsFragment = MutableLiveData<String>()
     val navigateToTaskDetailsFragment
         get() = _navigateTooTaskDetailsFragment
 
@@ -58,7 +58,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 try {
                     val response = appRepository.deleteClassroomAsync(
                         appRepository.currentToken.value,
-                        classroom.value!!.id
+                        classroom.value!!.uid
                     ).await()
                     if (response.isSuccessful) {
                         val data = response.body()
@@ -127,7 +127,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     }
 
 
-    fun onTaskClicked(id: Long) {
+    fun onTaskClicked(id: String) {
         _navigateTooTaskDetailsFragment.value = id
     }
 
@@ -162,10 +162,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         uiScope.launch {
             insertTask(
                 Task(
-                    100,
+                    UUID.randomUUID().toString(),
                     "java",
                     "ZrrcYvrGgxakww8qHeDWdN3YC1OOEQimJd7zlObnCDkdwtpU3XjniOqGGU4fT91quvOtbzjIH9r7SuMbB0NgdKZ6FBHEzLGBp7X52gefZ7TS973leFJbUsmVXnGVZ8nYExsu27iQdnxLjsN2wDBhmIGrmfHP8T4jyweZ8wvI0V0EAcYnrRPmiFBltWcdMSZ9osdRCDGM0Ew8xX4PT5TmFW5Fvm0GfnOigcYL0mK2mjmqWflp0CNQHK9hJgeM7Bs",
-                    "https://i.imgur.com/V9mmwJN.jpg",
+                    listOf("https://i.imgur.com/V9mmwJN.jpg"),
+                    listOf("https://wwww.google.com"),
                     Calendar.getInstance().time,
                     Calendar.getInstance().time
                 )

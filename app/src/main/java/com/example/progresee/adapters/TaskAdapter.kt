@@ -40,7 +40,7 @@ class TaskAdapter(private val clickListener: TaskClickListener) : ListAdapter<Ta
 
 class TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
     override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.uid == newItem.uid
     }
 
     override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
@@ -48,6 +48,6 @@ class TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
     }
 }
 
-class TaskClickListener(val clickListener: (taskId: Long) -> Unit) {
-    fun onClick(task: Task) = clickListener(task.id)
+class TaskClickListener(val clickListener: (taskId: String) -> Unit) {
+    fun onClick(task: Task) = clickListener(task.uid)
 }

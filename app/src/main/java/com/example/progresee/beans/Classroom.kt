@@ -2,6 +2,7 @@ package com.example.progresee.beans
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.progresee.adapters.UserClickListener
 import com.squareup.moshi.Json
 import java.io.Serializable
 import java.util.*
@@ -10,11 +11,13 @@ import java.util.*
 data class Classroom(
 
     @PrimaryKey
-    val id: Long,
+    val uid: String,
     var name: String,
     var owner: String,
-    var dateCreated: String,
-    var openTasks:Int): Serializable
+    var ownerUid: String,
+    var userList: List<String>,
+    val dateCreated: Date
+)
 
 
 

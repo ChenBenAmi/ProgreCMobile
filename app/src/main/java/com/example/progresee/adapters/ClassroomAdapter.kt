@@ -44,7 +44,7 @@ class ClassroomAdapter(private val clickListener: ClassroomClickListener) : List
 
 class ClassroomDiffCallback : DiffUtil.ItemCallback<Classroom>() {
     override fun areItemsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.uid == newItem.uid
     }
 
     override fun areContentsTheSame(oldItem: Classroom, newItem: Classroom): Boolean {
@@ -52,6 +52,6 @@ class ClassroomDiffCallback : DiffUtil.ItemCallback<Classroom>() {
     }
 }
 
-class ClassroomClickListener(val clickListener: (classroomId: Long) -> Unit) {
-    fun onClick(classroom: Classroom) = clickListener(classroom.id)
+class ClassroomClickListener(val clickListener: (classroomId: String) -> Unit) {
+    fun onClick(classroom: Classroom) = clickListener(classroom.uid)
 }

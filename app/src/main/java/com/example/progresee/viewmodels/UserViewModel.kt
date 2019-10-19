@@ -5,7 +5,7 @@ import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
 
-class UserViewModel(private val appRepository: AppRepository, private val classroomId: Long) :
+class UserViewModel(private val appRepository: AppRepository, private val classroomId: String) :
     BaseViewModel() {
 
 
@@ -24,7 +24,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
             showProgressBar()
             withContext(Dispatchers.IO) {
                 try {
-                    Timber.wtf(classroomId.toString())
+                    Timber.wtf(classroomId)
                     val response = appRepository.getUsersInClassroomAsync(
                         appRepository.currentToken.value,
                         classroomId
@@ -47,7 +47,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     }
 
 
-    fun onUserClicked(userId: Long) {
+    fun onUserClicked(userId: String) {
 
     }
 

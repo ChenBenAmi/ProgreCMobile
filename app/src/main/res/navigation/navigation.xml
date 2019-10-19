@@ -66,7 +66,8 @@
             app:destination="@id/classroomFragment" />
         <argument
             android:name="classroomId"
-            app:argType="long" />
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/taskFragment"
@@ -75,7 +76,7 @@
         tools:layout="@layout/fragment_task">
         <argument
             android:name="classroomId"
-            app:argType="long" />
+            app:argType="string" />
         <action
             android:id="@+id/action_taskFragment_to_taskDetailsFragment"
             app:destination="@id/taskDetailsFragment" />
@@ -95,7 +96,7 @@
         android:label="ExerciseFragment" >
         <argument
             android:name="taskId"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -112,6 +113,6 @@
         android:label="UserFragment" >
         <argument
             android:name="classroomId"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
 </navigation>

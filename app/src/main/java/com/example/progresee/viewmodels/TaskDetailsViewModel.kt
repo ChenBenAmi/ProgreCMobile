@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 
-class TaskDetailsViewModel constructor(private val appRepository: AppRepository, private val taskId: Long) :
+class TaskDetailsViewModel constructor(private val appRepository: AppRepository, private val taskId: String) :
     BaseViewModel() {
 
     private var viewModelJob = Job()
@@ -20,7 +20,7 @@ class TaskDetailsViewModel constructor(private val appRepository: AppRepository,
     private val task = MediatorLiveData<Task>()
     fun getTask() = task
 
-    private val _changeExerciseStatus = MutableLiveData<Long?>()
+    private val _changeExerciseStatus = MutableLiveData<String?>()
     val changeExerciseStatus
         get() = _changeExerciseStatus
 
@@ -31,7 +31,7 @@ class TaskDetailsViewModel constructor(private val appRepository: AppRepository,
         task.addSource(appRepository.getTask(taskId), task::setValue)
     }
 
-    fun onTaskClicked(exerciseId: Long) {
+    fun onTaskClicked(exerciseId: String) {
         _changeExerciseStatus.value = exerciseId
     }
     private suspend fun insertExercise(exercise: Exercise) {
@@ -42,15 +42,15 @@ class TaskDetailsViewModel constructor(private val appRepository: AppRepository,
     fun insertDummyData() {
         uiScope.launch {
             insertExercise(
-                Exercise(98,"a very nice exercise",taskId))
+                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
             insertExercise(
-                Exercise(97,"a very nice exercise",taskId))
+                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
             insertExercise(
-                Exercise(96,"a very nice exercise ",taskId))
+                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
             insertExercise(
-                Exercise(95,"a very nice exercise ",taskId))
+                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
             insertExercise(
-                Exercise(94,"a very nice exercise ",taskId))
+                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
         }
     }
 

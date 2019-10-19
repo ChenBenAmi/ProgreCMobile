@@ -13,8 +13,8 @@ interface ClassroomDao {
     @Insert
     fun insert(classroom: Classroom?)
 
-    @Query("select * from classroom where Id = :classroomId")
-    fun getClassroom(classroomId: Long?): LiveData<Classroom?>
+    @Query("select * from classroom where uid = :classroomId")
+    fun getClassroom(classroomId: String?): LiveData<Classroom?>
 
     @Update
     fun updateClassroom(classroom: Classroom?)
@@ -22,8 +22,8 @@ interface ClassroomDao {
     @Delete
     fun deleteClassroom(classroom: Classroom?)
 
-    @Query("delete from classroom where Id= :classroomId ")
-    fun deleteClassroomById(classroomId: Long?)
+    @Query("delete from classroom where uid= :classroomId ")
+    fun deleteClassroomById(classroomId: String?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(data: List<Classroom>)

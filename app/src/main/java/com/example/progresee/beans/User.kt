@@ -7,18 +7,17 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.utils.ConverterUtils
 import java.io.Serializable
 import java.time.LocalDateTime
+import java.util.*
 
 @Entity
 data class User(
     @PrimaryKey
-    val id: Long,
-    val uid:String,
+    val uid: String,
     var email: String,
     var fullName: String,
-    var pictureURL: String,
-    var role:String,
-    var dateCreated:String,
-    var lastLoggedIn:String,
-    var  classrooms:Map<Long,Classroom>
+    var profilePictureUrl: String,
+    var dateCreated:Date,
+    var signedIn:Date
 
-):Serializable
+
+)

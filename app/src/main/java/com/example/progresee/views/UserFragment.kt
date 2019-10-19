@@ -26,7 +26,7 @@ import org.koin.core.parameter.parametersOf
 class UserFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
-    private var classroomId: Long = 0
+    private lateinit var classroomId: String
     private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(

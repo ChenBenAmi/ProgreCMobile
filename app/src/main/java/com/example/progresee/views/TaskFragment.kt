@@ -31,7 +31,7 @@ import timber.log.Timber
 class TaskFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
-    private var classroomId: Long = 0
+    private lateinit var classroomId: String
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var emailText: EditText
 

@@ -10,11 +10,12 @@ import java.util.*
 data class Task(
 
     @PrimaryKey
-    val id: Long,
+    val uid: String,
     var title: String,
     var description: String,
-    var imageURL: String,
+    var imageUrls: List<String>,
+    var referenceLinks:List<String>,
     val startDate: Date,
     var endDate: Date
-//    val exercises: Map<Long,Exercise>
-):Serializable
+
+)
