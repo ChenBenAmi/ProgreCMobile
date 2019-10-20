@@ -2,12 +2,9 @@ package com.example.progresee.utils
 
 import androidx.room.TypeConverter
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.DateCreated
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.squareup.moshi.Moshi
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.util.*
 
 class ConverterUtils {
@@ -23,36 +20,35 @@ class ConverterUtils {
         return date?.time
     }
 
-    companion object {
-        @JvmStatic
-        @TypeConverter
-        fun fromString(value: String): Map<Long, Classroom> {
-            val mapType = object : TypeToken<Map<Long, Classroom>>() {}.type
-            return Gson().fromJson(value, mapType)
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun fromStringMap(map: Map<Long, Classroom>): String {
-            val gson = Gson()
-            return gson.toJson(map)
-        }
-    }
-
-
     @TypeConverter
     fun restoreList(listOfString: String): List<String> {
         return Gson().fromJson(listOfString, object : TypeToken<List<String>>() {
-
         }.type)
     }
-
     @TypeConverter
     fun saveList(listOfString: List<String>): String {
         return Gson().toJson(listOfString)
     }
+    @TypeConverter
+    fun fromDateCreated(dateCreated: DateCreated?): String? {
+        if (dateCreated == null) {
+            return null
+        }
+        val gson = Gson()
+        val type = object : TypeToken<DateCreated>() {
+        }.type
+        return gson.toJson(dateCreated, type)
+    }
 
-
-
+    @TypeConverter
+    fun toDateCreated(dateCreated: String?): DateCreated? {
+        if (dateCreated == null) {
+            return null
+        }
+        val gson = Gson()
+        val type = object : TypeToken<DateCreated>() {
+        }.type
+        return gson.fromJson<DateCreated>(dateCreated, type)
+    }
 
 }

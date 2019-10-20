@@ -10,7 +10,7 @@ import com.example.progresee.beans.User
 @Dao
 interface UserDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(data: User?)
 
     @Query("select * from User where uid = :userId")

@@ -13,6 +13,7 @@ import com.example.progresee.data.network.apicalls.ApiCalls
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import retrofit2.Response
+import retrofit2.http.Query
 import timber.log.Timber
 
 class AppRepository constructor(
@@ -24,6 +25,8 @@ class AppRepository constructor(
 
     private var _currentToken = MutableLiveData<String?>()
 
+    val classrooms = MediatorLiveData<List<Classroom>>()
+
     val currentToken: LiveData<String?>
         get() = _currentToken
 
@@ -34,10 +37,6 @@ class AppRepository constructor(
     private val user = MediatorLiveData<User?>()
     fun getUser() = user
 
-
-    private var _classrooms = dataBase.classroomDao().getClassrooms()
-    val classrooms
-        get() = _classrooms
 
     private var _users = dataBase.userDao().getAllUsers()
     val users
@@ -55,9 +54,9 @@ class AppRepository constructor(
 
 
     fun fetchClassroomsFromDb() {
-        _classrooms=dataBase.classroomDao().getClassrooms()
-        Timber.wtf(dataBase.classroomDao().getClassrooms().toString())
+        classrooms.addSource(dataBase.classroomDao().getClassrooms(), classrooms::setValue)
     }
+
     fun isUserExist(userId: String): Boolean {
         return dataBase.userDao().isUserExist(userId)
     }
@@ -106,66 +105,80 @@ class AppRepository constructor(
         dataBase.exerciseDao().insertExercise(exercise)
     }
 
-    fun getCurrentUserAsync(token: String?): Deferred<Response<User>> {
+    fun getCurrentUserAsync(token: String): Deferred<Response<User>> {
         return apiCalls.getCurrentUserAsync(token)
 
     }
 
-    fun updateUser(token: String?, user: User): Deferred<Response<User>> {
+    fun updateUser(token: String, user: User): Deferred<Response<User>> {
         return apiCalls.updateUserAsync(token, user)
     }
 
-    fun createClassroomAsync(token: String?, name: String): Deferred<Response<Classroom>> {
+    fun createClassroomAsync(
+        token: String,
+        name: String
+    ): Deferred<Response<Map<String, Classroom>>> {
         return apiCalls.createClassroomAsync(token, name)
     }
 
-    fun deleteClassroomAsync(token: String?, classroomId: String): Deferred<Response<String>> {
+    fun deleteClassroomAsync(
+        token: String,
+        classroomId: String
+    ): Deferred<Response<Map<String, String>>> {
         return apiCalls.deleteClassroomAsync(token, classroomId)
     }
 
     fun addToClassroomAsync(
-        token: String?,
+        token: String,
         userEmail: String,
         classroomId: String
-    ): Deferred<Response<String>> {
+    ): Deferred<Response<Map<String, String>>> {
         return apiCalls.addToClassroomAsync(token, userEmail, classroomId)
     }
 
-    fun getUsersInClassroomAsync(token: String?, classroomId: String): Deferred<Response<List<User>>> {
+    fun getUsersInClassroomAsync(
+        token: String,
+        classroomId: String
+    ): Deferred<Response<Map<String, User>>> {
         return apiCalls.getUsersInClassroomAsync(token, classroomId)
     }
 
-    fun updateClassroomAsync(token: String?, classroom: Classroom): Deferred<Response<Classroom>> {
-        return apiCalls.updateClassroomAsync(token, classroom)
+    fun updateClassroomAsync(
+        token: String,
+        classroomId: String,
+        name: String
+    ): Deferred<Response<Map<String, Classroom>>> {
+        return apiCalls.updateClassroomAsync(token, classroomId, name)
     }
 
-    fun leaveClassroom(token: String?, classroomId: String): Deferred<Response<User>> {
+    fun leaveClassroom(token: String, classroomId: String): Deferred<Response<User>> {
         return apiCalls.leaveClassRoomAsync(token, classroomId)
     }
 
-    fun removeUser(token: String?, userId: String, classroomId: String): Deferred<Response<String>> {
+    fun removeUser(token: String, userId: String, classroomId: String): Deferred<Response<String>> {
         return apiCalls.removeUserAsync(token, userId, classroomId)
     }
 
     fun transferClassroom(
-        token: String?,
+        token: String,
         classroomId: String,
         email: String
     ): Deferred<Response<Classroom>> {
         return apiCalls.transferClassroomAsync(token, classroomId, email)
     }
 
-    fun getClassroom(token: String?, classroomId: String): Deferred<Response<Classroom>> {
+    fun getClassroom(token: String, classroomId: String): Deferred<Response<Classroom>> {
         return apiCalls.getClassroomAsync(token, classroomId)
     }
 
-    fun getClassroomsAsync(token: String?): Deferred<Response<List<Classroom>>> {
+    fun getClassroomsAsync(token: String): Deferred<Response<Map<String, Classroom>>> {
         return apiCalls.getClassroomsAsync(token)
     }
 
     fun insertClassrooms(data: List<Classroom>) {
         dataBase.classroomDao().insertAll(data)
     }
+
 
 
 }

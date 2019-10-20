@@ -2,8 +2,6 @@ package com.example.progresee.viewmodels
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
@@ -39,20 +37,20 @@ class TaskDetailsViewModel constructor(private val appRepository: AppRepository,
             appRepository.insertExercise(exercise)
         }
     }
-    fun insertDummyData() {
-        uiScope.launch {
-            insertExercise(
-                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
-            insertExercise(
-                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
-            insertExercise(
-                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
-            insertExercise(
-                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
-            insertExercise(
-                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
-        }
-    }
+//    fun insertDummyData() {
+//        uiScope.launch {
+//            insertExercise(
+//                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
+//            insertExercise(
+//                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
+//            insertExercise(
+//                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
+//            insertExercise(
+//                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
+//            insertExercise(
+//                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
+//        }
+//    }
 
     override fun onCleared() {
         super.onCleared()

@@ -1,5 +1,6 @@
 package com.example.progresee.beans
 
+import androidx.annotation.Nullable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
@@ -11,7 +12,7 @@ data class Exercise (
     @PrimaryKey
     val uid : String,
     var exerciseTitle : String,
-    val dateCreated:Date,
+    val dateCreated:DateCreated,
     var finishedUsersList:List<String>
 
 )

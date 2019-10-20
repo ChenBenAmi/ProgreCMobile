@@ -55,23 +55,28 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         uiScope.launch {
             showProgressBar()
             withContext(Dispatchers.IO) {
-                try {
-                    val response = appRepository.deleteClassroomAsync(
-                        appRepository.currentToken.value,
-                        classroom.value!!.uid
-                    ).await()
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        Timber.wtf(data.toString())
-                        appRepository.deleteClassroomById(data)
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        val response = appRepository.deleteClassroomAsync(
+                            appRepository.currentToken.value!!,
+                            classroom.value!!.uid
+                        ).await()
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            Timber.wtf(data.toString())
+                            data?.forEach {
+                                appRepository.deleteClassroomById(it.value)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
                     }
-                } catch (e: Exception) {
-                    Timber.wtf("Something went wrong")
                 }
             }
             hideProgressBar()
             onClassroomDeleted()
         }
+
     }
 
     fun checkClassroomOwnerShip(classroom: Classroom?) {
@@ -89,34 +94,28 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         uiScope.launch {
             showProgressBar()
             withContext(Dispatchers.IO) {
-                try {
-                    Timber.wtf("hey")
-                    val response = appRepository.addToClassroomAsync(
-                        appRepository.currentToken.value,
-                        text,
-                        classroomId
-                    ).await()
-                    Timber.wtf("${appRepository.currentToken.value} $text $classroomId")
-                    Timber.wtf("hey1")
-                    if (response.isSuccessful) {
-                        Timber.wtf("hey2")
-                        val data = response.body()
-                        if (data != null)
-                            withContext(Dispatchers.Main) {
-                                Timber.wtf("hey3")
-                                hideProgressBar()
-                                _showSnackBar.value = true
-                            }
-
-                    } else {
-                        Timber.wtf("${response.code()}${response.errorBody()}")
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        val response = appRepository.addToClassroomAsync(
+                            appRepository.currentToken.value!!,
+                            text,
+                            classroomId
+                        ).await()
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            if (data != null)
+                                withContext(Dispatchers.Main) {
+                                    hideProgressBar()
+                                    _showSnackBar.value = true
+                                }
+                        } else {
+                            Timber.wtf("${response.code()}${response.errorBody()}")
+                        }
+                    } catch (e: Exception) {
+                        Timber.wtf("${e.message}${e.printStackTrace()}")
                     }
-                } catch (e: Exception) {
-                    Timber.wtf("${e.message}${e.printStackTrace()}")
                 }
-
             }
-
         }
 
     }
@@ -151,29 +150,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         navigateToClassroomUsersFragment.value = null
     }
 
-
-    private suspend fun insertTask(task: Task) {
-        withContext(Dispatchers.IO) {
-            appRepository.insertTask(task)
-        }
-    }
-
-    fun insertDummyData() {
-        uiScope.launch {
-            insertTask(
-                Task(
-                    UUID.randomUUID().toString(),
-                    "java",
-                    "ZrrcYvrGgxakww8qHeDWdN3YC1OOEQimJd7zlObnCDkdwtpU3XjniOqGGU4fT91quvOtbzjIH9r7SuMbB0NgdKZ6FBHEzLGBp7X52gefZ7TS973leFJbUsmVXnGVZ8nYExsu27iQdnxLjsN2wDBhmIGrmfHP8T4jyweZ8wvI0V0EAcYnrRPmiFBltWcdMSZ9osdRCDGM0Ew8xX4PT5TmFW5Fvm0GfnOigcYL0mK2mjmqWflp0CNQHK9hJgeM7Bs",
-                    listOf("https://i.imgur.com/V9mmwJN.jpg"),
-                    listOf("https://wwww.google.com"),
-                    Calendar.getInstance().time,
-                    Calendar.getInstance().time
-                )
-            )
-            Timber.wtf(Calendar.getInstance().time.toString())
-        }
-    }
 
     override fun showProgressBar() {
         _showProgressBar.value = true

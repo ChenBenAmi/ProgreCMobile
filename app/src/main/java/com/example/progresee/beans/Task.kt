@@ -15,7 +15,7 @@ data class Task(
     var description: String,
     var imageUrls: List<String>,
     var referenceLinks:List<String>,
-    val startDate: Date,
-    var endDate: Date
+    val startDate: DateCreated,
+    var endDate: DateCreated
 
 )

@@ -8,9 +8,9 @@ import com.example.progresee.beans.Classroom
 interface ClassroomDao {
 
     @Query("select * from classroom")
-    fun getClassrooms(): LiveData<List<Classroom?>>
+    fun getClassrooms(): LiveData<List<Classroom>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(classroom: Classroom?)
 
     @Query("select * from classroom where uid = :classroomId")

@@ -1,6 +1,8 @@
 package com.example.progresee.viewmodels
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -42,51 +44,47 @@ class ClassroomViewModel constructor(
                     uiScope.launch {
                         showProgressBar()
                         appRepository.setToken(it.result?.token)
+                        val token = appRepository.currentToken.value
                         withContext(Dispatchers.IO) {
-                            try {
-                                val request =
-                                    appRepository.getCurrentUserAsync(it.result?.token).await()
-                                if (request.isSuccessful) {
-                                    val data = request.body()
-                                    if (appRepository.isUserExist(data!!.uid)) {
-                                        withContext(Dispatchers.Main) {
-                                            appRepository.getUser().addSource(
-                                                appRepository.getUser(data.uid),
-                                                appRepository.getUser()::setValue
-                                            )
-                                            hideProgressBar()
+                            if (token != null) {
+                                try {
+                                    val request =
+                                        appRepository.getCurrentUserAsync(token).await()
+                                    if (request.isSuccessful) {
+                                        val data = request.body()
+                                        if (appRepository.isUserExist(data!!.uid)) {
+                                            withContext(Dispatchers.Main) {
+                                                appRepository.getUser().addSource(
+                                                    appRepository.getUser(data.uid),
+                                                    appRepository.getUser()::setValue
+                                                )
+                                            }
+                                        } else {
+                                            appRepository.insertUser(data)
+                                            withContext(Dispatchers.Main) {
+                                                appRepository.getUser().addSource(
+                                                    appRepository.getUser(data.uid),
+                                                    appRepository.getUser()::setValue
+                                                )
+                                            }
                                         }
-                                    } else {
-                                        appRepository.insertUser(data)
-                                        withContext(Dispatchers.Main) {
-                                            appRepository.getUser().addSource(
-                                                appRepository.getUser(data.uid),
-                                                appRepository.getUser()::setValue
-                                            )
-                                            hideProgressBar()
-
-                                        }
-                                    }
-                                } else {
-                                    Timber.wtf("${request.code()}${request.errorBody()}")
+                                        val request2 =
+                                            appRepository.getClassroomsAsync(token).await()
+                                        if (request2.isSuccessful) {
+                                            val classroomsData = request2.body()
+                                            Timber.wtf("data -------->  $classroomsData")
+                                            classroomsData?.forEach { classroomEntry ->
+                                                appRepository.insertClassroom(classroomEntry.value)
+                                            }
+                                        } else Timber.wtf("${request2.code()}${request2.errorBody()}")
+                                    } else Timber.wtf("${request.code()}${request.errorBody()}")
+                                } catch (e: Exception) {
+                                    Timber.e("${e.printStackTrace()}${e.message}")
                                 }
-                            } catch (e: Exception) {
-                                Timber.e(e.printStackTrace().toString())
-                            }
-                            try {
-                                val request = appRepository.getClassroomsAsync(it.result?.token).await()
-                                if (request.isSuccessful) {
-                                    val data = request.body()
-                                    Timber.wtf("data -------->  $data")
-                                    if (data != null) {
-                                        appRepository.insertClassrooms(data)
-                                    }
-                                } else {
-                                }
-                            } catch (e: Exception) {
-                                Timber.wtf("${e.message}${e.printStackTrace()}")
                             }
                         }
+                        appRepository.fetchClassroomsFromDb()
+                        hideProgressBar()
                     }
                 }
             }
@@ -114,7 +112,7 @@ class ClassroomViewModel constructor(
     }
 
     override fun hideProgressBar() {
-        _showProgressBar.value = null
+        _showProgressBar.value = false
     }
 
 

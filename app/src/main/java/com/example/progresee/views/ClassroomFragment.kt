@@ -47,7 +47,9 @@ class ClassroomFragment : Fragment() {
         classroomViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true)
                 layout_progress_bar.visibility = View.VISIBLE
-
+            if (it == false) {
+                classroom_list.visibility=View.VISIBLE
+            }
         })
 
         val title: String = getString(R.string.progresee)
@@ -69,6 +71,7 @@ class ClassroomFragment : Fragment() {
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
+                classroom_list.visibility=View.VISIBLE
             }
         })
 
@@ -92,7 +95,7 @@ class ClassroomFragment : Fragment() {
                 this.findNavController()
                     .navigate(
                         ClassroomFragmentDirections.actionClassroomFragmentToCreateClassroomFragment(
-                            null
+                            "none"
                         )
                     )
                 classroomViewModel.doneNavigateToCreateClassroomFragment()
