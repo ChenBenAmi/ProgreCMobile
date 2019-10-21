@@ -22,14 +22,13 @@ class ApiService {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    private val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
-
     fun retrofit(): ApiCalls {
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
+
         return retrofit.create(ApiCalls::class.java)
     }
 

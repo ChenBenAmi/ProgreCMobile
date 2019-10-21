@@ -9,7 +9,7 @@
     <string name="number_of_open_tasks">Number of Tasks</string>
     <string name="full_name">FullName</string>
     <string name="email">Email</string>
-    <string name="last_login_date">Last Login Date</string>
+
     <string name="your_classrooms">Your classrooms:</string>
     <string name="logout">Logout</string>
     <string name="setting">Setting</string>
@@ -25,6 +25,7 @@
     <string name="classroom_name">Classroom Name</string>
     <string name="progresee">ProgreSee</string>
     <string name="number_of_tasks">Open tasks: %1$d </string>
+    <string name="last_login_date">Last seen: %1$s</string>
     <string name="number_of_exercises">Finished exercises: %1$d/%2$d </string>
     <string name="task_desc_long_255">ZrrcYvrGgxakww8qHeDWdN3YC1OOEQimJd7zlObnCDkdwtpU3XjniOqGGU4fT91quvOtbzjIH9r7SuMbB0NgdKZ6FBHEzLGBp7X52gefZ7TS973leFJbUsmVXnGVZ8nYExsu27iQdnxLjsN2wDBhmIGrmfHP8T4jyweZ8wvI0V0EAcYnrRPmiFBltWcdMSZ9osdRCDGM0Ew8xX4PT5TmFW5Fvm0GfnOigcYL0mK2mjmqWflp0CNQHK9hJgeM7Bs</string>
     <string name="description">Description:</string>
@@ -55,5 +56,8 @@
     <string name="owner">Owner</string>
     <string name="add_person">Add person</string>
     <string name="leave_classroom">Leave classroom</string>
+    <string name="transfer_ownership">Transfer ownership</string>
+    <string name="remove_user">Remove user</string>
+    <string name="dots">⋮</string>
 
 </resources>

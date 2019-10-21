@@ -72,8 +72,7 @@
     <fragment
         android:id="@+id/taskFragment"
         android:name="com.example.progresee.views.TaskFragment"
-        android:label="fragment_task"
-        tools:layout="@layout/fragment_task">
+        android:label="fragment_task">
         <argument
             android:name="classroomId"
             app:argType="string" />
@@ -82,13 +81,13 @@
             app:destination="@id/taskDetailsFragment" />
         <action
             android:id="@+id/action_taskFragment_to_createClassroomFragment"
-            app:destination="@+id/createClassroomFragment"/>
+            app:destination="@+id/createClassroomFragment" />
         <action
             android:id="@+id/action_taskFragment_to_classroomFragment"
             app:destination="@id/classroomFragment" />
         <action
             android:id="@+id/action_taskFragment_to_userFragment"
-            app:destination="@id/userFragment" />
+            app:destination="@id/userFragment"/>
     </fragment>
     <fragment
         android:id="@+id/taskDetailsFragment"
@@ -111,8 +110,14 @@
         android:id="@+id/userFragment"
         android:name="com.example.progresee.views.UserFragment"
         android:label="UserFragment" >
+        <action
+            android:id="@+id/action_userFragment_to_classroomFragment"
+            app:destination="@id/classroomFragment" />
         <argument
             android:name="classroomId"
             app:argType="string" />
+        <argument
+            android:name="owner"
+            app:argType="boolean" />
     </fragment>
 </navigation>

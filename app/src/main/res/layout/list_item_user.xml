@@ -7,15 +7,11 @@
     <data>
 
         <variable
-            name="classroom"
-            type="com.example.progresee.beans.Classroom" />
-
-        <variable
             name="user"
             type="com.example.progresee.beans.User" />
 
         <variable
-            name="taskClickListener"
+            name="userClickListener"
             type="com.example.progresee.adapters.UserClickListener" />
     </data>
 
@@ -37,7 +33,7 @@
             app:layout_constraintHorizontal_bias="0.023"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.387"
+            app:layout_constraintVertical_bias="0.0"
             app:setProfilePic="@{user}"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -91,13 +87,30 @@
             android:id="@+id/owner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@string/owner"
-            app:layout_constraintBottom_toTopOf="@+id/last_login_date"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="340dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/full_name"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView"
+            app:layout_constraintVertical_bias="0.6" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/three_dots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="@{(v)->userClickListener.onClick(user,context,v)}"
+            android:text="@string/dots"
+            android:textAppearance="?android:textAppearanceLarge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.96"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.56" />
+            app:layout_constraintVertical_bias="0.228" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

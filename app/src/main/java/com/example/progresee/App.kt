@@ -61,10 +61,10 @@ class App : Application() {
                     classroomId
                 )
             }
-            viewModel {(appRepository: AppRepository, classroomId: String) ->
+            viewModel {(appRepository: AppRepository, classroomId: String,owner:Boolean) ->
                 UserViewModel(
                     appRepository,
-                    classroomId
+                    classroomId,owner
                 )  }
 
 

@@ -1,10 +1,7 @@
 package com.example.progresee.data.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.progresee.beans.User
 
 @Dao
@@ -25,6 +22,11 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUsers(data: List<User>?)
+
+    @Query("delete from User")
+    fun clearUsers()
+    @Query("delete from user where uid=:userId")
+    fun removeUser(userId: String)
 
 
 }

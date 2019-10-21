@@ -37,10 +37,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val navigateBackToClassroomFragment
         get() = _navigateBackToClassroomFragment
 
-    private val _navigateToClassroomUsersFragment = MutableLiveData<Boolean?>()
-    val navigateToClassroomUsersFragment
-        get() = _navigateToClassroomUsersFragment
-
     private val _checkOwnerShip = MutableLiveData<Boolean?>()
     val checkOwnerShip
         get() = _checkOwnerShip
@@ -88,7 +84,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
             }
         }
     }
-
+//TODO figure out why showSnackBar trigger gc event and anr
     fun addToClassRoom(text: String) {
         Timber.wtf(text)
         uiScope.launch {
@@ -98,16 +94,21 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                     try {
                         val response = appRepository.addToClassroomAsync(
                             appRepository.currentToken.value!!,
-                            text,
-                            classroomId
+                            classroomId,
+                            text
                         ).await()
                         if (response.isSuccessful) {
                             val data = response.body()
-                            if (data != null)
+                            if (data != null) {
+                                Timber.wtf(data.toString())
+                                data.forEach {
+                                    appRepository.insertClassroom(it.value)
+                                }
                                 withContext(Dispatchers.Main) {
                                     hideProgressBar()
-                                    _showSnackBar.value = true
+//                                    showSnackBar()
                                 }
+                            }
                         } else {
                             Timber.wtf("${response.code()}${response.errorBody()}")
                         }
@@ -117,7 +118,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 }
             }
         }
-
     }
 
 
@@ -142,21 +142,16 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         _navigateBackToClassroomFragment.value = null
     }
 
-    fun navigateToClassroomUsersPage() {
-        navigateToClassroomUsersFragment.value = true
-    }
-
-    fun navigateToClassroomUsersPageDone() {
-        navigateToClassroomUsersFragment.value = null
-    }
-
-
     override fun showProgressBar() {
         _showProgressBar.value = true
     }
 
     override fun hideProgressBar() {
         _showProgressBar.value = null
+    }
+
+    fun showSnackBar() {
+        _showSnackBar.value = true
     }
 
     override fun snackBarShown() {

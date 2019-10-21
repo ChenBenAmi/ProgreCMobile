@@ -5,28 +5,35 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.progresee.beans.Task
 import com.example.progresee.beans.User
-import com.example.progresee.databinding.ListItemTaskBinding
+import android.content.Context
+import android.view.View
 import com.example.progresee.databinding.ListItemUserBinding
+import com.example.progresee.views.UserFragment
 
 
 class UsersAdapter(private val clickListener: UserClickListener) : ListAdapter<User,
         UsersAdapter.ViewHolder>(UserDiffCallback()) {
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(clickListener, item)
+        if (UserFragment.owner) {
+            holder.binding.threeDots.visibility=View.VISIBLE
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
+
     class ViewHolder private constructor(val binding: ListItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(clickListener: UserClickListener, item: User) {
             binding.user = item
-            binding.taskClickListener = clickListener
+            binding.userClickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -37,6 +44,7 @@ class UsersAdapter(private val clickListener: UserClickListener) : ListAdapter<U
                 return ViewHolder(binding)
             }
         }
+
     }
 }
 
@@ -50,6 +58,6 @@ class UserDiffCallback : DiffUtil.ItemCallback<User>() {
     }
 }
 
-class UserClickListener(val clickListener: (userId: String) -> Unit) {
-    fun onClick(user: User) = clickListener(user.uid)
+class UserClickListener(val clickListener: (user: User,context:Context,view:View) -> Unit) {
+    fun onClick(user: User,context: Context,view: View) = clickListener(user,context,view)
 }

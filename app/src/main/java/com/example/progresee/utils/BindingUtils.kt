@@ -9,6 +9,11 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 import com.example.progresee.beans.User
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+
+
 
 
 @BindingAdapter("setFullName")
@@ -25,10 +30,30 @@ fun TextView.setEmail(user: User?) {
     }
 }
 
+@BindingAdapter("setOwner","setClassroom")
+fun TextView.setOwner(user: User?,classroom: Classroom?) {
+    user?.let {
+        classroom?.let {
+            if (user.email==classroom.owner)
+                text = "owner"
+        }
+
+    }
+}
+
+
+//TODO change time zones
 @BindingAdapter("setLastLoggedIn")
 fun TextView.setLastLoggedIn(user: User?) {
     user?.let {
-        text = user.signedIn.toString()
+        val seconds=user.signedIn.seconds+0L
+        val nano=user.signedIn.nanos+3600000000000*3
+        val mil=TimeUnit.MILLISECONDS.convert(nano,TimeUnit.NANOSECONDS)
+        val millis = TimeUnit.MILLISECONDS.convert(seconds, TimeUnit.SECONDS)
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.getDefault())
+        val netDate = Date(millis+mil)
+        val date = sdf.format(netDate).toString()
+        text = context.getString(R.string.last_login_date, date)
     }
 }
 
@@ -40,7 +65,6 @@ fun ImageView.setProfilePic(user: User?) {
             .into(this)
     }
 }
-
 
 @BindingAdapter("classroomOwner")
 fun TextView.setClassroomOwner(item: Classroom?) {

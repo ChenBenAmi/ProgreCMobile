@@ -14,7 +14,7 @@ interface ClassroomDao {
     fun insert(classroom: Classroom?)
 
     @Query("select * from classroom where uid = :classroomId")
-    fun getClassroom(classroomId: String?): LiveData<Classroom?>
+    fun getClassroom(classroomId: String): LiveData<Classroom?>
 
     @Update
     fun updateClassroom(classroom: Classroom?)

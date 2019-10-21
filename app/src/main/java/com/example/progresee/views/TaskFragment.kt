@@ -1,7 +1,6 @@
 package com.example.progresee.views
 
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
 import android.view.*
@@ -28,12 +27,17 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 
+
+
+
+
 class TaskFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
     private lateinit var classroomId: String
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var emailText: EditText
+    private var owner=false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +53,7 @@ class TaskFragment : Fragment() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.classroom_menu)
         emailText = EditText(context)
         emailText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+
         val arguments = TaskFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId
         val taskViewModel: TaskViewModel by viewModel {
@@ -67,15 +72,12 @@ class TaskFragment : Fragment() {
         })
         binding.taskList.adapter = adapter
 
-        taskViewModel.checkOwnerShip.observe(viewLifecycleOwner, Observer { })
-
-//        taskViewModel.insertDummyData()
-
         taskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 layout_progress_bar.visibility = View.VISIBLE
                 create_task_button.isEnabled = false
             }
+            if (it==null) layout_progress_bar.visibility = View.GONE
         })
 
         taskViewModel.getClassroom().observe(viewLifecycleOwner, Observer {
@@ -94,6 +96,7 @@ class TaskFragment : Fragment() {
                     true
                 (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(2)?.isVisible =
                     true
+                owner=true
                 taskViewModel.checkedClassroomOwnerShip()
             }
         })
@@ -126,18 +129,19 @@ class TaskFragment : Fragment() {
         })
 
         taskViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
-            ShowUserAdded()
+            showUserAdded()
             taskViewModel.snackBarShown()
         })
 
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener {
             this.findNavController()
-                .navigate(TaskFragmentDirections.actionTaskFragmentToUserFragment(classroomId))
+                .navigate(TaskFragmentDirections.actionTaskFragmentToUserFragment(classroomId,owner))
         }
 
         return binding.root
 
     }
+
 
     //TODO change when network layer is ready
     private fun setItems() {
@@ -177,7 +181,7 @@ class TaskFragment : Fragment() {
         dialog.show()
     }
 
-    private fun ShowUserAdded() {
+    private fun showUserAdded() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
             "User added",
@@ -200,6 +204,10 @@ class TaskFragment : Fragment() {
         val dialog: AlertDialog = builder.create()
 
         dialog.show()
+    }
+
+    companion object {
+        const val ARG_TEMPLATE_CODE = "someString"
     }
 
 
