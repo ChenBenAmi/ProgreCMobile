@@ -81,14 +81,14 @@ fun TextView.setClassroomName(item: Classroom?) {
     }
 }
 
-@BindingAdapter("classroomDescription")
+@BindingAdapter("setClassroomDescription")
 fun TextView.setClassroomDescription(item: Classroom?) {
     item?.let {
         text = item.description
     }
 }
 
-@BindingAdapter("classroomNumberOfTasks")
+@BindingAdapter("setClassroomNumberOfTasks")
 fun TextView.setClassroomNumberOfTasks(item: Classroom?) {
     item?.let {
         text = context.getString(R.string.number_of_tasks, item.numberOfTasks)

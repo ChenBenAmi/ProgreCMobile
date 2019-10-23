@@ -28,6 +28,7 @@
         android:focusable="true"
         android:minHeight="100dp"
         app:cardElevation="4dp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:onClick="@{() -> classroomClickListener.onClick(classroom)}"
 
         tools:ignore="PrivateResource">
@@ -82,6 +83,7 @@
                 android:layout_marginBottom="8dp"
                 style="@style/FirebaseUI.Text.T12"
                 android:text="@string/number_of_open_tasks"
+                setClassroomNumberOfTasks="@{classroom}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.961"
@@ -90,10 +92,10 @@
                 app:layout_constraintVertical_bias="0.915" />
 
             <TextView
-                android:id="@+id/classroom_id"
+                android:id="@+id/classroom_description"
+                setClassroomDescription="@{classroom}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:classroomId="@{classroom}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.082"
