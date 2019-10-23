@@ -37,9 +37,9 @@ interface ApiCalls {
 
     @PUT("/user/updateClassroom")
     fun updateClassroomAsync(
-        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query("description") description: String, @Query(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
             "name"
-        ) name: String
+        ) name: String, @Query("description") description: String
     ): Deferred<Response<Map<String, Classroom>>>
 
     @DELETE("/user/deleteClassroom")
