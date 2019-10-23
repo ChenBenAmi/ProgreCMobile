@@ -116,9 +116,10 @@ class AppRepository constructor(
 
     fun createClassroomAsync(
         token: String,
-        name: String
+        name: String,
+        description: String
     ): Deferred<Response<Map<String, Classroom>>> {
-        return apiCalls.createClassroomAsync(token, name)
+        return apiCalls.createClassroomAsync(token, name, description)
     }
 
     fun deleteClassroomAsync(
@@ -132,7 +133,7 @@ class AppRepository constructor(
         token: String,
         classroomId: String,
         email: String
-    ): Deferred<Response<Map<String,Classroom>>> {
+    ): Deferred<Response<Map<String, Classroom>>> {
         return apiCalls.addToClassroomAsync(token, classroomId, email)
     }
 
@@ -146,9 +147,9 @@ class AppRepository constructor(
     fun updateClassroomAsync(
         token: String,
         classroomId: String,
-        name: String
+        name: String, description: String
     ): Deferred<Response<Map<String, Classroom>>> {
-        return apiCalls.updateClassroomAsync(token, classroomId, name)
+        return apiCalls.updateClassroomAsync(token, classroomId, name, description)
     }
 
     fun leaveClassroom(token: String, classroomId: String): Deferred<Response<User>> {

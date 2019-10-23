@@ -92,6 +92,14 @@ class CreateClassroomFragment : Fragment() {
                 showSnackBar(R.string.name_cant_be_empty)
             }
         })
+
+        createClassroomViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
+            if (it == 1) {
+                showSnackBar(R.string.description_too_long)
+            } else if (it == 2) {
+                showSnackBar(R.string.description_cant_be_empty)
+            }
+        })
         return binding.root
     }
 

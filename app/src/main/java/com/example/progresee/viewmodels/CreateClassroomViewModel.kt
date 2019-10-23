@@ -29,6 +29,11 @@ class CreateClassroomViewModel(
     val stringLength: LiveData<Int?>
         get() = _stringLength
 
+
+    private val _descriptionStringLength = MutableLiveData<Int?>()
+    val descriptionStringLength: LiveData<Int?>
+        get() = _descriptionStringLength
+
     private val _showProgressBar = MutableLiveData<Boolean?>()
     val showProgressBar
         get() = _showProgressBar
@@ -40,10 +45,12 @@ class CreateClassroomViewModel(
         token = appRepository.currentToken
     }
 
-    fun onSavePressed(name: String) {
+    fun onSavePressed(name: String, description: String) {
         when {
             name.length > 60 -> _stringLength.value = 1
             name.isEmpty() -> _stringLength.value = 2
+            description.length > 100 -> _descriptionStringLength.value = 1
+            description.isEmpty() -> _descriptionStringLength.value = 2
             else -> uiScope.launch {
                 showProgressBar()
                 withContext(Dispatchers.IO) {
@@ -51,7 +58,11 @@ class CreateClassroomViewModel(
                         if (token.value != null) {
                             try {
                                 val request =
-                                    appRepository.createClassroomAsync(token.value!!, name).await()
+                                    appRepository.createClassroomAsync(
+                                        token.value!!,
+                                        name,
+                                        description
+                                    ).await()
                                 if (request.isSuccessful) {
                                     val data = request.body()
                                     Timber.wtf(data.toString())
@@ -75,7 +86,12 @@ class CreateClassroomViewModel(
                             try {
                                 classroom.name = name
                                 val request =
-                                    appRepository.updateClassroomAsync(token.value!!, classroom.uid,classroom.name)
+                                    appRepository.updateClassroomAsync(
+                                        token.value!!,
+                                        classroom.uid,
+                                        classroom.name,
+                                        classroom.description
+                                    )
                                         .await()
                                 if (request.isSuccessful) {
                                     val data = request.body()

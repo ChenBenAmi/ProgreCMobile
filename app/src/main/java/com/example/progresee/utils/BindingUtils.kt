@@ -73,19 +73,25 @@ fun TextView.setClassroomOwner(item: Classroom?) {
     }
 }
 
-//TODO find a way to get the number of open tasks
-//@BindingAdapter("numberOfOpenTasks")
-//fun TextView.setNumberOfOpenTasks(item: Classroom?) {
-//    item?.let {
-//        text = context.getString(R.string.number_of_tasks, item.openTasks)
-//    }
-//}
-
 
 @BindingAdapter("classroomName")
 fun TextView.setClassroomName(item: Classroom?) {
     item?.let {
         text = item.name
+    }
+}
+
+@BindingAdapter("classroomDescription")
+fun TextView.setClassroomDescription(item: Classroom?) {
+    item?.let {
+        text = item.description
+    }
+}
+
+@BindingAdapter("classroomNumberOfTasks")
+fun TextView.setClassroomNumberOfTasks(item: Classroom?) {
+    item?.let {
+        text = context.getString(R.string.number_of_tasks, item.numberOfTasks)
     }
 }
 
@@ -126,12 +132,9 @@ fun TextView.setExerciseText(item: Exercise?) {
     }
 }
 
-@BindingAdapter("classroomId")
-fun TextView.setClassroomId(item: Classroom?) {
-    item?.let {
-        text = item.uid.toString()
-    }
-}
+
+
+
 
 
 

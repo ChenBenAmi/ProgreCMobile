@@ -29,11 +29,15 @@ interface ApiCalls {
     ): Deferred<Response<Map<String, Classroom>>>
 
     @POST("/user/createClassroom")
-    fun createClassroomAsync(@Header("Authorization") token: String, @Query("name") name: String): Deferred<Response<Map<String, Classroom>>>
+    fun createClassroomAsync(
+        @Header("Authorization") token: String, @Query("name") name: String,
+        @Query("description") description: String
+
+    ): Deferred<Response<Map<String, Classroom>>>
 
     @PUT("/user/updateClassroom")
     fun updateClassroomAsync(
-        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query("description") description: String, @Query(
             "name"
         ) name: String
     ): Deferred<Response<Map<String, Classroom>>>
@@ -65,7 +69,7 @@ interface ApiCalls {
     @PUT("user/removeUser")
     fun removeUserAsync(
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query("userId") userId: String
-    ): Deferred<Response<Map<String,Classroom>>>
+    ): Deferred<Response<Map<String, Classroom>>>
 
 
 }

@@ -36,6 +36,7 @@
     <string name="generated_classroom_invite_link">Generated classroom invite link:</string>
     <string name="save">Save</string>
     <string name="name_too_long">Classroom name can not be longer than 60 characters</string>
+    <string name="description_too_long">Description can not be longer than 100 characters</string>
     <string name="info">Info</string>
     <string name="edit_classroom">Edit classroom</string>
     <string name="delete_are_you_sure">Are you sure you want to delete this classroom? Deleting the classroom will also delete all the tasks within it.</string>
@@ -45,6 +46,7 @@
     <string name="exit">Exit</string>
     <string name="exit_app">Are you sure you want to exit the application?</string>
     <string name="name_cant_be_empty">Name can not be empty</string>
+    <string name="description_cant_be_empty">Description can not be empty</string>
     <string name="unknown_sign_in_response">Unknown Response</string>
     <string name="unknown_error">Unknown error</string>
     <string name="sign_in_cancelled">Sign In cancelled</string>
