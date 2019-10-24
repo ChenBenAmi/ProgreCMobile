@@ -15,6 +15,20 @@
             type="com.example.progresee.adapters.UserClickListener" />
     </data>
 
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mtrl_cards_spacing"
+        android:layout_marginTop="@dimen/mtrl_cards_spacing"
+        android:layout_marginRight="@dimen/mtrl_cards_spacing"
+        android:layout_marginBottom="@dimen/mtrl_cards_spacing"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:minHeight="100dp"
+        app:cardElevation="4dp">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="100dp">
@@ -113,4 +127,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.228" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

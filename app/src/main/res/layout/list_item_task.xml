@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,41 +14,53 @@
             type="com.example.progresee.adapters.TaskClickListener" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mtrl_cards_spacing"
+        android:layout_marginTop="@dimen/mtrl_cards_spacing"
+        android:layout_marginRight="@dimen/mtrl_cards_spacing"
+        android:layout_marginBottom="@dimen/mtrl_cards_spacing"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:minHeight="100dp"
         android:onClick="@{() -> taskClickListener.onClick(task)}"
+        app:cardElevation="4dp">
 
-        android:orientation="vertical">
+        <LinearLayout
 
-        <TextView
-            android:id="@+id/task_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/task_title"
-            app:taskTitle="@{task}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.023"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            android:layout_height="100dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/due_by"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="8dp"
-            android:text="@string/due_by"
-            app:taskDueDate="@{task}"
-            tools:layout_editor_absoluteX="248dp"
-            tools:layout_editor_absoluteY="65dp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/task_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/task_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.023"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:taskTitle="@{task}" />
 
+            <TextView
+                android:id="@+id/due_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="8dp"
+                android:text="@string/due_by"
+                app:taskDueDate="@{task}"
+                tools:layout_editor_absoluteX="248dp"
+                tools:layout_editor_absoluteY="65dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
