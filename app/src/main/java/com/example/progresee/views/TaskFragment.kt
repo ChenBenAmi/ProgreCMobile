@@ -110,7 +110,7 @@ class TaskFragment : Fragment() {
                     this.findNavController()
                         .navigate(
                             TaskFragmentDirections.actionTaskFragmentToTaskDetailsFragment(
-                                taskId
+                                classroomId,taskId
                             )
                         )
                     taskViewModel.doneNavigateToTaskDetailsFragment()
@@ -158,7 +158,6 @@ class TaskFragment : Fragment() {
     }
 
 
-    //TODO change when network layer is ready
     private fun setItems() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -186,8 +185,11 @@ class TaskFragment : Fragment() {
         builder.setMessage(R.string.delete_are_you_sure)
         builder.setPositiveButton("YES") { dialog, which ->
             taskViewModel.deleteClassRoom()
+            dialog.cancel()
         }
         builder.setNegativeButton("No") { dialog, which ->
+            dialog.cancel()
+
 
         }
 
@@ -211,8 +213,10 @@ class TaskFragment : Fragment() {
         builder.setView(emailText)
         builder.setPositiveButton("Confirm") { dialog, which ->
             taskViewModel.addToClassRoom(emailText.text.toString())
+            dialog.cancel()
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
+            dialog.cancel()
 
         }
 

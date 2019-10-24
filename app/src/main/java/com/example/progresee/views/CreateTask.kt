@@ -37,10 +37,16 @@ class CreateTask : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentCreateTaskBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_task, container, false)
+
+        (activity as? AppCompatActivity)?.supportActionBar?.title =
+            context?.getString(R.string.create_task)
 
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
+
+        val binding: FragmentCreateTaskBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_create_task, container, false)
+
+
 
         binding.lifecycleOwner = this
 
@@ -54,10 +60,10 @@ class CreateTask : Fragment() {
             )
         }
         this.createTaskViewModel = createTaskViewModel
-        binding.createClassroomViewModel = createTaskViewModel
+        binding.createClassroomViewModel = this.createTaskViewModel
 
 
-        createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+        this.createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 hideKeyboard()
                 layout_progress_bar.visibility = View.VISIBLE
@@ -66,7 +72,7 @@ class CreateTask : Fragment() {
             }
         })
 
-        createTaskViewModel.navigateBackToTaskFragment.observe(
+        this.createTaskViewModel.navigateBackToTaskFragment.observe(
             viewLifecycleOwner,
             Observer {
                 if (it == true) {
@@ -76,7 +82,7 @@ class CreateTask : Fragment() {
                 }
             })
 
-        createTaskViewModel.stringLength.observe(viewLifecycleOwner, Observer {
+        this.createTaskViewModel.stringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
                 showSnackBar(R.string.name_too_long)
             } else if (it == 2) {
@@ -84,17 +90,13 @@ class CreateTask : Fragment() {
             }
         })
 
-        createTaskViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
+        this.createTaskViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
                 showSnackBar(R.string.description_too_long)
             } else if (it == 2) {
                 showSnackBar(R.string.description_cant_be_empty)
             }
         })
-
-
-
-
         return binding.root
     }
 

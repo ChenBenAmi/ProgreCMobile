@@ -39,6 +39,7 @@ class CreateClassroomFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.supportActionBar?.title =
             context?.getString(R.string.create_classroom_title)
+        (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
 
         val binding: FragmentCreateClassroomBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_classroom, container, false)
@@ -91,7 +92,7 @@ class CreateClassroomFragment : Fragment() {
             } else if (it == 2) {
                 showSnackBar(R.string.name_cant_be_empty)
             }
-    })
+        })
 
         createClassroomViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {

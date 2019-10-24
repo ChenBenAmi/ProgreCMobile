@@ -99,6 +99,12 @@
         <argument
             android:name="taskId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_taskDetailsFragment_to_createTask"
+            app:destination="@id/createTask" />
+        <argument
+            android:name="classroomId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -126,7 +132,7 @@
     <fragment
         android:id="@+id/createTask"
         android:name="com.example.progresee.views.CreateTask"
-        android:label="CreateTask" >
+        android:label="CreateTask">
         <action
             android:id="@+id/action_createTask_to_taskFragment"
             app:destination="@id/taskFragment" />

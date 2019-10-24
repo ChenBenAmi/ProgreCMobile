@@ -13,10 +13,11 @@ data class Task(
     val uid: String,
     var title: String,
     var description: String,
-    var imageUrls: List<String>,
-    var referenceLinks: List<String>,
+    var imageUrl: String,
+    var referenceLink: String,
     val startDate: DateCreated,
     var endDate: DateCreated,
-    val classroomUid: String
+    val classroomUid: String,
+    var status: Boolean
 
 )

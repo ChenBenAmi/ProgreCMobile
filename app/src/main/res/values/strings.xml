@@ -67,5 +67,10 @@
     <string name="resource_link">Resource link</string>
     <string name="task_description_max_255_characters">Task description - max 255 characters</string>
     <string name="add_image">Add image</string>
+    <string name="see_progress">See Progress</string>
+    <string name="add_exercise">Add exercise</string>
+    <string name="end_date">End date</string>
+    <string name="date">Current end date: 00/00/0000</string>
+    <string name="task_status_image">Task Status Image</string>
 
 </resources>

@@ -4,6 +4,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.example.progresee.R
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Exercise
@@ -63,6 +65,9 @@ fun ImageView.setProfilePic(user: User?) {
     user?.let {
         Glide.with(context)
             .load(user.profilePictureUrl)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .apply(RequestOptions.circleCropTransform())
+            .apply(RequestOptions.overrideOf(250, 250))
             .into(this)
     }
 }
@@ -110,6 +115,15 @@ fun TextView.setTaskDueDate(item: Task?) {
     }
 }
 
+@BindingAdapter("setTaskStatus")
+fun ImageView.setTaskStatus(item:Task?) {
+    item?.let {
+        if (it.status){
+            this.setImageResource(R.drawable.ic_lock_open_24px)
+        } else   this.setImageResource(R.drawable.ic_lock_24px)
+    }
+}
+
 @BindingAdapter("taskDescription")
 fun TextView.setTaskDescription(item: Task?) {
     item?.let {
@@ -121,7 +135,7 @@ fun TextView.setTaskDescription(item: Task?) {
 fun ImageView.setTaskImage(item: Task?) {
     item?.let {
         Glide.with(context)
-            .load(item.imageUrls[0])
+            .load(item.imageUrl)
             .into(this)
     }
 }
@@ -129,11 +143,7 @@ fun ImageView.setTaskImage(item: Task?) {
 @BindingAdapter("setLinks")
 fun TextView.setLinks(item:Task?) {
     item?.let {
-        val stringBuilder=StringBuilder()
-        item.referenceLinks.forEach {
-            stringBuilder.append(it+"\n")
-        }
-        text=stringBuilder.toString()
+        text=it.referenceLink
     }
 }
 

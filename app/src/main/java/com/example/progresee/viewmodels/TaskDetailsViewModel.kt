@@ -9,7 +9,7 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 
-class TaskDetailsViewModel constructor(private val appRepository: AppRepository, private val taskId: String) :
+class TaskDetailsViewModel constructor(private val appRepository: AppRepository,private val classroomId:String, private val taskId: String) :
     BaseViewModel() {
 
 

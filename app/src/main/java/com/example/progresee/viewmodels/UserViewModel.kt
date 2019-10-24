@@ -89,7 +89,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
 
     fun onUserClicked(user: User, context: Context, view: View) {
         val popup = PopupMenu(context, view)
-        popup.inflate(R.menu.test_menu)
+        popup.inflate(R.menu.users_menu)
         popup.setOnMenuItemClickListener { item: MenuItem? ->
             when (item!!.itemId) {
                 R.id.remove_user -> {

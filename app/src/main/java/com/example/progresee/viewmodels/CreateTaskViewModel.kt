@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
 class CreateTaskViewModel(
-    private val appRepository: AppRepository, classroomId: String?, taskId: String
+    private val appRepository: AppRepository, classroomId: String, taskId: String?
 ) : BaseViewModel() {
 
 
