@@ -1,10 +1,7 @@
 package com.example.progresee.beans
 
-import androidx.annotation.Nullable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
-import java.util.*
 
 @Entity
 data class Exercise (
@@ -13,6 +10,7 @@ data class Exercise (
     val uid : String,
     var exerciseTitle : String,
     val dateCreated:DateCreated,
-    var finishedUsersList:List<String>
+    var finishedUsersList:List<String>,
+    val taskUid: String
 
 )

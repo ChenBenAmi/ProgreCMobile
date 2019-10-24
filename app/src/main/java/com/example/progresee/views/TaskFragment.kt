@@ -27,17 +27,13 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 
-
-
-
-
 class TaskFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
     private lateinit var classroomId: String
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var emailText: EditText
-    private var owner=false
+    private var owner = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +59,7 @@ class TaskFragment : Fragment() {
             )
         }
         this.taskViewModel = taskViewModel
-        binding.taskViewModel = taskViewModel
+        binding.taskViewModel = this.taskViewModel
 
         val manager = LinearLayoutManager(context)
         binding.taskList.layoutManager = manager
@@ -77,7 +73,7 @@ class TaskFragment : Fragment() {
                 layout_progress_bar.visibility = View.VISIBLE
                 create_task_button.isEnabled = false
             }
-            if (it==null) layout_progress_bar.visibility = View.GONE
+            if (it == null) layout_progress_bar.visibility = View.GONE
         })
 
         taskViewModel.getClassroom().observe(viewLifecycleOwner, Observer {
@@ -96,7 +92,7 @@ class TaskFragment : Fragment() {
                     true
                 (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(2)?.isVisible =
                     true
-                owner=true
+                owner = true
                 taskViewModel.checkedClassroomOwnerShip()
             }
         })
@@ -133,10 +129,29 @@ class TaskFragment : Fragment() {
             taskViewModel.snackBarShown()
         })
 
+
+
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener {
             this.findNavController()
-                .navigate(TaskFragmentDirections.actionTaskFragmentToUserFragment(classroomId,owner))
+                .navigate(
+                    TaskFragmentDirections.actionTaskFragmentToUserFragment(
+                        classroomId,
+                        owner
+                    )
+                )
         }
+
+        taskViewModel.navigateToCreateTask.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                this.findNavController().navigate(
+                    TaskFragmentDirections.actionTaskFragmentToCreateTask(
+                        classroomId,
+                        null
+                    )
+                )
+            }
+        })
+
 
         return binding.root
 

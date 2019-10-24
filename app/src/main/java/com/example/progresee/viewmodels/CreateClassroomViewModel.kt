@@ -29,7 +29,6 @@ class CreateClassroomViewModel(
     val stringLength: LiveData<Int?>
         get() = _stringLength
 
-
     private val _descriptionStringLength = MutableLiveData<Int?>()
     val descriptionStringLength: LiveData<Int?>
         get() = _descriptionStringLength
@@ -127,6 +126,7 @@ class CreateClassroomViewModel(
 
     override fun snackBarShown() {
         _stringLength.value = null
+        _descriptionStringLength.value=null
     }
 
     override fun onDoneNavigating() {

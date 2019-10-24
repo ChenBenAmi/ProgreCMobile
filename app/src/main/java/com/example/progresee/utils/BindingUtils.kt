@@ -9,6 +9,7 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 import com.example.progresee.beans.User
+import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -125,12 +126,24 @@ fun ImageView.setTaskImage(item: Task?) {
     }
 }
 
+@BindingAdapter("setLinks")
+fun TextView.setLinks(item:Task?) {
+    item?.let {
+        val stringBuilder=StringBuilder()
+        item.referenceLinks.forEach {
+            stringBuilder.append(it+"\n")
+        }
+        text=stringBuilder.toString()
+    }
+}
+
 @BindingAdapter("exerciseText")
 fun TextView.setExerciseText(item: Exercise?) {
     item?.let {
         text = item.exerciseTitle
     }
 }
+
 
 
 

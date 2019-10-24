@@ -12,6 +12,7 @@ import java.util.*
 class TaskDetailsViewModel constructor(private val appRepository: AppRepository, private val taskId: String) :
     BaseViewModel() {
 
+
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -37,20 +38,7 @@ class TaskDetailsViewModel constructor(private val appRepository: AppRepository,
             appRepository.insertExercise(exercise)
         }
     }
-//    fun insertDummyData() {
-//        uiScope.launch {
-//            insertExercise(
-//                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
-//            insertExercise(
-//                Exercise(taskId,"a very nice exercise",Calendar.getInstance().time, listOf("s","S")))
-//            insertExercise(
-//                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
-//            insertExercise(
-//                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
-//            insertExercise(
-//                Exercise(taskId,"a very nice exercise ",Calendar.getInstance().time, listOf("s","S")))
-//        }
-//    }
+
 
     override fun onCleared() {
         super.onCleared()

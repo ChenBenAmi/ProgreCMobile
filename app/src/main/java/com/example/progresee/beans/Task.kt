@@ -14,8 +14,9 @@ data class Task(
     var title: String,
     var description: String,
     var imageUrls: List<String>,
-    var referenceLinks:List<String>,
+    var referenceLinks: List<String>,
     val startDate: DateCreated,
-    var endDate: DateCreated
+    var endDate: DateCreated,
+    val classroomUid: String
 
 )

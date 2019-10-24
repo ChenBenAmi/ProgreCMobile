@@ -35,7 +35,7 @@
     <string name="delete">Delete</string>
     <string name="generated_classroom_invite_link">Generated classroom invite link:</string>
     <string name="save">Save</string>
-    <string name="name_too_long">Classroom name can not be longer than 60 characters</string>
+    <string name="name_too_long">name can not be longer than 60 characters</string>
     <string name="description_too_long">Description can not be longer than 100 characters</string>
     <string name="info">Info</string>
     <string name="edit_classroom">Edit classroom</string>
@@ -61,5 +61,11 @@
     <string name="transfer_ownership">Transfer ownership</string>
     <string name="remove_user">Remove user</string>
     <string name="dots">⋮</string>
+    <string name="links">Links</string>
+    <string name="create_task">Create Task</string>
+    <string name="links_header">Links:</string>
+    <string name="resource_link">Resource link</string>
+    <string name="task_description_max_255_characters">Task description - max 255 characters</string>
+    <string name="add_image">Add image</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.example.progresee.data.network.apicalls
 
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Exercise
+import com.example.progresee.beans.Task
 import com.example.progresee.beans.User
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
@@ -71,5 +73,83 @@ interface ApiCalls {
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query("userId") userId: String
     ): Deferred<Response<Map<String, Classroom>>>
 
+    //Task Controller
+    @GET("task/getAllTasks")
+    fun getAllTasksAsync(@Header("Authorization") token: String, @Query("classroomId") classroomId: String): Deferred<Response<Map<String, Task>>>
+
+    @GET("task/getTask")
+    fun getTaskAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String
+    ): Deferred<Response<Map<String, Task>>>
+
+    @POST("task/createTask")
+    fun createTaskAsync(@Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Body task: Task): Deferred<Response<Map<String, Task>>>
+
+    @DELETE("task/deleteTask")
+    fun deleteTaskAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String
+    ): Deferred<Response<Map<String, String>>>
+
+
+    @PUT("task/updateTask")
+    fun updateTaskAsync(@Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Body task: Task): Deferred<Response<Map<String, Task>>>
+
+
+    //Exercise Controller
+
+    @GET("exercise/getAllExercises")
+    fun getAllExercisesAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String
+    ): Deferred<Response<Map<String, Exercise>>>
+
+    @GET("exercise/getExercise")
+    fun getExerciseAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String, @Query("exerciseId") exerciseId: String
+    ): Deferred<Response<Map<String, Exercise>>>
+
+    @GET("exercise/getFinishedUsers")
+    //TODO change return type
+    fun getFinishedUsersAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String, @Query("exerciseId") exerciseId: String
+    ): Deferred<Response<Map<String, Exercise>>>
+
+    @POST("exercise/createExercise")
+    fun createExerciseAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String, @Body exercise: Exercise
+    ): Deferred<Response<Map<String, Exercise>>>
+
+    @DELETE("exercise/deleteExercise")
+    fun deleteExerciseAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String, @Query("exerciseId") exerciseId: String
+    ): Deferred<Response<Map<String, String>>>
+
+    @PUT("exercise/updateExercise")
+    fun updateExerciseAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String,@Body exercise: Exercise
+    ): Deferred<Response<Map<String, Exercise>>>
+
+    //TODO change return type
+    @PUT("exercise/updateStatus")
+    fun updateStatusAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "taskId"
+        ) taskId: String, @Query("exerciseId") exerciseId: String
+    ): Deferred<Response<Map<String, String>>>
 
 }

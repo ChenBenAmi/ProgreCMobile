@@ -37,8 +37,8 @@
 
         <EditText
             android:id="@+id/editText_classroom_name"
-            android:layout_width="219dp"
-            android:layout_height="47dp"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/classroom_name"
             android:importantForAutofill="no"
@@ -52,8 +52,8 @@
 
         <EditText
             android:id="@+id/editText_classroom_description"
-            android:layout_width="219dp"
-            android:layout_height="47dp"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/classroom_description"
             android:importantForAutofill="no"

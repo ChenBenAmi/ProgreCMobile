@@ -88,6 +88,9 @@
         <action
             android:id="@+id/action_taskFragment_to_userFragment"
             app:destination="@id/userFragment"/>
+        <action
+            android:id="@+id/action_taskFragment_to_createTask"
+            app:destination="@id/createTask" />
     </fragment>
     <fragment
         android:id="@+id/taskDetailsFragment"
@@ -119,5 +122,20 @@
         <argument
             android:name="owner"
             app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/createTask"
+        android:name="com.example.progresee.views.CreateTask"
+        android:label="CreateTask" >
+        <action
+            android:id="@+id/action_createTask_to_taskFragment"
+            app:destination="@id/taskFragment" />
+        <argument
+            android:name="classroomId"
+            app:argType="string" />
+        <argument
+            android:name="taskId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

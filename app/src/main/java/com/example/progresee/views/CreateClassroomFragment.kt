@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentCreateClassroomBinding
-import com.example.progresee.viewmodels.BaseViewModel
 import com.example.progresee.viewmodels.CreateClassroomViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -82,7 +81,8 @@ class CreateClassroomFragment : Fragment() {
                 layout_progress_bar.visibility = View.VISIBLE
                 save_button.isEnabled = false
                 save_button.text = getString(R.string.saving)
-            }
+            } else layout_progress_bar.visibility = View.VISIBLE
+
         })
 
         createClassroomViewModel.stringLength.observe(viewLifecycleOwner, Observer {
@@ -91,7 +91,7 @@ class CreateClassroomFragment : Fragment() {
             } else if (it == 2) {
                 showSnackBar(R.string.name_cant_be_empty)
             }
-        })
+    })
 
         createClassroomViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
@@ -112,7 +112,7 @@ class CreateClassroomFragment : Fragment() {
         createClassroomViewModel.snackBarShown()
     }
 
-    //TODO change to util file
+
     private fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
     }

@@ -33,6 +33,10 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val navigateToTaskDetailsFragment
         get() = _navigateTooTaskDetailsFragment
 
+    private val _navigateToCreateTask = MutableLiveData<Boolean?>()
+    val navigateToCreateTask
+        get() = _navigateToCreateTask
+
     private val _navigateBackToClassroomFragment = MutableLiveData<Boolean?>()
     val navigateBackToClassroomFragment
         get() = _navigateBackToClassroomFragment
@@ -84,7 +88,8 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
             }
         }
     }
-//TODO figure out why showSnackBar trigger gc event and anr
+
+    //TODO figure out why showSnackBar trigger gc event and anr
     fun addToClassRoom(text: String) {
         Timber.wtf(text)
         uiScope.launch {
@@ -140,6 +145,14 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
 
     fun doneNavigateToClassroomFragment() {
         _navigateBackToClassroomFragment.value = null
+    }
+
+    fun navigateToCreateTaskFragment() {
+        _navigateToCreateTask.value=true
+    }
+
+    fun doneNavigationToCreateTaskFragment() {
+        _navigateToCreateTask.value=null
     }
 
     override fun showProgressBar() {

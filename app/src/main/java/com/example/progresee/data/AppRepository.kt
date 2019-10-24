@@ -13,6 +13,8 @@ import com.example.progresee.data.network.apicalls.ApiCalls
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.Query
 import timber.log.Timber
 
@@ -42,11 +44,12 @@ class AppRepository constructor(
     val users
         get() = _users
 
-    private val _tasks: LiveData<List<Task>> = dataBase.taskDao().getTasks()
+    //TODO move to the view models
+    private val _tasks: LiveData<List<Task>> = dataBase.taskDao().getTasks("123")
     val tasks
         get() = _tasks
-
-    private val _exercises: LiveData<List<Exercise>> = dataBase.exerciseDao().getExercises()
+    //TODO move to the view models
+    private val _exercises: LiveData<List<Exercise>> = dataBase.exerciseDao().getExercises("123")
     val exercises
         get() = _exercises
 
@@ -180,10 +183,6 @@ class AppRepository constructor(
         return apiCalls.getClassroomsAsync(token)
     }
 
-    fun insertClassrooms(data: List<Classroom>) {
-        dataBase.classroomDao().insertAll(data)
-    }
-
     fun clearUsers() {
         dataBase.userDao().clearUsers()
     }
@@ -192,5 +191,86 @@ class AppRepository constructor(
         dataBase.userDao().removeUser(userId)
     }
 
+
+    fun getAllTasksAsync(
+        token: String,
+        classroomId: String
+    ): Deferred<Response<Map<String, Task>>> {
+        return apiCalls.getAllTasksAsync(token, classroomId)
+    }
+
+    fun getTaskAsync(
+        token: String, classroomId: String,
+        taskId: String
+    ): Deferred<Response<Map<String, Task>>> {
+        return apiCalls.getTaskAsync(token, classroomId, taskId)
+    }
+
+    fun createTaskAsync(
+        token: String,
+        classroomId: String,
+        task: Task
+    ): Deferred<Response<Map<String, Task>>> {
+        return apiCalls.createTaskAsync(token, classroomId, task)
+    }
+
+    fun deleteTaskAsync(
+        token: String, classroomId: String,
+        taskId: String
+    ): Deferred<Response<Map<String, String>>> {
+        return apiCalls.deleteTaskAsync(token, classroomId, taskId)
+    }
+
+    fun updateTaskAsync(
+        token: String,
+        classroomId: String,
+        task: Task
+    ): Deferred<Response<Map<String, Task>>> {
+        return apiCalls.updateTaskAsync(token, classroomId, task)
+    }
+
+    fun getAllExercisesAsync(
+        token: String, classroomId: String,
+        taskId: String
+    ): Deferred<Response<Map<String, Exercise>>> {
+        return apiCalls.getAllExercisesAsync(token, classroomId, taskId)
+    }
+
+    fun getExerciseAsync(
+        token: String, classroomId: String, taskId: String, exerciseId: String
+    ): Deferred<Response<Map<String, Exercise>>> {
+        return apiCalls.getExerciseAsync(token, classroomId, taskId, exerciseId)
+    }
+
+    fun getFinishedUsersAsync(
+        token: String, classroomId: String, taskId: String, exerciseId: String
+    ): Deferred<Response<Map<String, Exercise>>> {
+        return apiCalls.getFinishedUsersAsync(token, classroomId, taskId, exerciseId)
+    }
+
+    fun createExerciseAsync(
+        token: String, classroomId: String,
+        taskId: String, exercise: Exercise
+    ): Deferred<Response<Map<String, Exercise>>> {
+        return apiCalls.createExerciseAsync(token, classroomId, taskId, exercise)
+    }
+
+    fun deleteExerciseAsync(
+        token: String, classroomId: String, taskId: String, exerciseId: String
+    ): Deferred<Response<Map<String, String>>> {
+        return apiCalls.deleteExerciseAsync(token, classroomId, taskId, exerciseId)
+    }
+
+    fun updateExerciseAsync(
+        token: String, classroomId: String, taskId: String, exercise: Exercise
+    ): Deferred<Response<Map<String, Exercise>>> {
+        return apiCalls.updateExerciseAsync(token, classroomId, taskId, exercise)
+    }
+
+    fun updateStatusAsync(
+        token: String, classroomId: String, taskId: String, exerciseId: String
+    ): Deferred<Response<Map<String, String>>> {
+        return apiCalls.updateStatusAsync(token, classroomId, taskId, exerciseId)
+    }
 
 }

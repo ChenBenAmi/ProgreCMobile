@@ -1,17 +1,24 @@
 package com.example.progresee.data.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.progresee.beans.Exercise
 
 @Dao
 interface ExerciseDao {
 
-    @Query("SELECT * FROM exercise")
-    fun getExercises(): LiveData<List<Exercise>>
+    @Query("SELECT * FROM exercise where taskUid=:taskId")
+    fun getExercises(taskId:String): LiveData<List<Exercise>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertExercise(exercise: Exercise)
+
+    @Update
+    fun updateExercise(exercise:Exercise)
+
+    @Query("delete from exercise where uid=:exerciseId")
+    fun deleteExercise(exerciseId:String)
+
+
+
 }
