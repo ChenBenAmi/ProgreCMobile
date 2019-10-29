@@ -33,6 +33,8 @@ class TaskFragment : Fragment() {
     private lateinit var classroomId: String
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var emailText: EditText
+
+
     private var owner = false
 
     override fun onCreateView(
@@ -125,8 +127,10 @@ class TaskFragment : Fragment() {
         })
 
         taskViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
-            showUserAdded()
-            taskViewModel.snackBarShown()
+            if(it==true) {
+                showUserAdded()
+                taskViewModel.snackBarShown()
+            }
         })
 
 

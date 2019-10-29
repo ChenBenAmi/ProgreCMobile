@@ -119,6 +119,7 @@ class ClassroomViewModel constructor(
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+        uiScope.cancel()
     }
 
 
