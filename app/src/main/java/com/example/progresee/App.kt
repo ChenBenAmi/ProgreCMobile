@@ -68,9 +68,8 @@ class App : Application() {
                 )
             }
 
-            viewModel { (appRepository: AppRepository, classroomId: String, taskId: String) ->
+            viewModel { (classroomId: String, taskId: String) ->
                 CreateTaskViewModel(
-                    appRepository,
                     classroomId, taskId
                 )
             }

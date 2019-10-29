@@ -111,7 +111,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                                 }
                                 withContext(Dispatchers.Main) {
                                     hideProgressBar()
-//                                    showSnackBar()
+                                    showSnackBar()
                                 }
                             }
                         } else {
@@ -148,11 +148,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     }
 
     fun navigateToCreateTaskFragment() {
-        _navigateToCreateTask.value=true
+        _navigateToCreateTask.value = true
     }
 
     fun doneNavigationToCreateTaskFragment() {
-        _navigateToCreateTask.value=null
+        _navigateToCreateTask.value = null
     }
 
     override fun showProgressBar() {
@@ -174,6 +174,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+        uiScope.cancel()
     }
 
 

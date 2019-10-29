@@ -112,5 +112,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.0.2'
 
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 }
 apply plugin: 'com.google.gms.google-services'

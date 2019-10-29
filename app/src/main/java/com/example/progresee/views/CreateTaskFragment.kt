@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
 import com.example.progresee.data.AppRepository
@@ -24,18 +25,18 @@ import kotlinx.android.synthetic.main.fragment_create_classroom.*
 import kotlinx.android.synthetic.main.fragment_create_task.*
 import kotlinx.android.synthetic.main.fragment_task.layout_progress_bar
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 import java.util.*
 import javax.xml.datatype.DatatypeConstants.MONTHS
 
 
 class CreateTaskFragment : Fragment() {
 
-    private val appRepository: AppRepository by inject()
-    private lateinit var classroomId: String
-    private var taskId: String? = null
-    private lateinit var createTaskViewModel: CreateTaskViewModel
+//    private val appRepository: AppRepository by inject()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,33 +51,32 @@ class CreateTaskFragment : Fragment() {
         val binding: FragmentCreateTaskBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_task, container, false)
 
-
-
-        binding.lifecycleOwner = this
-
-        val arguments = CreateTaskFragmentArgs.fromBundle(arguments!!)
-        classroomId = arguments.classroomId
-        taskId = arguments.taskId
-        val createTaskViewModel: CreateTaskViewModel by viewModel {
+        val args = CreateTaskArgs.fromBundle(arguments!!)
+        val taskId = args.taskId
+        val classroomId = args.classroomId
+        val createTaskViewModel: CreateTaskViewModel = getViewModel {
             parametersOf(
-                appRepository,
                 classroomId, taskId
             )
         }
-        this.createTaskViewModel = createTaskViewModel
-        binding.createClassroomViewModel = this.createTaskViewModel
+
+        binding.lifecycleOwner = this
 
 
-        this.createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                hideKeyboard()
-                layout_progress_bar.visibility = View.VISIBLE
-                save_button.isEnabled = false
-                save_button.text = getString(R.string.saving)
-            }
-        })
 
-        this.createTaskViewModel.navigateBackToTaskFragment.observe(
+        binding.createClassroomViewModel = createTaskViewModel
+
+
+//        createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+//            if (it == true) {
+//                hideKeyboard()
+//                layout_progress_bar.visibility = View.VISIBLE
+//                save_button.isEnabled = false
+//                save_button.text = getString(R.string.saving)
+//            }
+//        })
+
+        createTaskViewModel.navigateBackToTaskFragment.observe(
             viewLifecycleOwner,
             Observer {
                 if (it == true) {
@@ -86,25 +86,34 @@ class CreateTaskFragment : Fragment() {
                 }
             })
 
-        this.createTaskViewModel.stringLength.observe(viewLifecycleOwner, Observer {
-            if (it == 1) {
-                showSnackBar(R.string.name_too_long)
-            } else if (it == 2) {
-                showSnackBar(R.string.name_cant_be_empty)
-            }
-        })
+//        createTaskViewModel.stringLength.observe(viewLifecycleOwner, Observer {
+//            if (it == 1) {
+//                showSnackBar(R.string.name_too_long)
+//                createTaskViewModel.snackBarShown()
+//            } else if (it == 2) {
+//                showSnackBar(R.string.name_cant_be_empty)
+//                createTaskViewModel.snackBarShown()
+//            }
+//        })
 
-        this.createTaskViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
-            if (it == 1) {
-                showSnackBar(R.string.description_too_long)
-            } else if (it == 2) {
-                showSnackBar(R.string.description_cant_be_empty)
-            }
-        })
+//        createTaskViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
+//            if (it == 1) {
+//                showSnackBar(R.string.description_too_long)
+//                createTaskViewModel.snackBarShown()
+//            } else if (it == 2) {
+//                showSnackBar(R.string.description_cant_be_empty)
+//                createTaskViewModel.snackBarShown()
+//            }
+//        })
 
-        this.createTaskViewModel.pickDate.observe(viewLifecycleOwner,Observer{
-            if (it==true) datePicker()
-            this.createTaskViewModel.onPickDateFinished()
+        createTaskViewModel.pickDate.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                Timber.wtf("hey")
+                datePicker()
+                Timber.wtf("hey1")
+                createTaskViewModel.onPickDateFinished()
+                Timber.wtf("hey2")
+            }
         })
         return binding.root
     }
@@ -115,7 +124,7 @@ class CreateTaskFragment : Fragment() {
             getString(id),
             Snackbar.LENGTH_LONG
         ).show()
-        createTaskViewModel.snackBarShown()
+
     }
 
 
@@ -141,7 +150,7 @@ class CreateTaskFragment : Fragment() {
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
 
                 // Display Selected date in textbox
-                current_end_date.text = "" + dayOfMonth + " " + monthOfYear + ", " + year
+                current_end_date.text = """$dayOfMonth $monthOfYear, $year"""
             },
             year,
             month,
@@ -150,5 +159,6 @@ class CreateTaskFragment : Fragment() {
 
         dpd.show()
     }
+
 
 }
