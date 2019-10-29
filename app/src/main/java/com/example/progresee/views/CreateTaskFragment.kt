@@ -30,7 +30,7 @@ import java.util.*
 import javax.xml.datatype.DatatypeConstants.MONTHS
 
 
-class CreateTask : Fragment() {
+class CreateTaskFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
     private lateinit var classroomId: String
@@ -54,7 +54,7 @@ class CreateTask : Fragment() {
 
         binding.lifecycleOwner = this
 
-        val arguments = CreateTaskArgs.fromBundle(arguments!!)
+        val arguments = CreateTaskFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId
         taskId = arguments.taskId
         val createTaskViewModel: CreateTaskViewModel by viewModel {
@@ -81,7 +81,7 @@ class CreateTask : Fragment() {
             Observer {
                 if (it == true) {
                     this.findNavController()
-                        .navigate(CreateTaskDirections.actionCreateTaskToTaskFragment(classroomId))
+                        .navigate(CreateTaskFragmentDirections.actionCreateTaskToTaskFragment(classroomId))
                     createTaskViewModel.onDoneNavigating()
                 }
             })

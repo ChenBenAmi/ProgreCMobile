@@ -19,7 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.CreateTask">
+        tools:context=".views.CreateTaskFragment">
 
         <include
             android:id="@+id/layout_progress_bar"
@@ -107,23 +107,11 @@
             app:layout_constraintTop_toBottomOf="@+id/edit_text_description"
             app:layout_constraintVertical_bias="0.16000003" />
 
-        <Button
-            android:id="@+id/add_image"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="@string/add_image"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pick_date" />
-
         <TextView
             android:id="@+id/current_end_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/date"
-            app:layout_constraintBottom_toTopOf="@+id/add_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pick_date" />
@@ -148,8 +136,6 @@
             android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_image"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

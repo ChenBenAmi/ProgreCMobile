@@ -131,7 +131,7 @@
     </fragment>
     <fragment
         android:id="@+id/createTask"
-        android:name="com.example.progresee.views.CreateTask"
+        android:name="com.example.progresee.views.CreateTaskFragment"
         android:label="CreateTask">
         <action
             android:id="@+id/action_createTask_to_taskFragment"

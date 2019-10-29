@@ -141,22 +141,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.525" />
 
-        <ImageView
-            android:id="@+id/task_image"
-            android:layout_width="141dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape"
-            android:contentDescription="@string/task_image"
-            android:src="@android:drawable/ic_menu_camera"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image"
-            app:layout_constraintVertical_bias="0.006"
-            app:taskImage="@{task}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

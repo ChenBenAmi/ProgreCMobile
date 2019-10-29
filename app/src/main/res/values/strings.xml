@@ -35,7 +35,7 @@
     <string name="delete">Delete</string>
     <string name="generated_classroom_invite_link">Generated classroom invite link:</string>
     <string name="save">Save</string>
-    <string name="name_too_long">name can not be longer than 60 characters</string>
+    <string name="name_too_long">Name can not be longer than 60 characters</string>
     <string name="description_too_long">Description can not be longer than 100 characters</string>
     <string name="info">Info</string>
     <string name="edit_classroom">Edit classroom</string>

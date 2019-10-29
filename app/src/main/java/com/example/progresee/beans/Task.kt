@@ -13,7 +13,6 @@ data class Task(
     val uid: String,
     var title: String,
     var description: String,
-    var imageUrl: String,
     var referenceLink: String,
     val startDate: DateCreated,
     var endDate: DateCreated,

@@ -131,14 +131,14 @@ fun TextView.setTaskDescription(item: Task?) {
     }
 }
 
-@BindingAdapter("taskImage")
-fun ImageView.setTaskImage(item: Task?) {
-    item?.let {
-        Glide.with(context)
-            .load(item.imageUrl)
-            .into(this)
-    }
-}
+//@BindingAdapter("taskImage")
+//fun ImageView.setTaskImage(item: Task?) {
+//    item?.let {
+//        Glide.with(context)
+//            .load(item.imageUrl)
+//            .into(this)
+//    }
+//}
 
 @BindingAdapter("setLinks")
 fun TextView.setLinks(item:Task?) {
