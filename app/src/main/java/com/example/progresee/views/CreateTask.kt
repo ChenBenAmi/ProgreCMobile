@@ -102,9 +102,10 @@ class CreateTask : Fragment() {
             }
         })
 
-        pick_date.setOnClickListener {
-            datePicker()
-        }
+        this.createTaskViewModel.pickDate.observe(viewLifecycleOwner,Observer{
+            if (it==true) datePicker()
+            this.createTaskViewModel.onPickDateFinished()
+        })
         return binding.root
     }
 

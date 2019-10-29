@@ -19,10 +19,13 @@ class CreateTaskViewModel(
     val showProgressBar
         get() = _showProgressBar
 
-    private val _navigateBackToTaskFragment=MutableLiveData<Boolean?>()
+    private val _navigateBackToTaskFragment = MutableLiveData<Boolean?>()
     val navigateBackToTaskFragment
-    get() = _navigateBackToTaskFragment
+        get() = _navigateBackToTaskFragment
 
+    private val _pickDate = MutableLiveData<Boolean?>()
+    val pickDate
+        get() = _pickDate
 
     private val _stringLength = MutableLiveData<Int?>()
     val stringLength: LiveData<Int?>
@@ -32,7 +35,13 @@ class CreateTaskViewModel(
     val descriptionStringLength: LiveData<Int?>
         get() = _descriptionStringLength
 
+    fun onPressedDatePick() {
+        _pickDate.value = true
+    }
 
+    fun onPickDateFinished() {
+        _pickDate.value=null
+    }
 
     override fun showProgressBar() {
         _showProgressBar.value = true
@@ -43,7 +52,7 @@ class CreateTaskViewModel(
     }
 
     override fun navigate() {
-        _navigateBackToTaskFragment.value=true
+        _navigateBackToTaskFragment.value = true
     }
 
     override fun onDoneNavigating() {
@@ -52,7 +61,7 @@ class CreateTaskViewModel(
 
     override fun snackBarShown() {
         _stringLength.value = null
-        _descriptionStringLength.value=null
+        _descriptionStringLength.value = null
     }
 
     override fun onCleared() {
