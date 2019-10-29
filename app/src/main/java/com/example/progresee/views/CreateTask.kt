@@ -2,6 +2,7 @@ package com.example.progresee.views
 
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,10 +21,13 @@ import com.example.progresee.viewmodels.CreateTaskViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_classroom.*
+import kotlinx.android.synthetic.main.fragment_create_task.*
 import kotlinx.android.synthetic.main.fragment_task.layout_progress_bar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
+import javax.xml.datatype.DatatypeConstants.MONTHS
 
 
 class CreateTask : Fragment() {
@@ -97,6 +101,10 @@ class CreateTask : Fragment() {
                 showSnackBar(R.string.description_cant_be_empty)
             }
         })
+
+        pick_date.setOnClickListener {
+            datePicker()
+        }
         return binding.root
     }
 
@@ -120,5 +128,26 @@ class CreateTask : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+    fun datePicker() {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+
+        val dpd = DatePickerDialog(
+            context!!,
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+
+                // Display Selected date in textbox
+                current_end_date.text = "" + dayOfMonth + " " + monthOfYear + ", " + year
+            },
+            year,
+            month,
+            day
+        )
+
+        dpd.show()
+    }
 
 }

@@ -135,7 +135,8 @@
         android:label="CreateTask">
         <action
             android:id="@+id/action_createTask_to_taskFragment"
-            app:destination="@id/taskFragment" />
+            app:destination="@id/taskFragment"
+            app:popUpTo="@+id/taskFragment" />
         <argument
             android:name="classroomId"
             app:argType="string" />

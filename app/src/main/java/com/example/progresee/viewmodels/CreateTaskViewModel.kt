@@ -55,7 +55,6 @@ class CreateTaskViewModel(
         _descriptionStringLength.value=null
     }
 
-
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
