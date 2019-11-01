@@ -1,19 +1,34 @@
 package com.example.progresee.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
+import timber.log.Timber
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CreateTaskViewModel(
-    private val appRepository: AppRepository, classroomId: String, taskId: String?
-) : BaseViewModel() {
+    private val appRepository: AppRepository,
+    private val classroomId: String,
+    private val taskId: String?
 
+) : BaseViewModel() {
+    private val c = Calendar.getInstance()
+    private val year = c.get(Calendar.YEAR)
+    private val month = c.get(Calendar.MONTH)
+    private val day = c.get(Calendar.DAY_OF_MONTH)
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    private val task = MediatorLiveData<Task>()
+    fun getTask() = task
+
 
     private val _showProgressBar = MutableLiveData<Boolean?>()
     val showProgressBar
@@ -34,6 +49,13 @@ class CreateTaskViewModel(
     private val _descriptionStringLength = MutableLiveData<Int?>()
     val descriptionStringLength: LiveData<Int?>
         get() = _descriptionStringLength
+
+
+    init {
+        if (taskId != null) {
+            task.addSource(appRepository.getTask(taskId), task::setValue)
+        }
+    }
 
     fun onPressedDatePick() {
         _pickDate.value = true
@@ -69,4 +91,93 @@ class CreateTaskViewModel(
         viewModelJob.cancel()
     }
 
+    fun onSavePressed(title: String, description: String, link: String, date: String) {
+        Timber.wtf("hey")
+        var sentDate: String = ""
+        if (date == "00/00/0000") {
+            sentDate = "$day/${month.plus(1)}/$year"
+
+        } else {
+            sentDate = date
+        }
+        when {
+            title.length > 60 -> _stringLength.value = 1
+            title.isEmpty() -> _stringLength.value = 2
+            description.length > 100 -> _descriptionStringLength.value = 1
+            description.isEmpty() -> _descriptionStringLength.value = 2
+            else -> uiScope.launch {
+                Timber.wtf("hey1")
+                showProgressBar()
+                withContext(Dispatchers.IO) {
+                    if (taskId == null) {
+                        if (appRepository.currentToken.value != null) {
+                            try {
+                                val request =
+                                    appRepository.createTaskAsync(
+                                        appRepository.currentToken.value!!,
+                                        classroomId,
+                                        title,
+                                        description,
+                                        link,
+                                        sentDate
+                                    ).await()
+                                Timber.wtf("hey2")
+
+                                if (request.isSuccessful) {
+                                    Timber.wtf("heySux3")
+
+                                    val data = request.body()
+                                    Timber.wtf(data.toString())
+                                    data?.forEach {
+                                        appRepository.insertTask(it.value)
+                                    }
+
+
+                                    withContext(Dispatchers.Main) {
+                                        hideProgressBar()
+                                        _navigateBackToTaskFragment.value = true
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Timber.wtf("${e.message}${e.printStackTrace()}")
+                            }
+                        }
+                    } else {
+                        val task = getTask().value
+                        Timber.wtf(task.toString())
+                        if (task != null) {
+                            try {
+                                task.title = title
+                                task.description = description
+                                task.endDate = sentDate
+                                task.referenceLink = link
+                                val request =
+                                    appRepository.updateTaskAsync(
+                                        appRepository.currentToken.value!!,
+                                        classroomId,
+                                        task
+                                    )
+                                        .await()
+                                if (request.isSuccessful) {
+                                    val data = request.body()
+                                    data?.forEach {
+                                        appRepository.updateTask(task)
+                                    }
+
+                                    withContext(Dispatchers.Main) {
+                                        hideProgressBar()
+                                        navigateBackToTaskFragment.value = true
+                                    }
+                                } else {
+                                    Timber.wtf("${request.code()}${request.raw()}")
+                                }
+                            } catch (e: Exception) {
+                                Timber.wtf("oh no something went wrong!${e.printStackTrace()}${e.message}")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

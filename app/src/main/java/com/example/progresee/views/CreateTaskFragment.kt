@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.transition.Visibility
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import com.example.progresee.R
 import com.example.progresee.data.AppRepository
@@ -21,21 +21,22 @@ import com.example.progresee.databinding.FragmentCreateTaskBinding
 import com.example.progresee.viewmodels.CreateTaskViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_create_classroom.*
 import kotlinx.android.synthetic.main.fragment_create_task.*
 import kotlinx.android.synthetic.main.fragment_task.layout_progress_bar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.util.*
-import javax.xml.datatype.DatatypeConstants.MONTHS
 
 
 class CreateTaskFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
+    private val c = Calendar.getInstance()
+    private val year = c.get(Calendar.YEAR)
+    private val month = c.get(Calendar.MONTH)
+    private val day = c.get(Calendar.DAY_OF_MONTH)
 
 
     override fun onCreateView(
@@ -51,6 +52,7 @@ class CreateTaskFragment : Fragment() {
         val binding: FragmentCreateTaskBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_task, container, false)
 
+
         val args = CreateTaskFragmentArgs.fromBundle(arguments!!)
         val taskId = args.taskId
         val classroomId = args.classroomId
@@ -65,15 +67,29 @@ class CreateTaskFragment : Fragment() {
 
 
 
-        binding.createClassroomViewModel = createTaskViewModel
+        binding.createTaskViewModel = createTaskViewModel
 
+
+        createTaskViewModel.getTask().observe(viewLifecycleOwner, Observer {
+            it?.let {
+                (activity as? AppCompatActivity)?.progresee_toolbar?.title =
+                    context?.getString(R.string.edit_task)
+                create_task_title.text = context?.getString(R.string.edit_task)
+                edit_text_task_title.setText(it.title)
+                edit_text_task_description.setText(it.description)
+                if (it.referenceLink != null) {
+                    add_link_task.setText(it.referenceLink)
+                }
+                current_end_date.text = it.endDate
+            }
+        })
 
         createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 hideKeyboard()
                 layout_progress_bar.visibility = View.VISIBLE
-                save_button.isEnabled = false
-                save_button.text = getString(R.string.saving)
+                save_task.isEnabled = false
+                save_task.text = getString(R.string.saving)
             }
         })
 
@@ -113,13 +129,12 @@ class CreateTaskFragment : Fragment() {
 
         createTaskViewModel.pickDate.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                Timber.wtf("hey")
                 datePicker()
-                Timber.wtf("hey1")
                 createTaskViewModel.onPickDateFinished()
-                Timber.wtf("hey2")
             }
         })
+
+
         return binding.root
     }
 
@@ -144,10 +159,7 @@ class CreateTaskFragment : Fragment() {
     }
 
     private fun datePicker() {
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
+        hideKeyboard()
 
 
         val dpd = DatePickerDialog(
@@ -155,7 +167,8 @@ class CreateTaskFragment : Fragment() {
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
 
                 // Display Selected date in textbox
-                current_end_date.text = """$dayOfMonth $monthOfYear, $year"""
+                current_end_date.text = getString(R.string.current_date, dayOfMonth, monthOfYear + 1, year)
+                Timber.wtf("$dayOfMonth + ${monthOfYear + 1} + $year")
             },
             year,
             month,
@@ -163,6 +176,7 @@ class CreateTaskFragment : Fragment() {
         )
 
         dpd.show()
+        current_end_date.visibility = View.VISIBLE
     }
 
 

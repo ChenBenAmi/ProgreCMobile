@@ -1,8 +1,10 @@
 package com.example.progresee.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
@@ -16,6 +18,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+
+    private val _tasks: LiveData<List<Task>> = appRepository.getAllTasks(classroomId)
+    val tasks
+        get() = _tasks
+
     private val classroom = MediatorLiveData<Classroom>()
     fun getClassroom() = classroom
 
@@ -27,7 +34,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val showSnackBar
         get() = _showSnackBar
 
-    val tasks = appRepository.tasks
 
     private val _navigateTooTaskDetailsFragment = MutableLiveData<String>()
     val navigateToTaskDetailsFragment
@@ -47,7 +53,34 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
 
     init {
         uiScope.launch {
+            fetchTasksFromFirebase()
             classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
+        }
+    }
+
+    private fun fetchTasksFromFirebase() {
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        val response = appRepository.getAllTasksAsync(
+                            appRepository.currentToken.value!!,
+                            classroomId
+                        ).await()
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            Timber.wtf(data.toString())
+                            data?.forEach {
+                                appRepository.insertTask(it.value)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    }
+                }
+            }
+            hideProgressBar()
         }
     }
 
@@ -89,7 +122,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         }
     }
 
-    //TODO figure out why showSnackBar trigger gc event and anr
     fun addToClassRoom(text: String) {
         Timber.wtf(text)
         uiScope.launch {

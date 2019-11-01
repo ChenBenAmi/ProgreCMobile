@@ -44,14 +44,6 @@ class AppRepository constructor(
     val users
         get() = _users
 
-    //TODO move to the view models
-    private val _tasks: LiveData<List<Task>> = dataBase.taskDao().getTasks("123")
-    val tasks
-        get() = _tasks
-    //TODO move to the view models
-    private val _exercises: LiveData<List<Exercise>> = dataBase.exerciseDao().getExercises("123")
-    val exercises
-        get() = _exercises
 
     private val apiCalls: ApiCalls = network.retrofit()
 
@@ -92,6 +84,7 @@ class AppRepository constructor(
         dataBase.classroomDao().deleteClassroomById(classroomId)
     }
 
+
     fun getClassroom(classroomId: String): LiveData<Classroom?> {
         return dataBase.classroomDao().getClassroom(classroomId)
     }
@@ -102,6 +95,22 @@ class AppRepository constructor(
 
     fun getTask(taskId: String): LiveData<Task> {
         return dataBase.taskDao().getTask(taskId)
+    }
+
+    fun updateTask(task: Task) {
+        dataBase.taskDao().updateTask(task)
+    }
+
+    fun getAllTasks(classroomId: String): LiveData<List<Task>> {
+        return dataBase.taskDao().getTasks(classroomId)
+    }
+
+    fun deleteTaskById(taskId: String) {
+        dataBase.taskDao().deleteTask(taskId)
+    }
+
+    fun getExercises(taskId: String): LiveData<List<Exercise>> {
+        return dataBase.exerciseDao().getExercises(taskId)
     }
 
     fun insertExercise(exercise: Exercise) {
@@ -116,6 +125,7 @@ class AppRepository constructor(
     fun updateUser(token: String, user: User): Deferred<Response<User>> {
         return apiCalls.updateUserAsync(token, user)
     }
+
 
     fun createClassroomAsync(
         token: String,
@@ -209,9 +219,12 @@ class AppRepository constructor(
     fun createTaskAsync(
         token: String,
         classroomId: String,
-        task: Task
+        title: String,
+        description: String,
+        link: String,
+        date: String
     ): Deferred<Response<Map<String, Task>>> {
-        return apiCalls.createTaskAsync(token, classroomId, task)
+        return apiCalls.createTaskAsync(token, classroomId, title, description, link, date)
     }
 
     fun deleteTaskAsync(
@@ -250,9 +263,9 @@ class AppRepository constructor(
 
     fun createExerciseAsync(
         token: String, classroomId: String,
-        taskId: String, exercise: Exercise
+        taskId: String, description: String
     ): Deferred<Response<Map<String, Exercise>>> {
-        return apiCalls.createExerciseAsync(token, classroomId, taskId, exercise)
+        return apiCalls.createExerciseAsync(token, classroomId, taskId, description)
     }
 
     fun deleteExerciseAsync(
@@ -272,7 +285,6 @@ class AppRepository constructor(
     ): Deferred<Response<Map<String, String>>> {
         return apiCalls.updateStatusAsync(token, classroomId, taskId, exerciseId)
     }
-
 
 
 }

@@ -11,7 +11,7 @@
             type="com.example.progresee.beans.Task" />
 
         <variable
-            name="createClassroomViewModel"
+            name="createTaskViewModel"
             type="com.example.progresee.viewmodels.CreateTaskViewModel" />
     </data>
 
@@ -27,10 +27,86 @@
             android:layout_width="76dp"
             android:layout_height="13dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/pick_date"
+            app:layout_constraintTop_toBottomOf="@+id/add_link_task"
+            tools:layout_editor_absoluteX="206dp" />
+
+        <!--    <DatePicker-->
+        <!--        android:id="@+id/end_date"-->
+        <!--        android:layout_width="wrap_content"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        tools:layout_editor_absoluteX="30dp"-->
+        <!--        tools:layout_editor_absoluteY="55dp" />-->
+
+
+        <Button
+            android:id="@+id/pick_date"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:onClick="@{()->createTaskViewModel.onPressedDatePick()}"
+            android:text="@string/end_date"
+            app:layout_constraintBottom_toTopOf="@+id/current_end_date_string"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_progress_bar" />
+
+        <TextView
+            android:id="@+id/current_end_date_string"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_end_date_string"
+            app:layout_constraintBottom_toTopOf="@+id/current_end_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pick_date" />
+
+        <TextView
+            android:id="@+id/current_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_mock"
+            app:layout_constraintBottom_toTopOf="@+id/save_task"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/current_end_date_string" />
+
+        <EditText
+
+            android:id="@+id/add_link_task"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="@string/resource_link"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            app:layout_constraintBottom_toTopOf="@+id/layout_progress_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_task_description" />
+
+        <EditText
+            android:id="@+id/edit_text_task_description"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/task_description_max_255_characters"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            app:layout_constraintBottom_toTopOf="@+id/add_link_task"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_task_title" />
+
+        <EditText
+            android:id="@+id/edit_text_task_title"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:hint="@string/task_title"
+            android:importantForAutofill="no"
+            android:inputType="textCapWords"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_task_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_task_title" />
 
         <TextView
             android:id="@+id/create_task_title"
@@ -41,107 +117,20 @@
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_task_title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.064" />
-
-        <!--    <DatePicker-->
-        <!--        android:id="@+id/end_date"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        tools:layout_editor_absoluteX="30dp"-->
-        <!--        tools:layout_editor_absoluteY="55dp" />-->
-
-
-        <EditText
-            android:id="@+id/edit_text_title"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/task_title"
-            android:importantForAutofill="no"
-            android:inputType="textCapWords"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.488"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/create_task_title"
-            app:layout_constraintVertical_bias="0.005" />
-
-        <EditText
-            android:id="@+id/edit_text_description"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:hint="@string/task_description_max_255_characters"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.488"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <EditText
-
-            android:id="@+id/add_link"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="24dp"
-            android:hint="@string/resource_link"
-            android:importantForAutofill="no"
-            android:inputType="textUri"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_description"
-            app:layout_constraintVertical_bias="0.035" />
-
-        <TextView
-            android:id="@+id/current_end_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="104dp"
-            android:text="@string/date"
-            app:layout_constraintBottom_toTopOf="@+id/save_task"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pick_date" />
-
-        <Button
-            android:id="@+id/pick_date"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="244dp"
-            android:onClick="@{()->createClassroomViewModel.onPressedDatePick()}"
-            android:text="@string/end_date"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/save_task"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="16dp"
+            android:onClick="@{()->createTaskViewModel.onSavePressed(editTextTaskTitle.getText().toString(),editTextTaskDescription.getText().toString(),addLinkTask.getText().toString(),currentEndDate.getText().toString())}"
             android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/current_end_date" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

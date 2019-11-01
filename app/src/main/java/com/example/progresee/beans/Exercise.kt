@@ -9,8 +9,8 @@ data class Exercise (
     @PrimaryKey
     val uid : String,
     var exerciseTitle : String,
-    val dateCreated:DateCreated,
-    var finishedUsersList:List<String>,
+    val dateCreated:String,
+    var usersFinishedList:List<String>,
     val taskUid: String
 
 )

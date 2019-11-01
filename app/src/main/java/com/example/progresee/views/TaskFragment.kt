@@ -75,7 +75,10 @@ class TaskFragment : Fragment() {
                 layout_progress_bar.visibility = View.VISIBLE
                 create_task_button.isEnabled = false
             }
-            if (it == null) layout_progress_bar.visibility = View.GONE
+            if (it == null) {
+                layout_progress_bar.visibility = View.GONE
+                create_task_button.isEnabled = true
+            }
         })
 
         taskViewModel.getClassroom().observe(viewLifecycleOwner, Observer {
@@ -109,11 +112,10 @@ class TaskFragment : Fragment() {
             viewLifecycleOwner,
             Observer { taskId ->
                 taskId?.let {
+                    Timber.wtf("classroomId is $classroomId taskId is $taskId")
                     this.findNavController()
                         .navigate(
-                            TaskFragmentDirections.actionTaskFragmentToTaskDetailsFragment(
-                                classroomId,taskId
-                            )
+                            TaskFragmentDirections.actionTaskFragmentToTaskDetailsFragment(taskId,classroomId)
                         )
                     taskViewModel.doneNavigateToTaskDetailsFragment()
                 }
@@ -186,7 +188,7 @@ class TaskFragment : Fragment() {
     private fun deleteAlert() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(R.string.delete)
-        builder.setMessage(R.string.delete_are_you_sure)
+        builder.setMessage(R.string.delete_are_you_sure_classroom)
         builder.setPositiveButton("YES") { dialog, which ->
             taskViewModel.deleteClassRoom()
             dialog.cancel()
@@ -229,9 +231,6 @@ class TaskFragment : Fragment() {
         dialog.show()
     }
 
-    companion object {
-        const val ARG_TEMPLATE_CODE = "someString"
-    }
 
 
 }

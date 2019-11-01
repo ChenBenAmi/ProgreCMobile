@@ -19,7 +19,7 @@ interface TaskDao {
     fun insert(task: Task)
 
     @Update
-    fun updateClassroom(classroom: Classroom?)
+    fun updateTask(task: Task)
 
     @Query("delete from task where uid=:taskId")
     fun deleteTask(taskId: String)

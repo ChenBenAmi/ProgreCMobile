@@ -85,7 +85,11 @@ interface ApiCalls {
     ): Deferred<Response<Map<String, Task>>>
 
     @POST("task/createTask")
-    fun createTaskAsync(@Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Body task: Task): Deferred<Response<Map<String, Task>>>
+    fun createTaskAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
+            "title"
+        ) title: String, @Query("description") description: String,@Query("link") link: String, @Query("date") date: String
+    ): Deferred<Response<Map<String, Task>>>
 
     @DELETE("task/deleteTask")
     fun deleteTaskAsync(
@@ -127,7 +131,7 @@ interface ApiCalls {
     fun createExerciseAsync(
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
             "taskId"
-        ) taskId: String, @Body exercise: Exercise
+        ) taskId: String, @Query("description") description: String
     ): Deferred<Response<Map<String, Exercise>>>
 
     @DELETE("exercise/deleteExercise")
@@ -141,7 +145,7 @@ interface ApiCalls {
     fun updateExerciseAsync(
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
             "taskId"
-        ) taskId: String,@Body exercise: Exercise
+        ) taskId: String, @Body exercise: Exercise
     ): Deferred<Response<Map<String, Exercise>>>
 
     //TODO change return type

@@ -63,6 +63,7 @@ class CreateClassroomFragment : Fragment() {
                     context?.getString(R.string.edit_classroom)
                 create_classroom_title.text = context?.getString(R.string.edit_classroom)
                 editText_classroom_name.setText(it.name)
+                editText_classroom_description.setText(it.description)
 
             }
         })

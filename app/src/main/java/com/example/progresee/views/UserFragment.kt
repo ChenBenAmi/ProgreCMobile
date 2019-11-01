@@ -25,7 +25,6 @@ import org.koin.core.parameter.parametersOf
 import androidx.core.view.children
 import androidx.core.view.forEach
 import com.example.progresee.R
-import com.example.progresee.views.TaskFragment.Companion.ARG_TEMPLATE_CODE
 import kotlinx.android.synthetic.main.list_item_user.view.*
 import timber.log.Timber
 

@@ -11,6 +11,7 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 import com.example.progresee.beans.User
+import timber.log.Timber
 import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
@@ -111,7 +112,16 @@ fun TextView.setTaskTitle(item: Task?) {
 @BindingAdapter("taskDueDate")
 fun TextView.setTaskDueDate(item: Task?) {
     item?.let {
-        text = context.getString(R.string.due_by, item.endDate.toString())
+        Timber.wtf(item.endDate)
+
+        val tempDate=item.endDate.substring(0,10)
+
+        val year= tempDate.substring(0,4)
+        val month=tempDate.substring(5,7)
+            val day=tempDate.substring(8,10)
+        val dateToShow= "$day/$month/$year"
+
+        text = context.getString(R.string.due_by, dateToShow)
     }
 }
 
@@ -131,14 +141,6 @@ fun TextView.setTaskDescription(item: Task?) {
     }
 }
 
-//@BindingAdapter("taskImage")
-//fun ImageView.setTaskImage(item: Task?) {
-//    item?.let {
-//        Glide.with(context)
-//            .load(item.imageUrl)
-//            .into(this)
-//    }
-//}
 
 @BindingAdapter("setLinks")
 fun TextView.setLinks(item:Task?) {
