@@ -55,10 +55,10 @@ class App : Application() {
                     classroomId
                 )
             }
-            viewModel { (appRepository: AppRepository, classroomId: String,taskId:String) ->
+            viewModel { (appRepository: AppRepository, classroomId: String, taskId: String) ->
                 TaskDetailsViewModel(
                     appRepository,
-                    classroomId,taskId
+                    classroomId, taskId
                 )
             }
             viewModel { (appRepository: AppRepository, classroomId: String, owner: Boolean) ->
@@ -68,8 +68,9 @@ class App : Application() {
                 )
             }
 
-            viewModel { (classroomId: String, taskId: String) ->
+            viewModel { (appRepository: AppRepository, classroomId: String, taskId: String) ->
                 CreateTaskViewModel(
+                    appRepository,
                     classroomId, taskId
                 )
             }

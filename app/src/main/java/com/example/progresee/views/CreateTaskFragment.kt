@@ -35,7 +35,7 @@ import javax.xml.datatype.DatatypeConstants.MONTHS
 
 class CreateTaskFragment : Fragment() {
 
-//    private val appRepository: AppRepository by inject()
+    private val appRepository: AppRepository by inject()
 
 
     override fun onCreateView(
@@ -51,11 +51,12 @@ class CreateTaskFragment : Fragment() {
         val binding: FragmentCreateTaskBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_task, container, false)
 
-        val args = CreateTaskArgs.fromBundle(arguments!!)
+        val args = CreateTaskFragmentArgs.fromBundle(arguments!!)
         val taskId = args.taskId
         val classroomId = args.classroomId
         val createTaskViewModel: CreateTaskViewModel = getViewModel {
             parametersOf(
+                appRepository,
                 classroomId, taskId
             )
         }
@@ -67,44 +68,48 @@ class CreateTaskFragment : Fragment() {
         binding.createClassroomViewModel = createTaskViewModel
 
 
-//        createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
-//            if (it == true) {
-//                hideKeyboard()
-//                layout_progress_bar.visibility = View.VISIBLE
-//                save_button.isEnabled = false
-//                save_button.text = getString(R.string.saving)
-//            }
-//        })
+        createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                hideKeyboard()
+                layout_progress_bar.visibility = View.VISIBLE
+                save_button.isEnabled = false
+                save_button.text = getString(R.string.saving)
+            }
+        })
 
         createTaskViewModel.navigateBackToTaskFragment.observe(
             viewLifecycleOwner,
             Observer {
                 if (it == true) {
                     this.findNavController()
-                        .navigate(CreateTaskFragmentDirections.actionCreateTaskToTaskFragment(classroomId))
+                        .navigate(
+                            CreateTaskFragmentDirections.actionCreateTaskToTaskFragment(
+                                classroomId
+                            )
+                        )
                     createTaskViewModel.onDoneNavigating()
                 }
             })
 
-//        createTaskViewModel.stringLength.observe(viewLifecycleOwner, Observer {
-//            if (it == 1) {
-//                showSnackBar(R.string.name_too_long)
-//                createTaskViewModel.snackBarShown()
-//            } else if (it == 2) {
-//                showSnackBar(R.string.name_cant_be_empty)
-//                createTaskViewModel.snackBarShown()
-//            }
-//        })
+        createTaskViewModel.stringLength.observe(viewLifecycleOwner, Observer {
+            if (it == 1) {
+                showSnackBar(R.string.name_too_long)
+                createTaskViewModel.snackBarShown()
+            } else if (it == 2) {
+                showSnackBar(R.string.name_cant_be_empty)
+                createTaskViewModel.snackBarShown()
+            }
+        })
 
-//        createTaskViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
-//            if (it == 1) {
-//                showSnackBar(R.string.description_too_long)
-//                createTaskViewModel.snackBarShown()
-//            } else if (it == 2) {
-//                showSnackBar(R.string.description_cant_be_empty)
-//                createTaskViewModel.snackBarShown()
-//            }
-//        })
+        createTaskViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
+            if (it == 1) {
+                showSnackBar(R.string.description_too_long)
+                createTaskViewModel.snackBarShown()
+            } else if (it == 2) {
+                showSnackBar(R.string.description_cant_be_empty)
+                createTaskViewModel.snackBarShown()
+            }
+        })
 
         createTaskViewModel.pickDate.observe(viewLifecycleOwner, Observer {
             if (it == true) {
@@ -138,7 +143,7 @@ class CreateTaskFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun datePicker() {
+    private fun datePicker() {
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)

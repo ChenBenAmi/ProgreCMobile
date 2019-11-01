@@ -7,7 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 
-class CreateTaskViewModel(classroomId: String, taskId: String?
+class CreateTaskViewModel(
+    private val appRepository: AppRepository, classroomId: String, taskId: String?
 ) : BaseViewModel() {
 
 
@@ -39,7 +40,7 @@ class CreateTaskViewModel(classroomId: String, taskId: String?
     }
 
     fun onPickDateFinished() {
-        _pickDate.value=null
+        _pickDate.value = null
     }
 
     override fun showProgressBar() {
