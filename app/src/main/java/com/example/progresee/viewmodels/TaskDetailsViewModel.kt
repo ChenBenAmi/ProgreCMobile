@@ -82,27 +82,33 @@ class TaskDetailsViewModel constructor(
 
     private fun fetchExercisesFromFirebase() {
         uiScope.launch {
-            
+            Timber.wtf("hey")
             showProgressBar()
             withContext(Dispatchers.IO) {
+                Timber.wtf("hey1")
                 if (appRepository.currentToken.value != null) {
                     try {
+                        Timber.wtf("hey2")
                         val response = appRepository.getAllExercisesAsync(
                             appRepository.currentToken.value!!,
                             classroomId, taskId
                         ).await()
+                        Timber.wtf("hey3")
                         if (response.isSuccessful) {
+                            Timber.wtf("hey4")
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
                                 appRepository.insertExercise(it.value)
                             }
+                            Timber.wtf("hey5")
                             withContext(Dispatchers.Main) {
                                 exercises.addSource(
                                     appRepository.getExercises(taskId),
                                     exercises::setValue
                                 )
                             }
+                            Timber.wtf("hey6")
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")

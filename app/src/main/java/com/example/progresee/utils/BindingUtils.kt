@@ -17,8 +17,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-
-
 @BindingAdapter("setFullName")
 fun TextView.setFullName(user: User?) {
     user?.let {
@@ -33,11 +31,11 @@ fun TextView.setEmail(user: User?) {
     }
 }
 
-@BindingAdapter("setOwner","setClassroom")
-fun TextView.setOwner(user: User?,classroom: Classroom?) {
+@BindingAdapter("setOwner", "setClassroom")
+fun TextView.setOwner(user: User?, classroom: Classroom?) {
     user?.let {
         classroom?.let {
-            if (user.email==classroom.owner)
+            if (user.email == classroom.owner)
                 text = "owner"
         }
 
@@ -49,12 +47,12 @@ fun TextView.setOwner(user: User?,classroom: Classroom?) {
 @BindingAdapter("setLastLoggedIn")
 fun TextView.setLastLoggedIn(user: User?) {
     user?.let {
-        val seconds=user.signedIn.seconds+0L
-        val nano=user.signedIn.nanos+3600000000000*3
-        val mil=TimeUnit.MILLISECONDS.convert(nano,TimeUnit.NANOSECONDS)
+        val seconds = user.signedIn.seconds + 0L
+        val nano = user.signedIn.nanos + 3600000000000 * 3
+        val mil = TimeUnit.MILLISECONDS.convert(nano, TimeUnit.NANOSECONDS)
         val millis = TimeUnit.MILLISECONDS.convert(seconds, TimeUnit.SECONDS)
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.getDefault())
-        val netDate = Date(millis+mil)
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val netDate = Date(millis + mil)
         val date = sdf.format(netDate).toString()
         text = context.getString(R.string.last_login_date, date)
     }
@@ -113,23 +111,23 @@ fun TextView.setTaskDueDate(item: Task?) {
     item?.let {
         Timber.wtf(item.endDate)
 
-        val tempDate=item.endDate.substring(0,10)
+        val tempDate = item.endDate.substring(0, 10)
 
-        val year= tempDate.substring(0,4)
-        val month=tempDate.substring(5,7)
-            val day=tempDate.substring(8,10)
-        val dateToShow= "$day/$month/$year"
+        val year = tempDate.substring(0, 4)
+        val month = tempDate.substring(5, 7)
+        val day = tempDate.substring(8, 10)
+        val dateToShow = "$day/$month/$year"
 
         text = context.getString(R.string.due_by, dateToShow)
     }
 }
 
 @BindingAdapter("setTaskStatus")
-fun ImageView.setTaskStatus(item:Task?) {
+fun ImageView.setTaskStatus(item: Task?) {
     item?.let {
-        if (it.status){
+        if (it.status) {
             this.setImageResource(R.drawable.ic_lock_open_24px)
-        } else   this.setImageResource(R.drawable.ic_lock_24px)
+        } else this.setImageResource(R.drawable.ic_lock_24px)
     }
 }
 
@@ -142,9 +140,9 @@ fun TextView.setTaskDescription(item: Task?) {
 
 
 @BindingAdapter("setLinks")
-fun TextView.setLinks(item:Task?) {
+fun TextView.setLinks(item: Task?) {
     item?.let {
-        text=it.referenceLink
+        text = it.referenceLink
     }
 }
 
@@ -154,12 +152,14 @@ fun TextView.setExerciseText(item: Exercise?) {
         text = item.exerciseTitle
     }
 }
+
 @BindingAdapter("userFinishedEmail")
 fun TextView.setUserFinishedEmail(item: UserFinished?) {
     item?.let {
         text = item.email
     }
 }
+
 @BindingAdapter("userFinishedTimestamp")
 fun TextView.setUserFinishedTimestamp(item: UserFinished?) {
     item?.let {
@@ -170,7 +170,8 @@ fun TextView.setUserFinishedTimestamp(item: UserFinished?) {
 @BindingAdapter("userFinishedRadio")
 fun CheckBox.setUserFinishedRadio(item: UserFinished?) {
     item?.let {
-        this.isChecked = item.hasFinished
+        this.isChecked = item.hasFinished == "1"
+
     }
 }
 
