@@ -39,8 +39,9 @@ class UsersFinishedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.completed_list_title)
         val binding: UsersFinishedFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_task_details, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.users_finished_fragment, container, false)
 
         binding.lifecycleOwner = this
 

@@ -82,6 +82,7 @@ class TaskDetailsViewModel constructor(
 
     private fun fetchExercisesFromFirebase() {
         uiScope.launch {
+            
             showProgressBar()
             withContext(Dispatchers.IO) {
                 if (appRepository.currentToken.value != null) {
