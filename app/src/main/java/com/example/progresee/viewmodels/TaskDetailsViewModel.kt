@@ -1,13 +1,17 @@
 package com.example.progresee.viewmodels
 
+import android.content.Context
+import android.view.MenuItem
+import android.view.View
+import android.widget.PopupMenu
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.progresee.R
 import com.example.progresee.beans.Exercise
 import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.util.*
 
 class TaskDetailsViewModel constructor(
     private val appRepository: AppRepository,
@@ -34,6 +38,10 @@ class TaskDetailsViewModel constructor(
     val navigateToTaskFragment
         get() = _navigateTooTaskFragment
 
+    private val _navigateToUsersFinished = MutableLiveData<String?>()
+    val navigateToUsersFinished
+        get() = _navigateToUsersFinished
+
     private val _showProgressBar = MutableLiveData<Boolean?>()
     val showProgressBar
         get() = _showProgressBar
@@ -41,6 +49,15 @@ class TaskDetailsViewModel constructor(
     private val _showSnackBar = MutableLiveData<Boolean?>()
     val showSnackBar
         get() = _showSnackBar
+
+    private val _editExercise = MutableLiveData<Exercise?>()
+    val editExercise
+        get() = _editExercise
+
+    private val _removeExercise = MutableLiveData<String?>()
+    val removeExercise
+        get() = _removeExercise
+
 
     init {
         task.addSource(appRepository.getTask(taskId), task::setValue)
@@ -71,7 +88,7 @@ class TaskDetailsViewModel constructor(
                     try {
                         val response = appRepository.getAllExercisesAsync(
                             appRepository.currentToken.value!!,
-                            classroomId,taskId
+                            classroomId, taskId
                         ).await()
                         if (response.isSuccessful) {
                             val data = response.body()
@@ -79,8 +96,11 @@ class TaskDetailsViewModel constructor(
                             data?.forEach {
                                 appRepository.insertExercise(it.value)
                             }
-                            withContext(Dispatchers.Main){
-                                exercises.addSource(appRepository.getExercises(taskId), exercises::setValue)
+                            withContext(Dispatchers.Main) {
+                                exercises.addSource(
+                                    appRepository.getExercises(taskId),
+                                    exercises::setValue
+                                )
                             }
                         }
                     } catch (e: Exception) {
@@ -154,6 +174,103 @@ class TaskDetailsViewModel constructor(
         }
     }
 
+    fun deleteExercise(uid: String) {
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        val response = appRepository.deleteExerciseAsync(
+                            appRepository.currentToken.value!!,
+                            classroomId,
+                            taskId,
+                            uid
+                        ).await()
+                        if (response.isSuccessful) {
+                            val data = response.body()
+                            Timber.wtf(data.toString())
+                            data?.forEach {
+                                appRepository.deleteExerciseById(uid)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    }
+                }
+            }
+            hideProgressBar()
+        }
+    }
+
+    fun updateExercise(exercise: Exercise, newDescription: String) {
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        Timber.wtf("hey")
+                        exercise.exerciseTitle = newDescription
+                        val response = appRepository.updateExerciseAsync(
+                            appRepository.currentToken.value!!,
+                            classroomId,
+                            taskId,
+                            exercise
+                        ).await()
+                        Timber.wtf("hey1")
+                        if (response.isSuccessful) {
+                            Timber.wtf("hey2")
+                            val data = response.body()
+                            Timber.wtf(data.toString())
+                            data?.forEach {
+                                appRepository.updateExercise(it.value)
+                                Timber.wtf("hey3")
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    }
+                }
+            }
+            hideProgressBar()
+        }
+    }
+
+    fun onExerciseClicked(exercise: Exercise, context: Context, view: View) {
+        val popup = PopupMenu(context, view)
+        popup.inflate(R.menu.exercise_menu)
+        popup.setOnMenuItemClickListener { item: MenuItem? ->
+            when (item!!.itemId) {
+                R.id.edit_menu_item_exercise -> {
+                    showEditExerciseDialog(exercise)
+                }
+                R.id.delete_menu_item_exercise -> {
+                    showRemoveExerciseDialog(exercise.uid)
+                }
+                R.id.users_finished_list -> {
+                    navigatingToUsersFinished(exercise.uid)
+                }
+            }
+            true
+        }
+        popup.show()
+    }
+
+    fun showEditExerciseDialog(exercise: Exercise) {
+        _editExercise.value = exercise
+    }
+
+    fun hideEditExerciseDialog() {
+        _editExercise.value = null
+    }
+
+    fun showRemoveExerciseDialog(uid: String) {
+        _removeExercise.value = uid
+    }
+
+    fun hideRemoveExerciseDialog() {
+        _removeExercise.value = null
+    }
+
     override fun showProgressBar() {
         _showProgressBar.value = true
     }
@@ -170,12 +287,22 @@ class TaskDetailsViewModel constructor(
         _navigateTooTaskFragment.value = true
     }
 
-    fun showSnackBar() {
-        _showSnackBar.value=true
+    fun onDoneNavigatingToUsersFinished() {
+        _navigateToUsersFinished.value = null
     }
+
+    fun navigatingToUsersFinished(uid:String) {
+        _navigateToUsersFinished.value = uid
+    }
+
+    fun showSnackBar() {
+        _showSnackBar.value = true
+    }
+
     override fun snackBarShown() {
         _showSnackBar.value = null
     }
+
 
 
 

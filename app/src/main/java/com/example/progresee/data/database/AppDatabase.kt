@@ -9,20 +9,21 @@ import com.example.progresee.utils.ConverterUtils
 
 @TypeConverters(ConverterUtils::class)
 @Database(
-    entities = [Classroom::class, User::class, Task::class, Exercise::class],
-    version = 33,
+    entities = [Classroom::class, User::class, Task::class, Exercise::class, UserFinished::class],
+    version = 38,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun classroomDao(): ClassroomDao
 
-    abstract  fun exerciseDao():ExerciseDao
+    abstract fun exerciseDao(): ExerciseDao
 
-    abstract fun taskDao():TaskDao
+    abstract fun taskDao(): TaskDao
 
-    abstract fun userDao():UserDao
+    abstract fun userDao(): UserDao
 
+    abstract fun userFinishedDao(): UserFinishedDao
 
 
 }

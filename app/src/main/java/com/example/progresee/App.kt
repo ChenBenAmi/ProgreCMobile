@@ -75,6 +75,13 @@ class App : Application() {
                 )
             }
 
+            viewModel { (appRepository: AppRepository, classroomId: String, exerciseId: String) ->
+                UsersFinishedViewModel(
+                    appRepository,
+                    classroomId, exerciseId
+                )
+            }
+
         }
 
         startKoin {

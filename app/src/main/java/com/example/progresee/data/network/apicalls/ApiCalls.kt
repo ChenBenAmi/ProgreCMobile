@@ -1,9 +1,6 @@
 package com.example.progresee.data.network.apicalls
 
-import com.example.progresee.beans.Classroom
-import com.example.progresee.beans.Exercise
-import com.example.progresee.beans.Task
-import com.example.progresee.beans.User
+import com.example.progresee.beans.*
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
@@ -88,7 +85,9 @@ interface ApiCalls {
     fun createTaskAsync(
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
             "title"
-        ) title: String, @Query("description") description: String,@Query("link") link: String, @Query("date") date: String
+        ) title: String, @Query("description") description: String, @Query("link") link: String, @Query(
+            "date"
+        ) date: String
     ): Deferred<Response<Map<String, Task>>>
 
     @DELETE("task/deleteTask")
@@ -119,13 +118,6 @@ interface ApiCalls {
         ) taskId: String, @Query("exerciseId") exerciseId: String
     ): Deferred<Response<Map<String, Exercise>>>
 
-    @GET("exercise/getFinishedUsers")
-    //TODO change return type
-    fun getFinishedUsersAsync(
-        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
-            "taskId"
-        ) taskId: String, @Query("exerciseId") exerciseId: String
-    ): Deferred<Response<Map<String, Exercise>>>
 
     @POST("exercise/createExercise")
     fun createExerciseAsync(
@@ -155,5 +147,11 @@ interface ApiCalls {
             "taskId"
         ) taskId: String, @Query("exerciseId") exerciseId: String
     ): Deferred<Response<Map<String, String>>>
+
+    @GET("exercise/getFinishedUsers")
+    fun getFinishedUsersAsync(
+        @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query("exerciseId") exerciseId: String
+    ): Deferred<Response<Map<String, UserFinished>>>
+
 
 }

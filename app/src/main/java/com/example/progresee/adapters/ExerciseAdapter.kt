@@ -1,11 +1,14 @@
 package com.example.progresee.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progresee.beans.Exercise
+import com.example.progresee.beans.User
 import com.example.progresee.databinding.ListItemExerciseBinding
 
 
@@ -48,6 +51,6 @@ class ExerciseDiffCallback : DiffUtil.ItemCallback<Exercise>() {
     }
 }
 
-class ExerciseClickListener(val clickListener: (exerciseId: String) -> Unit) {
-    fun onClick(exercise: Exercise) = clickListener(exercise.uid)
+class ExerciseClickListener(val clickListener: (exercise: Exercise, context: Context, view: View) -> Unit) {
+    fun onClick(exercise: Exercise, context: Context, view: View) = clickListener(exercise,context,view)
 }

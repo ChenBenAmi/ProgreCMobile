@@ -46,7 +46,7 @@ class CreateClassroomViewModel(
 
     fun onSavePressed(name: String, description: String) {
         when {
-            name.length > 60 -> _stringLength.value = 1
+            name.length > 32 -> _stringLength.value = 1
             name.isEmpty() -> _stringLength.value = 2
             description.length > 100 -> _descriptionStringLength.value = 1
             description.isEmpty() -> _descriptionStringLength.value = 2
@@ -84,6 +84,8 @@ class CreateClassroomViewModel(
                         if (classroom != null) {
                             try {
                                 classroom.name = name
+                                classroom.description = description
+                                Timber.wtf("name is $name desc $description")
                                 val request =
                                     appRepository.updateClassroomAsync(
                                         token.value!!,
@@ -126,7 +128,7 @@ class CreateClassroomViewModel(
 
     override fun snackBarShown() {
         _stringLength.value = null
-        _descriptionStringLength.value=null
+        _descriptionStringLength.value = null
     }
 
     override fun onDoneNavigating() {

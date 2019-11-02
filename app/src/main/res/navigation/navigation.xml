@@ -108,6 +108,9 @@
         <action
             android:id="@+id/action_taskDetailsFragment_to_taskFragment"
             app:destination="@id/taskFragment" />
+        <action
+            android:id="@+id/action_taskDetailsFragment_to_usersFinishedFragment"
+            app:destination="@id/usersFinishedFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -147,5 +150,19 @@
             android:name="taskId"
             app:argType="string"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/usersFinishedFragment"
+        android:name="com.example.progresee.views.UsersFinishedFragment"
+        android:label="UsersFinishedFragment" >
+        <argument
+            android:name="classroomId"
+            app:argType="string" />
+        <argument
+            android:name="exerciseId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_usersFinishedFragment_to_taskDetailsFragment"
+            app:destination="@id/taskDetailsFragment" />
     </fragment>
 </navigation>

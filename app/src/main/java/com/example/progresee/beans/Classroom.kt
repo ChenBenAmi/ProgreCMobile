@@ -16,7 +16,7 @@ data class Classroom(
     var name: String,
     var owner: String,
     var ownerUid: String,
-    var userList: List<String>,
+    var userList: Map<String,String>,
     val dateCreated: String,
     var description : String,
     var numberOfTasks: Int

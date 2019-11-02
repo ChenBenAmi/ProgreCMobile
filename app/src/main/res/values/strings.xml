@@ -26,6 +26,7 @@
     <string name="progresee">ProgreSee</string>
     <string name="number_of_tasks">Open tasks: %1$d </string>
     <string name="last_login_date">Last seen: %1$s</string>
+    <string name="completed_on">Completed on: %1$s</string>
     <string name="number_of_exercises">Number of exercises: %1$d </string>
     <string name="task_desc_long_255">ZrrcYvrGgxakww8qHeDWdN3YC1OOEQimJd7zlObnCDkdwtpU3XjniOqGGU4fT91quvOtbzjIH9r7SuMbB0NgdKZ6FBHEzLGBp7X52gefZ7TS973leFJbUsmVXnGVZ8nYExsu27iQdnxLjsN2wDBhmIGrmfHP8T4jyweZ8wvI0V0EAcYnrRPmiFBltWcdMSZ9osdRCDGM0Ew8xX4PT5TmFW5Fvm0GfnOigcYL0mK2mjmqWflp0CNQHK9hJgeM7Bs</string>
     <string name="description">Description:</string>
@@ -78,5 +79,10 @@
     <string name="task_status_image">Task Status Image</string>
     <string name="please_pick_date">Please pick an End Date</string>
     <string name="edit_task">Edit Task</string>
+    <string name="edit_exercise">New exercise description</string>
+    <string name="delete_exercise">Delete Exercise</string>
+    <string name="seanhed22_gmail_com">seanhed22@gmail.com</string>
+    <string name="see_progresee">See ProgreSee</string>
+
 
 </resources>

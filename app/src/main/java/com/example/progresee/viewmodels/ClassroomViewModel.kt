@@ -45,21 +45,32 @@ class ClassroomViewModel constructor(
                         showProgressBar()
                         appRepository.setToken(it.result?.token)
                         val token = appRepository.currentToken.value
+                        Timber.wtf("hey")
                         withContext(Dispatchers.IO) {
                             if (token != null) {
                                 try {
+                                    Timber.wtf("hey1")
                                     val request =
                                         appRepository.getCurrentUserAsync(token).await()
+                                    Timber.wtf("hey2")
+
                                     if (request.isSuccessful) {
+                                        Timber.wtf("hey3")
+
                                         val data = request.body()
                                         if (appRepository.isUserExist(data!!.uid)) {
+                                            Timber.wtf("hey4")
+
                                             withContext(Dispatchers.Main) {
+
                                                 appRepository.getUser().addSource(
                                                     appRepository.getUser(data.uid),
                                                     appRepository.getUser()::setValue
                                                 )
                                             }
                                         } else {
+                                            Timber.wtf("hey5")
+
                                             appRepository.insertUser(data)
                                             withContext(Dispatchers.Main) {
                                                 appRepository.getUser().addSource(
@@ -68,16 +79,21 @@ class ClassroomViewModel constructor(
                                                 )
                                             }
                                         }
+                                        Timber.wtf("hey6")
+
                                         val request2 =
                                             appRepository.getClassroomsAsync(token).await()
+                                        Timber.wtf("hey7")
+
                                         if (request2.isSuccessful) {
+
                                             val classroomsData = request2.body()
                                             Timber.wtf("data -------->  $classroomsData")
                                             classroomsData?.forEach { classroomEntry ->
                                                 appRepository.insertClassroom(classroomEntry.value)
                                             }
-                                        } else Timber.wtf("${request2.code()}${request2.errorBody()}")
-                                    } else Timber.wtf("${request.code()}${request.errorBody()}")
+                                        } else Timber.wtf(" else 1 ${request2.code()}${request2.errorBody()} ${request2.message()}")
+                                    } else Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
                                 } catch (e: Exception) {
                                     Timber.e("${e.printStackTrace()}${e.message}")
                                 }

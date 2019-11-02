@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.progresee.R
 import com.example.progresee.adapters.ExerciseAdapter
 import com.example.progresee.adapters.ExerciseClickListener
+import com.example.progresee.beans.Exercise
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentTaskDetailsBinding
 import com.example.progresee.viewmodels.TaskDetailsViewModel
@@ -64,8 +65,8 @@ class TaskDetailsFragment : Fragment() {
         binding.taskDetailsViewModel = taskDetailsViewModel
         val manager = LinearLayoutManager(context)
         binding.exerciseList.layoutManager = manager
-        val adapter = ExerciseAdapter(ExerciseClickListener { exerciseId ->
-            taskDetailsViewModel.onTaskClicked(exerciseId)
+        val adapter = ExerciseAdapter(ExerciseClickListener {  exercise, context, view ->
+            taskDetailsViewModel.onExerciseClicked(exercise, context, view)
         })
         binding.exerciseList.adapter = adapter
 
@@ -93,7 +94,7 @@ class TaskDetailsFragment : Fragment() {
             it?.let {
                 (activity as? AppCompatActivity)?.supportActionBar?.title =
                     it.title
-                Timber.wtf("task is ${it}")
+                Timber.wtf("task is $it")
                 binding.task = it
             }
         })
@@ -102,6 +103,26 @@ class TaskDetailsFragment : Fragment() {
             if (it == true) {
                 showExerciseAdded()
                 taskDetailsViewModel.snackBarShown()
+            }
+        })
+
+        taskDetailsViewModel.editExercise.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                editAlertExercise(it)
+
+            }
+        })
+
+        taskDetailsViewModel.removeExercise.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                deleteAlertExercise(it)
+            }
+        })
+
+        taskDetailsViewModel.navigateToUsersFinished.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                this.findNavController().navigate(TaskDetailsFragmentDirections.actionTaskDetailsFragmentToUsersFinishedFragment(classroomId, it))
+                taskDetailsViewModel.onDoneNavigatingToUsersFinished()
             }
         })
 
@@ -122,10 +143,10 @@ class TaskDetailsFragment : Fragment() {
                     )
                 }
                 R.id.delete_task_menu_item -> {
-                    deleteAlert()
+                    deleteAlertTask()
                 }
                 R.id.add_exercise_menu_item -> {
-                    addAlert()
+                    addAlertTask()
                 }
                 R.id.see_progress_menu_item -> {
 
@@ -136,7 +157,7 @@ class TaskDetailsFragment : Fragment() {
     }
 
 
-    private fun deleteAlert() {
+    private fun deleteAlertTask() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(R.string.delete)
         builder.setMessage(R.string.delete_are_you_sure_task)
@@ -153,7 +174,7 @@ class TaskDetailsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun addAlert() {
+    private fun addAlertTask() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(R.string.add_exercise)
         builder.setMessage(R.string.enter_exercise_description)
@@ -178,6 +199,43 @@ class TaskDetailsFragment : Fragment() {
             "Exercise added",
             Snackbar.LENGTH_LONG
         ).show()
+    }
+
+    private fun editAlertExercise(exercise: Exercise) {
+        val builder = AlertDialog.Builder(context!!)
+        builder.setTitle(getString(R.string.edit_exercise))
+        exerciseDescription.setText(exercise.exerciseTitle)
+        builder.setView(exerciseDescription)
+
+        builder.setPositiveButton("Confirm") { dialog, which ->
+            taskDetailsViewModel.updateExercise(exercise, exerciseDescription.text.toString())
+            taskDetailsViewModel.hideEditExerciseDialog()
+        }
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            taskDetailsViewModel.hideEditExerciseDialog()
+        }
+
+        val dialog: AlertDialog = builder.create()
+
+        dialog.show()
+    }
+
+    private fun deleteAlertExercise(uid: String) {
+        val builder = AlertDialog.Builder(context!!)
+        builder.setTitle(getString(R.string.delete_exercise))
+        builder.setMessage("Are you sure you want to remove this exercise?!")
+        builder.setPositiveButton("YES") { dialog, which ->
+            taskDetailsViewModel.deleteExercise(uid)
+            taskDetailsViewModel.hideRemoveExerciseDialog()
+        }
+        builder.setNegativeButton("No") { dialog, which ->
+            taskDetailsViewModel.hideRemoveExerciseDialog()
+
+        }
+
+        val dialog: AlertDialog = builder.create()
+
+        dialog.show()
     }
 
 

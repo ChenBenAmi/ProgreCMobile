@@ -39,10 +39,29 @@
                 android:text="@string/exercise_text"
                 app:exerciseText="@{exercise}" />
 
+            <TextView
+                android:visibility="visible"
+                android:id="@+id/three_dots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:onClick="@{(v)->exerciseClickListener.onClick(exercise,context,v)}"
+                android:text="@string/dots"
+                android:textAppearance="?android:textAppearanceLarge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.96"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.228" />
+
             <CheckBox
                 android:id="@+id/exercise_status"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
+
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

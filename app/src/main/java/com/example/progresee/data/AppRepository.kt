@@ -3,10 +3,7 @@ package com.example.progresee.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.Classroom
-import com.example.progresee.beans.Exercise
-import com.example.progresee.beans.Task
-import com.example.progresee.beans.User
+import com.example.progresee.beans.*
 import com.example.progresee.data.database.AppDatabase
 import com.example.progresee.data.network.ApiService
 import com.example.progresee.data.network.apicalls.ApiCalls
@@ -117,6 +114,14 @@ class AppRepository constructor(
         dataBase.exerciseDao().insertExercise(exercise)
     }
 
+    fun deleteExerciseById(exerciseId: String) {
+        dataBase.exerciseDao().deleteExercise(exerciseId)
+    }
+
+    fun updateExercise(exercise: Exercise) {
+        dataBase.exerciseDao().updateExercise(exercise)
+    }
+
     fun getCurrentUserAsync(token: String): Deferred<Response<User>> {
         return apiCalls.getCurrentUserAsync(token)
 
@@ -201,6 +206,14 @@ class AppRepository constructor(
         dataBase.userDao().removeUser(userId)
     }
 
+    fun insertUserFinishedIntoDB(userFinished: UserFinished) {
+        dataBase.userFinishedDao().insertFinishedUser(userFinished)
+    }
+
+    fun getUserFinishedFromDB(exerciseId: String): LiveData<List<UserFinished>> {
+        return dataBase.userFinishedDao().getFinishedUser(exerciseId)
+    }
+
 
     fun getAllTasksAsync(
         token: String,
@@ -256,9 +269,9 @@ class AppRepository constructor(
     }
 
     fun getFinishedUsersAsync(
-        token: String, classroomId: String, taskId: String, exerciseId: String
-    ): Deferred<Response<Map<String, Exercise>>> {
-        return apiCalls.getFinishedUsersAsync(token, classroomId, taskId, exerciseId)
+        token: String, classroomId: String, exerciseId: String
+    ): Deferred<Response<Map<String, UserFinished>>> {
+        return apiCalls.getFinishedUsersAsync(token, classroomId, exerciseId)
     }
 
     fun createExerciseAsync(

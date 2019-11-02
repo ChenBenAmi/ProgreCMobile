@@ -10,7 +10,7 @@ data class Exercise (
     val uid : String,
     var exerciseTitle : String,
     val dateCreated:String,
-    var usersFinishedList:List<String>,
+    var usersFinishedList:Map<String,String>,
     val taskUid: String
 
 )
