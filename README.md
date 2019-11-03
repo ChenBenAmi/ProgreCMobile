@@ -4,16 +4,20 @@ By [Chen Ben Ami](https://github.com/ChenBenAmi) and [Sean Hed](https://github.c
 The main idea about this project is to include everything we have learnt in our studies
 and demo a real life development cycle (CircleCi for Continuous Integration, Trello for planning,AWS to save applications on the cloud and monitor them)
 
+ProgreSee application to monitor students' progress on the class assignments. 
+
 
 **This project includes-**
+
 Server side - application written in Java and Spring framework.
+
 Side project- progresee server with jdbc +spring oauth2 
+
 [https://github.com/ChenBenAmi/ProgreSee](https://github.com/ChenBenAmi/ProgreSee)
 
 Client side - 2 native applications:
 
 Web app written in Angular8.
-
 
 Android mobile app written Kotlin.
 
@@ -28,7 +32,7 @@ Android mobile app written Kotlin.
 7.  **Viewmodels**: 
 8.  **Views**:
 
-### [](https://github.com/MindorksOpenSource/android-mvvm-architecture#library-reference-resources)Library reference resources:
+### Library reference resources:
 
 1.  Coroutines :  [https://github.com/Kotlin/kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
 2.  Koin:  [https://github.com/InsertKoinIO/koin](https://github.com/InsertKoinIO/koin)
