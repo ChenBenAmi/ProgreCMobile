@@ -85,11 +85,13 @@ class TaskDetailsFragment : Fragment() {
         binding.taskDetailsViewModel = taskDetailsViewModel
         val manager = LinearLayoutManager(context)
         binding.exerciseList.layoutManager = manager
+        val userEmail=appRepository.getCurrentUserEmail()
+        Timber.wtf("THE USER EMAIL IS "+userEmail)
         val adapter = ExerciseAdapter(ExerciseClickListener { exercise, context, view ->
             taskDetailsViewModel.onExerciseClicked(exercise, context, view)
         }, CheckedListener {
             taskDetailsViewModel.onExerciseChecked(it)
-        }
+        },userEmail!!
 
         )
         binding.exerciseList.adapter = adapter
@@ -195,14 +197,29 @@ class TaskDetailsFragment : Fragment() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save_progress_client -> {
-                    Timber.wtf("This is the list"+taskDetailsViewModel.getCheckedList())
+                    updateExercisesStatus()
                 }
             }
             true
         }
     }
 
+    private fun updateExercisesStatus() {
+        val builder = AlertDialog.Builder(context!!)
+        builder.setTitle(getString(R.string.update_exercises))
+        builder.setMessage(getString(R.string.update_exercises_status,taskDetailsViewModel.getCheckedList().size))
+        builder.setPositiveButton("YES") { dialog, which ->
+            taskDetailsViewModel.updateExercisesStatus()
+            dialog.cancel()
+        }
+        builder.setNegativeButton("No") { dialog, which ->
+            dialog.cancel()
+        }
 
+        val dialog: AlertDialog = builder.create()
+
+        dialog.show()
+    }
     private fun deleteAlertTask() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(R.string.delete)

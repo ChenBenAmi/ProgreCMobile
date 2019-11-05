@@ -14,14 +14,14 @@ import com.example.progresee.views.UserFragment
 
 class ExerciseAdapter(
     private val clickListener: ExerciseClickListener,
-    private val checkedListener: CheckedListener
+    private val checkedListener: CheckedListener,private val userEmail:String
 ) : ListAdapter<Exercise,
         ExerciseAdapter.ViewHolder>(ExerciseDiffCallback()) {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(clickListener, checkedListener, item)
+        holder.bind(clickListener, checkedListener, item,userEmail)
         if (UserFragment.owner) {
             holder.binding.threeDots.visibility = View.VISIBLE
         } else {
@@ -39,12 +39,13 @@ class ExerciseAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             clickListener: ExerciseClickListener,
-            checkedListner: CheckedListener,
-            item: Exercise
+            checkedListener: CheckedListener,
+            item: Exercise,userEmail: String
         ) {
             binding.exercise = item
             binding.exerciseClickListener = clickListener
-            binding.checkedListener = checkedListner
+            binding.checkedListener = checkedListener
+            binding.userEmail=userEmail
             binding.executePendingBindings()
         }
 

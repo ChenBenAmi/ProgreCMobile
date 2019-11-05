@@ -17,6 +17,8 @@ class AppRepository constructor(
 ) {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
+    private val currentUserEmail = firebaseAuth.currentUser?.email
+    fun getCurrentUserEmail() = currentUserEmail
 
     private var _currentToken = MutableLiveData<String?>()
 
@@ -306,7 +308,7 @@ class AppRepository constructor(
 
     fun updateStatusAsync(
         token: String, classroomId: String, taskId: String, exerciseId: String
-    ): Deferred<Response<Map<String, String>>> {
+    ): Deferred<Response<Map<String, Exercise>>> {
         return apiCalls.updateStatusAsync(token, classroomId, taskId, exerciseId)
     }
 

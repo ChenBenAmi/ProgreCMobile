@@ -28,8 +28,8 @@ class TaskDetailsViewModel constructor(
     val isAdmin
         get() = _isAdmin
 
-    private val checkedList= mutableListOf<String>()
-    fun getCheckedList()=checkedList
+    private val checkedList = mutableListOf<String>()
+    fun getCheckedList() = checkedList
 
     private val task = MediatorLiveData<Task>()
     fun getTask() = task
@@ -116,10 +116,13 @@ class TaskDetailsViewModel constructor(
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }
-            hideProgressBar()
         }
     }
 
@@ -137,17 +140,21 @@ class TaskDetailsViewModel constructor(
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach {
+                            data?.forEach { _ ->
                                 appRepository.deleteTaskById(taskId)
                             }
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                            navigate()
+                        }
                     }
                 }
             }
-            hideProgressBar()
-            navigate()
+
         }
 
     }
@@ -169,19 +176,18 @@ class TaskDetailsViewModel constructor(
                             data?.forEach {
                                 appRepository.insertExercise(it.value)
                             }
-                            withContext(Dispatchers.Main) {
-                                hideProgressBar()
-                                showSnackBar()
-                            }
                         }
 
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                            showSnackBar()
+                        }
                     }
                 }
             }
-
-
         }
     }
 
@@ -200,16 +206,19 @@ class TaskDetailsViewModel constructor(
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach {
+                            data?.forEach { _ ->
                                 appRepository.deleteExerciseById(uid)
                             }
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }
-            hideProgressBar()
         }
     }
 
@@ -239,12 +248,62 @@ class TaskDetailsViewModel constructor(
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }
-            hideProgressBar()
         }
     }
+
+    fun updateExercisesStatus() {
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        checkedList.forEach { uid ->
+                            Timber.wtf("hey")
+                            val response = appRepository.updateStatusAsync(
+                                appRepository.currentToken.value!!,
+                                classroomId,
+                                taskId,
+                                uid
+                            ).await()
+                            Timber.wtf("hey1")
+                            if (response.isSuccessful) {
+                                Timber.wtf("hey2")
+                                val data = response.body()
+                                Timber.wtf(data.toString())
+                                data?.forEach {
+                                    appRepository.insertExercise(it.value)
+
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun onExerciseChecked(it: Exercise) {
+        Timber.wtf(it.exerciseTitle + "was clicked")
+        if (checkedList.contains(it.uid)) {
+            checkedList.remove(it.uid)
+        } else {
+            checkedList.add(it.uid)
+        }
+    }
+
 
     fun onExerciseClicked(exercise: Exercise, context: Context, view: View) {
         val popup = PopupMenu(context, view)
@@ -266,7 +325,7 @@ class TaskDetailsViewModel constructor(
         popup.show()
     }
 
-    fun showEditExerciseDialog(exercise: Exercise) {
+    private fun showEditExerciseDialog(exercise: Exercise) {
         _editExercise.value = exercise
     }
 
@@ -274,7 +333,7 @@ class TaskDetailsViewModel constructor(
         _editExercise.value = null
     }
 
-    fun showRemoveExerciseDialog(uid: String) {
+    private fun showRemoveExerciseDialog(uid: String) {
         _removeExercise.value = uid
     }
 
@@ -302,11 +361,11 @@ class TaskDetailsViewModel constructor(
         _navigateToUsersFinished.value = null
     }
 
-    fun navigatingToUsersFinished(uid: String) {
+    private fun navigatingToUsersFinished(uid: String) {
         _navigateToUsersFinished.value = uid
     }
 
-    fun showSnackBar() {
+    private fun showSnackBar() {
         _showSnackBar.value = true
     }
 
@@ -321,15 +380,6 @@ class TaskDetailsViewModel constructor(
 
     fun hideCreateExerciseAlert() {
         _createExerciseAlert.value = null
-    }
-
-    fun onExerciseChecked(it: Exercise) {
-        Timber.wtf(it.exerciseTitle + "was clicked")
-        if (checkedList.contains(it.uid)) {
-            checkedList.remove(it.uid)
-        } else {
-            checkedList.add(it.uid)
-        }
     }
 
 

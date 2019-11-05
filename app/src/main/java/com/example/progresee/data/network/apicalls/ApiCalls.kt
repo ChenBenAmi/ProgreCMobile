@@ -144,7 +144,7 @@ interface ApiCalls {
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(
             "taskId"
         ) taskId: String, @Query("exerciseId") exerciseId: String
-    ): Deferred<Response<Map<String, String>>>
+    ): Deferred<Response<Map<String, Exercise>>>
 
     @GET("exercise/getFinishedUsers")
     fun getFinishedUsersAsync(

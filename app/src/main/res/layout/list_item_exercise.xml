@@ -9,8 +9,13 @@
             type="com.example.progresee.beans.Exercise" />
 
         <variable
+            name="userEmail"
+            type="String" />
+
+        <variable
             name="exerciseClickListener"
             type="com.example.progresee.adapters.ExerciseClickListener" />
+
         <variable
             name="checkedListener"
             type="com.example.progresee.adapters.CheckedListener" />
@@ -62,6 +67,8 @@
             <CheckBox
                 android:id="@+id/exercise_status"
                 android:visibility="gone"
+                android:setRadioExercise="@{exercise}"
+                android:setRadioUserEmail="@{userEmail}"
                 android:onClick="@{(v)->checkedListener.onClick(exercise)}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />

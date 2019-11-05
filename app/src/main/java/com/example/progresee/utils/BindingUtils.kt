@@ -1,6 +1,5 @@
 package com.example.progresee.utils
 
-import android.graphics.drawable.Drawable
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,9 +9,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.progresee.R
 import com.example.progresee.beans.*
-import java.text.SimpleDateFormat
+import timber.log.Timber
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 @BindingAdapter("setFullName")
@@ -28,18 +26,6 @@ fun TextView.setEmail(user: User?) {
         text = user.email
     }
 }
-
-@BindingAdapter("setOwner", "setClassroom")
-fun TextView.setOwner(user: User?, classroom: Classroom?) {
-    user?.let {
-        classroom?.let {
-            if (user.email == classroom.owner)
-                text = "owner"
-        }
-
-    }
-}
-
 
 //TODO change time zones
 @BindingAdapter("setLastLoggedIn")
@@ -176,6 +162,18 @@ fun CheckBox.setUserFinishedRadio(item: FinishedUser?) {
         }
     }
 }
+
+@BindingAdapter(value=["android:setRadioExercise", "android:setRadioUserEmail"], requireAll = true)
+fun CheckBox.setRadio(item: Exercise?, userEmail: String?) {
+    item?.let { exercise ->
+        userEmail?.let {
+            if (exercise.finishedUsersList[it] != "N/A") {
+                this.isChecked = true
+            }
+        }
+    }
+}
+
 
 
 

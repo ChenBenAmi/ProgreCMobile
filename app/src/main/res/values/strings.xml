@@ -85,6 +85,8 @@
     <string name="see_progresee">See ProgreSee</string>
     <string name="completed_list_title">Users Completed List</string>
     <string name="save_changes">Save Changes</string>
+    <string name="update_exercises">Update exercises</string>
+    <string name="update_exercises_status">Are you sure you want to update the status for %1$d exercises?</string>
 
 
 </resources>
