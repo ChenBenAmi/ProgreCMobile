@@ -140,7 +140,6 @@ interface ApiCalls {
         ) taskId: String, @Body exercise: Exercise
     ): Deferred<Response<Map<String, Exercise>>>
 
-    //TODO change return type
     @PUT("exercise/updateStatus")
     fun updateStatusAsync(
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query(

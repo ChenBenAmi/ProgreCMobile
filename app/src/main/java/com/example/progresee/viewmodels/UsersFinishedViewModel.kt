@@ -52,6 +52,7 @@ class UsersFinishedViewModel(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
+                                Timber.wtf(it.value.toString())
                                 appRepository.insertUserFinishedIntoDB(it.value)
                                 Timber.wtf("hey3")
                                 withContext(Dispatchers.Main) {

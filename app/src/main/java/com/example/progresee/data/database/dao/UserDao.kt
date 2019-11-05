@@ -16,7 +16,6 @@ interface UserDao {
     @Query("select * from User where uid = :userId")
     fun isUserExist(userId: String?): Boolean
 
-    //TODO: maybe OneToMany relationship for classroom lists of users
     @Query("select * from User")
     fun getAllUsers(): LiveData<List<User?>>
 

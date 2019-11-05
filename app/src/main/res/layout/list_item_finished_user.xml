@@ -65,6 +65,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="0.5"
                 android:width="0dp"
+                android:clickable="false"
                 userFinishedRadio="@{userFinished}"/>
 
 
