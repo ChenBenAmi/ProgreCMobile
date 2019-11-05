@@ -12,11 +12,6 @@
         android:title="@string/delete"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/add_exercise_menu_item"
-        android:icon="@drawable/ic_note_add_24px"
-        android:title="@string/add_exercise"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/see_progress_menu_item"

@@ -4,7 +4,6 @@ import com.example.progresee.beans.*
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 interface ApiCalls {
@@ -150,7 +149,7 @@ interface ApiCalls {
     @GET("exercise/getFinishedUsers")
     fun getFinishedUsersAsync(
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query("exerciseId") exerciseId: String
-    ): Deferred<Response<Map<String, UserFinished>>>
+    ): Deferred<Response<Map<String, String>>>
 
 
 }

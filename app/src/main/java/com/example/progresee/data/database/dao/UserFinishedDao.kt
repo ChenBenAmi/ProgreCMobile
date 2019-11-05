@@ -2,19 +2,17 @@ package com.example.progresee.data.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.progresee.beans.Exercise
-import com.example.progresee.beans.UserFinished
+import com.example.progresee.beans.FinishedUser
 
 @Dao
 interface UserFinishedDao {
 
 
-    @Query("SELECT * FROM userFinished where exerciseUid=:exerciseUid")
-    fun getFinishedUser(exerciseUid: String): LiveData<List<UserFinished>>
+    @Query("SELECT * FROM finisheduser where exerciseId=:exerciseUid")
+    fun getFinishedUser(exerciseUid: String): LiveData<List<FinishedUser>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFinishedUser(userFinished: UserFinished)
-
+    fun insertFinishedUser(userFinished: FinishedUser)
 
 
 }

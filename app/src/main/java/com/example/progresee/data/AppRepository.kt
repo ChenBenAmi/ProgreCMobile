@@ -10,10 +10,6 @@ import com.example.progresee.data.network.apicalls.ApiCalls
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.Query
-import timber.log.Timber
 
 class AppRepository constructor(
     private val dataBase: AppDatabase,
@@ -206,11 +202,11 @@ class AppRepository constructor(
         dataBase.userDao().removeUser(userId)
     }
 
-    fun insertUserFinishedIntoDB(userFinished: UserFinished) {
+    fun insertUserFinishedIntoDB(userFinished: FinishedUser) {
         dataBase.userFinishedDao().insertFinishedUser(userFinished)
     }
 
-    fun getUserFinishedFromDB(exerciseId: String): LiveData<List<UserFinished>> {
+    fun getUserFinishedFromDB(exerciseId: String): LiveData<List<FinishedUser>> {
         return dataBase.userFinishedDao().getFinishedUser(exerciseId)
     }
 
@@ -270,7 +266,7 @@ class AppRepository constructor(
 
     fun getFinishedUsersAsync(
         token: String, classroomId: String, exerciseId: String
-    ): Deferred<Response<Map<String, UserFinished>>> {
+    ): Deferred<Response<Map<String, String>>> {
         return apiCalls.getFinishedUsersAsync(token, classroomId, exerciseId)
     }
 

@@ -135,6 +135,7 @@ class CreateTaskFragment : Fragment() {
         })
 
 
+
         return binding.root
     }
 
@@ -167,14 +168,15 @@ class CreateTaskFragment : Fragment() {
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
 
                 // Display Selected date in textbox
-                current_end_date.text = getString(R.string.current_date, dayOfMonth, monthOfYear + 1, year)
+                current_end_date.text =
+                    getString(R.string.current_date, dayOfMonth, monthOfYear + 1, year)
                 Timber.wtf("$dayOfMonth + ${monthOfYear + 1} + $year")
             },
             year,
             month,
             day
         )
-
+        dpd.datePicker.minDate = System.currentTimeMillis() - 1000
         dpd.show()
         current_end_date.visibility = View.VISIBLE
     }

@@ -2,8 +2,7 @@ package com.example.progresee.viewmodels
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.Exercise
-import com.example.progresee.beans.UserFinished
+import com.example.progresee.beans.FinishedUser
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -22,7 +21,7 @@ class UsersFinishedViewModel(
     val navigateBackToTaskFragment
         get() = _navigateBackToTaskFragment
 
-    private val usersFinished = MediatorLiveData<List<UserFinished>>()
+    private val usersFinished = MediatorLiveData<List<FinishedUser>>()
     fun getUsersFinishedVariable() = usersFinished
 
     private val _showProgressBar = MutableLiveData<Boolean?>()
@@ -40,21 +39,17 @@ class UsersFinishedViewModel(
             withContext(Dispatchers.IO) {
                 if (appRepository.currentToken.value != null) {
                     try {
-                        Timber.wtf("hey")
                         val response = appRepository.getFinishedUsersAsync(
                             appRepository.currentToken.value!!,
                             classroomId,
                             exerciseId
                         ).await()
-                        Timber.wtf("hey1")
                         if (response.isSuccessful) {
-                            Timber.wtf("hey2")
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-                                Timber.wtf(it.value.toString())
-                                appRepository.insertUserFinishedIntoDB(it.value)
-                                Timber.wtf("hey3")
+                                val finishedUser = FinishedUser(it.key,it.value,exerciseId)
+                                appRepository.insertUserFinishedIntoDB(finishedUser)
                                 withContext(Dispatchers.Main) {
                                     usersFinished.addSource(
                                         appRepository.getUserFinishedFromDB(exerciseId),

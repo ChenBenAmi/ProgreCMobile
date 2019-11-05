@@ -58,6 +58,10 @@ class TaskDetailsViewModel constructor(
     val removeExercise
         get() = _removeExercise
 
+    private val _createExerciseAlert = MutableLiveData<Boolean?>()
+    val createExerciseAlert
+        get() = _createExerciseAlert
+
 
     init {
         task.addSource(appRepository.getTask(taskId), task::setValue)
@@ -298,7 +302,7 @@ class TaskDetailsViewModel constructor(
         _navigateToUsersFinished.value = null
     }
 
-    fun navigatingToUsersFinished(uid:String) {
+    fun navigatingToUsersFinished(uid: String) {
         _navigateToUsersFinished.value = uid
     }
 
@@ -310,7 +314,14 @@ class TaskDetailsViewModel constructor(
         _showSnackBar.value = null
     }
 
+    fun showCreateExerciseAlert() {
+        _createExerciseAlert.value = true
+    }
 
+
+    fun hideCreateExerciseAlert() {
+        _createExerciseAlert.value = null
+    }
 
 
 }

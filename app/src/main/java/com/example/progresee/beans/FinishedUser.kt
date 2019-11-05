@@ -4,14 +4,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class UserFinished(
+data class FinishedUser(
 
     @PrimaryKey
-    var uid: String,
-    var hasFinished: String,
+    var email: String,
     var timestamp: String,
-    var exerciseUid: String,
-    var email: String
+    var exerciseId: String
 
 
 )

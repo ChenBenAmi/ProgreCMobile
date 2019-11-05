@@ -126,6 +126,12 @@ class TaskDetailsFragment : Fragment() {
             }
         })
 
+        taskDetailsViewModel.createExerciseAlert.observe(viewLifecycleOwner, Observer {
+            if (it == true){
+               addAlertExercise()
+            }
+        })
+
 
 
 
@@ -145,9 +151,7 @@ class TaskDetailsFragment : Fragment() {
                 R.id.delete_task_menu_item -> {
                     deleteAlertTask()
                 }
-                R.id.add_exercise_menu_item -> {
-                    addAlertTask()
-                }
+
                 R.id.see_progress_menu_item -> {
 //TODO asdasdf
                 }
@@ -174,7 +178,7 @@ class TaskDetailsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun addAlertTask() {
+    private fun addAlertExercise() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(R.string.add_exercise)
         builder.setMessage(R.string.enter_exercise_description)

@@ -45,21 +45,16 @@ class ClassroomViewModel constructor(
                         showProgressBar()
                         appRepository.setToken(it.result?.token)
                         val token = appRepository.currentToken.value
-                        Timber.wtf("hey")
                         withContext(Dispatchers.IO) {
                             if (token != null) {
                                 try {
-                                    Timber.wtf("hey1")
                                     val request =
                                         appRepository.getCurrentUserAsync(token).await()
-                                    Timber.wtf("hey2")
 
                                     if (request.isSuccessful) {
-                                        Timber.wtf("hey3")
 
                                         val data = request.body()
                                         if (appRepository.isUserExist(data!!.uid)) {
-                                            Timber.wtf("hey4")
 
                                             withContext(Dispatchers.Main) {
 
@@ -69,7 +64,6 @@ class ClassroomViewModel constructor(
                                                 )
                                             }
                                         } else {
-                                            Timber.wtf("hey5")
 
                                             appRepository.insertUser(data)
                                             withContext(Dispatchers.Main) {
@@ -79,11 +73,9 @@ class ClassroomViewModel constructor(
                                                 )
                                             }
                                         }
-                                        Timber.wtf("hey6")
 
                                         val request2 =
                                             appRepository.getClassroomsAsync(token).await()
-                                        Timber.wtf("hey7")
 
                                         if (request2.isSuccessful) {
 
