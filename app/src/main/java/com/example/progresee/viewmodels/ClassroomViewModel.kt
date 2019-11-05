@@ -45,7 +45,7 @@ class ClassroomViewModel constructor(
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
-            if (currentUser?.email.equals("hedsean@gmail.com")) {
+            if (currentUser?.email.equals("chasdajsdas")) {
                 _isAdmin.value = appRepository.isAdmin()
             } else {
                 _isAdmin.value = appRepository.notAdmin()
@@ -85,12 +85,10 @@ class ClassroomViewModel constructor(
                                                 )
                                             }
                                         }
-
                                         val request2 =
                                             appRepository.getClassroomsAsync(token).await()
 
                                         if (request2.isSuccessful) {
-
                                             val classroomsData = request2.body()
                                             Timber.wtf("data -------->  $classroomsData")
                                             classroomsData?.forEach { classroomEntry ->

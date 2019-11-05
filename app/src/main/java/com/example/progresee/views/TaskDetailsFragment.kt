@@ -59,9 +59,6 @@ class TaskDetailsFragment : Fragment() {
             )
         }
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
-
-        (activity as? AppCompatActivity)?.progresee_toolbar?.title =
-            taskDetailsViewModel.getTask().value?.title
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
 
         taskDetailsViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
@@ -74,6 +71,12 @@ class TaskDetailsFragment : Fragment() {
                 (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.client_menu)
                 setItemsClient()
                 createExercise_button.hide()
+            }
+        })
+        taskDetailsViewModel.getTask().observe(viewLifecycleOwner, Observer {
+            it?.let {
+                (activity as? AppCompatActivity)?.progresee_toolbar?.title =
+                    taskDetailsViewModel.getTask().value?.title
             }
         })
         binding.taskDetailsViewModel = taskDetailsViewModel
@@ -148,6 +151,7 @@ class TaskDetailsFragment : Fragment() {
         taskDetailsViewModel.createExerciseAlert.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 addAlertExercise()
+                taskDetailsViewModel.hideCreateExerciseAlert()
             }
         })
 
@@ -172,7 +176,7 @@ class TaskDetailsFragment : Fragment() {
                 }
 
                 R.id.see_progress_menu_item -> {
-//TODO asdasdf
+//TODO See the entire graph
                 }
             }
             true

@@ -9,8 +9,8 @@ data class User(
     @PrimaryKey
     val uid: String,
     @SerializedName("profilePictureUrl") val profilePictureUrl: String,
-    @SerializedName("dateCreated") val dateCreated: DateCreated,
-    @SerializedName("signedIn") val signedIn: DateCreated,
+    @SerializedName("dateCreated") val dateCreated: String,
+    @SerializedName("signedIn") val signedIn: String,
     @SerializedName("fullName") val fullName: String,
     @SerializedName("email") val email: String
 )

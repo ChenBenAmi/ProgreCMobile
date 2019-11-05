@@ -45,14 +45,8 @@ fun TextView.setOwner(user: User?, classroom: Classroom?) {
 @BindingAdapter("setLastLoggedIn")
 fun TextView.setLastLoggedIn(user: User?) {
     user?.let {
-        val seconds = user.signedIn.seconds + 0L
-        val nano = user.signedIn.nanos + 3600000000000 * 3
-        val mil = TimeUnit.MILLISECONDS.convert(nano, TimeUnit.NANOSECONDS)
-        val millis = TimeUnit.MILLISECONDS.convert(seconds, TimeUnit.SECONDS)
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val netDate = Date(millis + mil)
-        val date = sdf.format(netDate).toString()
-        text = context.getString(R.string.last_login_date, date)
+
+        text = context.getString(R.string.last_login_date, user.signedIn)
     }
 }
 
