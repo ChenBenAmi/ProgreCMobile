@@ -5,11 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.progresee.beans.FinishedUser
+import com.example.progresee.beans.User
+import android.content.Context
+import android.view.View
+import com.example.progresee.beans.UserFinished
 import com.example.progresee.databinding.ListItemFinishedUserBinding
+import com.example.progresee.databinding.ListItemUserBinding
+import com.example.progresee.views.UserFragment
 
 
-class UserFinishedAdapter() : ListAdapter<FinishedUser,
+class UserFinishedAdapter() : ListAdapter<UserFinished,
         UserFinishedAdapter.ViewHolder>(UserFinishedDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -25,7 +30,7 @@ class UserFinishedAdapter() : ListAdapter<FinishedUser,
     class ViewHolder private constructor(val binding: ListItemFinishedUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: FinishedUser) {
+        fun bind(item: UserFinished) {
             binding.userFinished = item
             binding.executePendingBindings()
         }
@@ -41,12 +46,12 @@ class UserFinishedAdapter() : ListAdapter<FinishedUser,
     }
 }
 
-class UserFinishedDiffCallback : DiffUtil.ItemCallback<FinishedUser>() {
-    override fun areItemsTheSame(oldItem: FinishedUser, newItem: FinishedUser): Boolean {
+class UserFinishedDiffCallback : DiffUtil.ItemCallback<UserFinished>() {
+    override fun areItemsTheSame(oldItem: UserFinished, newItem: UserFinished): Boolean {
         return oldItem.uid == newItem.uid
     }
 
-    override fun areContentsTheSame(oldItem: FinishedUser, newItem: FinishedUser): Boolean {
+    override fun areContentsTheSame(oldItem: UserFinished, newItem: UserFinished): Boolean {
         return oldItem == newItem
     }
 }

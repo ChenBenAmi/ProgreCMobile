@@ -1,9 +1,9 @@
 package com.example.progresee.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.FinishedUser
+import com.example.progresee.beans.Exercise
+import com.example.progresee.beans.UserFinished
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -22,7 +22,7 @@ class UsersFinishedViewModel(
     val navigateBackToTaskFragment
         get() = _navigateBackToTaskFragment
 
-    private val usersFinished = MediatorLiveData<List<FinishedUser>>()
+    private val usersFinished = MediatorLiveData<List<UserFinished>>()
     fun getUsersFinishedVariable() = usersFinished
 
     private val _showProgressBar = MutableLiveData<Boolean?>()
@@ -51,18 +51,16 @@ class UsersFinishedViewModel(
                             Timber.wtf("hey2")
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            val liveData= MutableLiveData<List<FinishedUser>>()
-                            val list= mutableListOf<FinishedUser>()
                             data?.forEach {
-                                val finishedUser=FinishedUser(it.key,it.value)
-                                list.add(finishedUser)
+                                Timber.wtf(it.value.toString())
+                                appRepository.insertUserFinishedIntoDB(it.value)
+                                Timber.wtf("hey3")
+                                withContext(Dispatchers.Main) {
+                                    usersFinished.addSource(
+                                        appRepository.getUserFinishedFromDB(exerciseId),
+                                        usersFinished::setValue
+                                    )
                                 }
-                            liveData.value=list
-                            withContext(Dispatchers.Main) {
-                                usersFinished.addSource(
-                                    liveData,
-                                    usersFinished::setValue
-                                )
                             }
                         }
                     } catch (e: Exception) {

@@ -206,6 +206,15 @@ class AppRepository constructor(
         dataBase.userDao().removeUser(userId)
     }
 
+    fun insertUserFinishedIntoDB(userFinished: UserFinished) {
+        dataBase.userFinishedDao().insertFinishedUser(userFinished)
+    }
+
+    fun getUserFinishedFromDB(exerciseId: String): LiveData<List<UserFinished>> {
+        return dataBase.userFinishedDao().getFinishedUser(exerciseId)
+    }
+
+
     fun getAllTasksAsync(
         token: String,
         classroomId: String
@@ -261,7 +270,7 @@ class AppRepository constructor(
 
     fun getFinishedUsersAsync(
         token: String, classroomId: String, exerciseId: String
-    ): Deferred<Response<Map<String, String>>> {
+    ): Deferred<Response<Map<String, UserFinished>>> {
         return apiCalls.getFinishedUsersAsync(token, classroomId, exerciseId)
     }
 

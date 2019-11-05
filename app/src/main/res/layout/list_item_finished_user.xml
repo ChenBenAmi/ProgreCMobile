@@ -8,7 +8,7 @@
 
         <variable
             name="userFinished"
-            type="com.example.progresee.beans.FinishedUser" />
+            type="com.example.progresee.beans.UserFinished" />
 
     </data>
 

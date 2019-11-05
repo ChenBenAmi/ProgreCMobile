@@ -2,6 +2,7 @@ package com.example.progresee.utils
 
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -10,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.progresee.R
 import com.example.progresee.beans.*
 import timber.log.Timber
+import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -152,25 +154,24 @@ fun TextView.setExerciseText(item: Exercise?) {
 }
 
 @BindingAdapter("userFinishedEmail")
-fun TextView.setUserFinishedEmail(item: FinishedUser?) {
+fun TextView.setUserFinishedEmail(item: UserFinished?) {
     item?.let {
         text = item.email
     }
 }
 
 @BindingAdapter("userFinishedTimestamp")
-fun TextView.setUserFinishedTimestamp(item: FinishedUser?) {
+fun TextView.setUserFinishedTimestamp(item: UserFinished?) {
     item?.let {
         text = item.timestamp
     }
 }
 
 @BindingAdapter("userFinishedRadio")
-fun CheckBox.setUserFinishedRadio(item: FinishedUser?) {
+fun CheckBox.setUserFinishedRadio(item: UserFinished?) {
     item?.let {
-        if (it.timestamp!="N/A") {
-            this.isChecked =true
-        }
+        this.isChecked = item.hasFinished == "1"
+
     }
 }
 
