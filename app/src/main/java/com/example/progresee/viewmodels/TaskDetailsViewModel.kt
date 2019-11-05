@@ -28,6 +28,9 @@ class TaskDetailsViewModel constructor(
     val isAdmin
         get() = _isAdmin
 
+    private val checkedList= mutableListOf<String>()
+    fun getCheckedList()=checkedList
+
     private val task = MediatorLiveData<Task>()
     fun getTask() = task
 
@@ -318,6 +321,15 @@ class TaskDetailsViewModel constructor(
 
     fun hideCreateExerciseAlert() {
         _createExerciseAlert.value = null
+    }
+
+    fun onExerciseChecked(it: Exercise) {
+        Timber.wtf(it.exerciseTitle + "was clicked")
+        if (checkedList.contains(it.uid)) {
+            checkedList.remove(it.uid)
+        } else {
+            checkedList.add(it.uid)
+        }
     }
 
 

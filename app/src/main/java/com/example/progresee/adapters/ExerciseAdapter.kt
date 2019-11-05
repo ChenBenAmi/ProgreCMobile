@@ -8,15 +8,27 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progresee.beans.Exercise
-import com.example.progresee.beans.User
 import com.example.progresee.databinding.ListItemExerciseBinding
+import com.example.progresee.views.UserFragment
 
 
-class ExerciseAdapter(private val clickListener: ExerciseClickListener) : ListAdapter<Exercise,
+class ExerciseAdapter(
+    private val clickListener: ExerciseClickListener,
+    private val checkedListener: CheckedListener
+) : ListAdapter<Exercise,
         ExerciseAdapter.ViewHolder>(ExerciseDiffCallback()) {
+
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(clickListener, item)
+        holder.bind(clickListener, checkedListener, item)
+        if (UserFragment.owner) {
+            holder.binding.threeDots.visibility = View.VISIBLE
+        } else {
+            holder.binding.threeDots.visibility = View.GONE
+            holder.binding.exerciseStatus.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,9 +37,14 @@ class ExerciseAdapter(private val clickListener: ExerciseClickListener) : ListAd
 
     class ViewHolder private constructor(val binding: ListItemExerciseBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(clickListener: ExerciseClickListener, item: Exercise) {
+        fun bind(
+            clickListener: ExerciseClickListener,
+            checkedListner: CheckedListener,
+            item: Exercise
+        ) {
             binding.exercise = item
             binding.exerciseClickListener = clickListener
+            binding.checkedListener = checkedListner
             binding.executePendingBindings()
         }
 
@@ -52,5 +69,12 @@ class ExerciseDiffCallback : DiffUtil.ItemCallback<Exercise>() {
 }
 
 class ExerciseClickListener(val clickListener: (exercise: Exercise, context: Context, view: View) -> Unit) {
-    fun onClick(exercise: Exercise, context: Context, view: View) = clickListener(exercise,context,view)
+    fun onClick(exercise: Exercise, context: Context, view: View) =
+        clickListener(exercise, context, view)
 }
+
+class CheckedListener(val clickListener: (exercise: Exercise) -> Unit) {
+    fun onClick(exercise: Exercise) = clickListener(exercise)
+}
+
+

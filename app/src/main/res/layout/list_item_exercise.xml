@@ -11,6 +11,10 @@
         <variable
             name="exerciseClickListener"
             type="com.example.progresee.adapters.ExerciseClickListener" />
+        <variable
+            name="checkedListener"
+            type="com.example.progresee.adapters.CheckedListener" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -58,6 +62,7 @@
             <CheckBox
                 android:id="@+id/exercise_status"
                 android:visibility="gone"
+                android:onClick="@{(v)->checkedListener.onClick(exercise)}"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
 

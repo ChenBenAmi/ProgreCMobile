@@ -75,8 +75,6 @@ e
 Lapp/src/main/java/com/example/progresee/data/database/dao/UserFinishedDao.kt,8\7\875a6bcec405f440802b49542657a99435a11640
 j
 :app/src/main/java/com/example/progresee/beans/Classroom.kt,f\7\f77b04bfcf49abb9bfa58f8e31744f76377bffbe
-l
-<app/src/main/java/com/example/progresee/beans/DateCreated.kt,0\2\0295fb85da7e62cd2011cd2b364b00988b5c3cb8
 e
 5app/src/main/java/com/example/progresee/beans/User.kt,6\2\62cea13ee1f59edf4fb12455763ef6a60a16ead8
 |

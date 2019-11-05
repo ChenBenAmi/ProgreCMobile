@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.progresee.R
+import com.example.progresee.adapters.CheckedListener
 import com.example.progresee.adapters.ExerciseAdapter
 import com.example.progresee.adapters.ExerciseClickListener
 import com.example.progresee.beans.Exercise
@@ -38,11 +39,12 @@ class TaskDetailsFragment : Fragment() {
     private lateinit var taskId: String
     private lateinit var taskDetailsViewModel: TaskDetailsViewModel
     private lateinit var exerciseDescription: EditText
+    private lateinit var binding: FragmentTaskDetailsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentTaskDetailsBinding =
+        binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_task_details, container, false)
 
         binding.lifecycleOwner = this
@@ -70,6 +72,7 @@ class TaskDetailsFragment : Fragment() {
             } else if (it == false) {
                 (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.client_menu)
                 setItemsClient()
+
                 createExercise_button.hide()
             }
         })
@@ -84,9 +87,12 @@ class TaskDetailsFragment : Fragment() {
         binding.exerciseList.layoutManager = manager
         val adapter = ExerciseAdapter(ExerciseClickListener { exercise, context, view ->
             taskDetailsViewModel.onExerciseClicked(exercise, context, view)
-        })
-        binding.exerciseList.adapter = adapter
+        }, CheckedListener {
+            taskDetailsViewModel.onExerciseChecked(it)
+        }
 
+        )
+        binding.exerciseList.adapter = adapter
         exerciseDescription = EditText(context)
         exerciseDescription.inputType = InputType.TYPE_TEXT_VARIATION_NORMAL
         this.taskDetailsViewModel = taskDetailsViewModel
@@ -183,11 +189,13 @@ class TaskDetailsFragment : Fragment() {
         }
     }
 
+
+    //TODO updateStatus by exerciseID
     private fun setItemsClient() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save_progress_client -> {
-                    Timber.wtf("saving client data")
+                    Timber.wtf("This is the list"+taskDetailsViewModel.getCheckedList())
                 }
             }
             true
