@@ -1,8 +1,6 @@
 package com.example.progresee.viewmodels
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
