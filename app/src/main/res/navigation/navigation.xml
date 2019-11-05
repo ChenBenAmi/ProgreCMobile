@@ -131,9 +131,6 @@
         <argument
             android:name="classroomId"
             app:argType="string" />
-        <argument
-            android:name="owner"
-            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/createTask"

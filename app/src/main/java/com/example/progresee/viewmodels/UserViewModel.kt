@@ -11,13 +11,16 @@ import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
 
-class UserViewModel(private val appRepository: AppRepository, private val classroomId: String,private val owner:Boolean) :
+class UserViewModel(private val appRepository: AppRepository, private val classroomId: String) :
     BaseViewModel() {
 
 
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    private var _isAdmin = appRepository.isAdmin
+    val isAdmin
+        get() = _isAdmin
 
     val users = appRepository.users
 
@@ -45,9 +48,6 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     val showProgressBar
         get() = _showProgressBar
 
-    private val _checkOwnerShip = MutableLiveData<Boolean?>()
-    val checkOwnerShip
-        get() = _checkOwnerShip
 
     fun loadUsers() {
         Timber.wtf("load users triggered")
@@ -70,15 +70,14 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                                 appRepository.insertUser(it.value)
 
                             }
-
-                            withContext(Dispatchers.Main) {
-                                hideProgressBar()
-                            }
                         } else {
                             Timber.wtf("Something went wrong ${response.code()} ${response.errorBody().toString()}")
                         }
                     } catch (e: Exception) {
                         Timber.wtf("${e.message}${e.printStackTrace()}")
+                    }
+                    withContext(Dispatchers.Main) {
+                        hideProgressBar()
                     }
                 }
             }

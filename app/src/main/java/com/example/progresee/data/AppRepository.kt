@@ -20,6 +20,11 @@ class AppRepository constructor(
 
     private var _currentToken = MutableLiveData<String?>()
 
+    private var _isAdmin = MutableLiveData<Boolean?>()
+    val isAdmin
+        get() = _isAdmin
+
+
     val classrooms = MediatorLiveData<List<Classroom>>()
 
     val currentToken: LiveData<String?>
@@ -40,6 +45,16 @@ class AppRepository constructor(
 
     private val apiCalls: ApiCalls = network.retrofit()
 
+
+    fun isAdmin(): Boolean {
+        _isAdmin.value = true
+        return true
+    }
+
+    fun notAdmin(): Boolean {
+        _isAdmin.value = false
+        return false
+    }
 
     fun fetchClassroomsFromDb() {
         classrooms.addSource(dataBase.classroomDao().getClassrooms(), classrooms::setValue)

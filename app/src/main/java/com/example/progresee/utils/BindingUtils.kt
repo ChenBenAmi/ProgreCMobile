@@ -1,5 +1,6 @@
 package com.example.progresee.utils
 
+import android.graphics.drawable.Drawable
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,7 +10,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.progresee.R
 import com.example.progresee.beans.*
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -105,19 +105,18 @@ fun TextView.setTaskTitle(item: Task?) {
 }
 
 @BindingAdapter("setCurrentDate")
-fun TextView.setCurrentDate(a:Int) {
+fun TextView.setCurrentDate(a: Int) {
     val c = Calendar.getInstance()
     val year = c.get(Calendar.YEAR)
     val month = c.get(Calendar.MONTH)
     val day = c.get(Calendar.DAY_OF_MONTH)
-    text = context?.getString(R.string.current_date, day, month+1, year)
+    text = context?.getString(R.string.current_date, day, month + 1, year)
 
 }
 
 @BindingAdapter("taskDueDate")
 fun TextView.setTaskDueDate(item: Task?) {
     item?.let {
-        Timber.wtf(item.endDate)
 
         val tempDate = item.endDate.substring(0, 10)
 

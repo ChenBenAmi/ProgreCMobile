@@ -47,12 +47,12 @@ class UserFragment : Fragment() {
 
         val arguments = UserFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId
-        owner = arguments.owner
+
 
         val userViewModel: UserViewModel by viewModel {
             parametersOf(
                 appRepository,
-                classroomId, owner
+                classroomId
             )
         }
         this.userViewModel = userViewModel
@@ -84,6 +84,11 @@ class UserFragment : Fragment() {
             }
         })
 
+        userViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
+            if (it == true){
+                owner = true
+            }
+        })
 
         userViewModel.transferSuccessful.observe(viewLifecycleOwner, Observer {
             if (it == true)
@@ -95,6 +100,7 @@ class UserFragment : Fragment() {
                 showRemovedUserSnackBar()
             }
         })
+
         userViewModel.loadUsers()
         return binding.root
     }

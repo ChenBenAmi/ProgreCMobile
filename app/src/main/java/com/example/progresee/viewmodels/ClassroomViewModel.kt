@@ -18,6 +18,10 @@ class ClassroomViewModel constructor(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    private var _isAdmin = MutableLiveData<Boolean?>()
+    val isAdmin
+        get() = _isAdmin
+
     val classrooms = appRepository.classrooms
     val user = appRepository.getUser()
 
@@ -34,10 +38,18 @@ class ClassroomViewModel constructor(
         get() = _showProgressBar
 
 
+    init{
+        getCurrentUser()
+    }
     fun getCurrentUser() {
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
+            if (currentUser?.email.equals("hedsean@gmail.com")) {
+                _isAdmin.value = appRepository.isAdmin()
+            } else {
+                _isAdmin.value = appRepository.notAdmin()
+            }
             currentUser!!.getIdToken(true).addOnCompleteListener {
                 if (it.isSuccessful) {
                     Timber.wtf(it.result?.token)
@@ -87,7 +99,7 @@ class ClassroomViewModel constructor(
                                         } else Timber.wtf(" else 1 ${request2.code()}${request2.errorBody()} ${request2.message()}")
                                     } else Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
                                 } catch (e: Exception) {
-                                    Timber.e("${e.printStackTrace()}${e.message}")
+                                    Timber.e(" catch clause -> ${e.printStackTrace()}${e.message}")
                                 }
                             }
                         }

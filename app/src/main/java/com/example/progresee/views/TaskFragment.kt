@@ -20,7 +20,10 @@ import com.example.progresee.databinding.FragmentTaskBinding
 import com.example.progresee.viewmodels.TaskViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_classroom.*
 import kotlinx.android.synthetic.main.fragment_task.*
+import kotlinx.android.synthetic.main.fragment_task.layout_progress_bar
+import kotlinx.android.synthetic.main.fragment_task_details.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -35,8 +38,6 @@ class TaskFragment : Fragment() {
     private lateinit var emailText: EditText
 
 
-    private var owner = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,8 +48,7 @@ class TaskFragment : Fragment() {
         binding.lifecycleOwner = this
 
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
-        setItems()
-        (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.classroom_menu)
+
         emailText = EditText(context)
         emailText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
@@ -62,6 +62,16 @@ class TaskFragment : Fragment() {
         }
         this.taskViewModel = taskViewModel
         binding.taskViewModel = this.taskViewModel
+
+        taskViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.classroom_menu)
+                setItems()
+                create_task_button.show()
+            } else if (it == false) {
+                create_task_button.hide()
+            }
+        })
 
         val manager = LinearLayoutManager(context)
         binding.taskList.layoutManager = manager
@@ -85,22 +95,10 @@ class TaskFragment : Fragment() {
             it?.let {
                 (activity as? AppCompatActivity)?.progresee_toolbar?.title =
                     taskViewModel.getClassroom().value!!.name
-                taskViewModel.checkClassroomOwnerShip(it)
+
             }
         })
 
-        taskViewModel.checkOwnerShip.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(0)?.isVisible =
-                    true
-                (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(1)?.isVisible =
-                    true
-                (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.getItem(2)?.isVisible =
-                    true
-                owner = true
-                taskViewModel.checkedClassroomOwnerShip()
-            }
-        })
 
         taskViewModel.tasks.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -115,7 +113,10 @@ class TaskFragment : Fragment() {
                     Timber.wtf("classroomId is $classroomId taskId is $taskId")
                     this.findNavController()
                         .navigate(
-                            TaskFragmentDirections.actionTaskFragmentToTaskDetailsFragment(taskId,classroomId)
+                            TaskFragmentDirections.actionTaskFragmentToTaskDetailsFragment(
+                                taskId,
+                                classroomId
+                            )
                         )
                     taskViewModel.doneNavigateToTaskDetailsFragment()
                 }
@@ -129,7 +130,7 @@ class TaskFragment : Fragment() {
         })
 
         taskViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
-            if(it==true) {
+            if (it == true) {
                 showUserAdded()
                 taskViewModel.snackBarShown()
             }
@@ -141,8 +142,7 @@ class TaskFragment : Fragment() {
             this.findNavController()
                 .navigate(
                     TaskFragmentDirections.actionTaskFragmentToUserFragment(
-                        classroomId,
-                        owner
+                        classroomId
                     )
                 )
         }
@@ -230,7 +230,6 @@ class TaskFragment : Fragment() {
 
         dialog.show()
     }
-
 
 
 }

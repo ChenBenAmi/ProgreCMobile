@@ -77,8 +77,6 @@ j
 :app/src/main/java/com/example/progresee/beans/Classroom.kt,f\7\f77b04bfcf49abb9bfa58f8e31744f76377bffbe
 l
 <app/src/main/java/com/example/progresee/beans/DateCreated.kt,0\2\0295fb85da7e62cd2011cd2b364b00988b5c3cb8
-m
-=app/src/main/java/com/example/progresee/beans/UserFinished.kt,a\9\a9d800e459eb8414d62ec5d57cf5cb358a507809
 e
 5app/src/main/java/com/example/progresee/beans/User.kt,6\2\62cea13ee1f59edf4fb12455763ef6a60a16ead8
 |
@@ -87,3 +85,11 @@ r
 Bapp/src/main/java/com/example/progresee/data/network/ApiService.kt,1\3\133d1ab25a8f18e9ed45321d0eebe7b14f583a16
 t
 Dapp/src/main/java/com/example/progresee/data/database/AppDatabase.kt,3\8\38791bbde3c71cd186d17d940c79ff6d3e0731e3
+@
+app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
+x
+Happ/src/main/java/com/example/progresee/adapters/FinishedUsersAdapter.kt,e\0\e0a467b5b0786a92911b2514e29b3e161f78e34f
+m
+=app/src/main/java/com/example/progresee/beans/FinishedUser.kt,d\8\d8879033eedaa8c6c8d95f25677e1429bd831af3
+p
+@app/src/main/java/com/example/progresee/adapters/UsersAdapter.kt,6\a\6a4615274911275a0e8f7c528bb564502fa98e4c

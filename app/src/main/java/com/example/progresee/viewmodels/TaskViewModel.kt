@@ -19,6 +19,10 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
 
+    private var _isAdmin = appRepository.isAdmin
+    val isAdmin
+        get() = _isAdmin
+
     private val _tasks: LiveData<List<Task>> = appRepository.getAllTasks(classroomId)
     val tasks
         get() = _tasks
@@ -47,9 +51,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val navigateBackToClassroomFragment
         get() = _navigateBackToClassroomFragment
 
-    private val _checkOwnerShip = MutableLiveData<Boolean?>()
-    val checkOwnerShip
-        get() = _checkOwnerShip
 
     init {
         uiScope.launch {
@@ -112,15 +113,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
 
     }
 
-    fun checkClassroomOwnerShip(classroom: Classroom?) {
-        val user = appRepository.getUser().value
-        user?.let {
-            classroom?.let {
-                if (user.email == classroom.owner)
-                    _checkOwnerShip.value = true
-            }
-        }
-    }
 
     fun addToClassRoom(text: String) {
         Timber.wtf(text)
@@ -158,9 +150,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     }
 
 
-    fun checkedClassroomOwnerShip() {
-        _checkOwnerShip.value = null
-    }
+
 
 
     fun onTaskClicked(id: String) {

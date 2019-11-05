@@ -48,15 +48,23 @@ class ClassroomFragment : Fragment() {
             if (it == true)
                 layout_progress_bar.visibility = View.VISIBLE
             if (it == false) {
-                classroom_list.visibility=View.VISIBLE
+                classroom_list.visibility = View.VISIBLE
             }
         })
 
         val title: String = getString(R.string.progresee)
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
-        (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.main_menu)
         (activity as? AppCompatActivity)?.progresee_toolbar?.title = title
+        (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.main_menu)
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
         setItems()
+
+        classroomViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
+            if (it == false) {
+                createClassroom_button.hide()
+            }
+        })
+
 
 
         binding.classroomViewModel = classroomViewModel
@@ -67,11 +75,11 @@ class ClassroomFragment : Fragment() {
         })
         binding.classroomList.adapter = adapter
 
-        classroomViewModel.getCurrentUser()
+
         classroomViewModel.classrooms.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
-                classroom_list.visibility=View.VISIBLE
+                classroom_list.visibility = View.VISIBLE
             }
         })
 
@@ -146,8 +154,6 @@ class ClassroomFragment : Fragment() {
                 ).show()
             }
     }
-
-
 
 
 }

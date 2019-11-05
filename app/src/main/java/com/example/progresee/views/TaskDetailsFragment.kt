@@ -23,6 +23,8 @@ import com.example.progresee.databinding.FragmentTaskDetailsBinding
 import com.example.progresee.viewmodels.TaskDetailsViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_task.*
+import kotlinx.android.synthetic.main.fragment_task_details.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -57,15 +59,27 @@ class TaskDetailsFragment : Fragment() {
             )
         }
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
-        (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.task_details_menu)
+
         (activity as? AppCompatActivity)?.progresee_toolbar?.title =
             taskDetailsViewModel.getTask().value?.title
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
-        setItems()
+
+        taskDetailsViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
+            Timber.wtf("isAdmin $it")
+            if (it == true) {
+                (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.task_details_menu)
+                setItemsAdmin()
+                createExercise_button.show()
+            } else if (it == false) {
+                (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.client_menu)
+                setItemsClient()
+                createExercise_button.hide()
+            }
+        })
         binding.taskDetailsViewModel = taskDetailsViewModel
         val manager = LinearLayoutManager(context)
         binding.exerciseList.layoutManager = manager
-        val adapter = ExerciseAdapter(ExerciseClickListener {  exercise, context, view ->
+        val adapter = ExerciseAdapter(ExerciseClickListener { exercise, context, view ->
             taskDetailsViewModel.onExerciseClicked(exercise, context, view)
         })
         binding.exerciseList.adapter = adapter
@@ -120,15 +134,20 @@ class TaskDetailsFragment : Fragment() {
         })
 
         taskDetailsViewModel.navigateToUsersFinished.observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                this.findNavController().navigate(TaskDetailsFragmentDirections.actionTaskDetailsFragmentToUsersFinishedFragment(classroomId, it))
+            if (it != null) {
+                this.findNavController().navigate(
+                    TaskDetailsFragmentDirections.actionTaskDetailsFragmentToUsersFinishedFragment(
+                        classroomId,
+                        it
+                    )
+                )
                 taskDetailsViewModel.onDoneNavigatingToUsersFinished()
             }
         })
 
         taskDetailsViewModel.createExerciseAlert.observe(viewLifecycleOwner, Observer {
-            if (it == true){
-               addAlertExercise()
+            if (it == true) {
+                addAlertExercise()
             }
         })
 
@@ -138,7 +157,7 @@ class TaskDetailsFragment : Fragment() {
         return binding.root
     }
 
-    private fun setItems() {
+    private fun setItemsAdmin() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.edit_task_menu_item -> {
@@ -154,6 +173,17 @@ class TaskDetailsFragment : Fragment() {
 
                 R.id.see_progress_menu_item -> {
 //TODO asdasdf
+                }
+            }
+            true
+        }
+    }
+
+    private fun setItemsClient() {
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.save_progress_client -> {
+                    Timber.wtf("saving client data")
                 }
             }
             true
