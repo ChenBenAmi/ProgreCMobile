@@ -97,6 +97,7 @@ class TaskDetailsFragment : Fragment() {
             it?.let {
                 Timber.wtf("the list is now changed $it")
                 adapter.submitList(it)
+                adapter.notifyDataSetChanged()
                 context!!.getString(R.string.number_of_exercises, adapter.itemCount)
             }
         })
