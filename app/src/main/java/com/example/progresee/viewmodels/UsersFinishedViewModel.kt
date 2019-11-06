@@ -49,13 +49,8 @@ class UsersFinishedViewModel(
                             Timber.wtf(data.toString())
                             data?.forEach {
                                 val finishedUser = FinishedUser(it.key,it.value,exerciseId)
-                                appRepository.insertUserFinishedIntoDB(finishedUser)
-                                withContext(Dispatchers.Main) {
-                                    usersFinished.addSource(
-                                        appRepository.getUserFinishedFromDB(exerciseId),
-                                        usersFinished::setValue
-                                    )
-                                }
+//                                appRepository.insertUserFinishedIntoDB(finishedUser)
+
                             }
                         }
                     } catch (e: Exception) {

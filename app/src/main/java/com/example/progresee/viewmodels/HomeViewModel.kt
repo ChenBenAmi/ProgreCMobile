@@ -15,9 +15,6 @@ class HomeViewModel constructor(private val appRepository: AppRepository): BaseV
     val navigateToFirebaseLoginFragment: LiveData<Boolean?>
         get() = _navigateToFirebaseLoginFragment
 
-
-
-
     override fun onDoneNavigating() {
         _navigateToFirebaseLoginFragment.value = null
     }

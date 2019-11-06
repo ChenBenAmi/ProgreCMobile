@@ -248,7 +248,8 @@ class TaskDetailsFragment : Fragment() {
             dialog.cancel()
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
-            dialog.cancel()
+            dialog.dismiss()
+
 
         }
 

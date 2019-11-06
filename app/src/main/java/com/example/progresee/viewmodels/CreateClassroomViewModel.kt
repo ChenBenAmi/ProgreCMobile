@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.ClassroomFirestore
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -18,7 +19,7 @@ class CreateClassroomViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val classroom = MediatorLiveData<Classroom>()
+    private val classroom = MutableLiveData<Classroom>()
     fun getClassroom() = classroom
 
     private val _navigateBackToClassroomFragment = MutableLiveData<Long?>()
@@ -39,9 +40,46 @@ class CreateClassroomViewModel(
 
     init {
         if (classroomId != "none" && classroomId != null) {
-            classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
+            setListeners(classroomId)
         }
         token = appRepository.currentToken
+    }
+
+    private fun setListeners(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("classrooms")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val classroomFirestore =
+                    snapshot.toObject(ClassroomFirestore::class.java)
+                Timber.wtf("classroom -> $classroomFirestore")
+                classroomFirestore?.let {
+                    val updatedClassroom = Classroom(
+                        classroomFirestore.uid,
+                        classroomFirestore.name,
+                        classroomFirestore.owner,
+                        classroomFirestore.ownerUid,
+                        classroomFirestore.userList,
+                        classroomFirestore.dateCreated.toString(),
+                        classroomFirestore.description,
+                        classroomFirestore.numberOfTasks
+                    )
+                    Timber.wtf("formatted classroom is -> $updatedClassroom")
+                    classroom.value = updatedClassroom
+
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
+        }
     }
 
     fun onSavePressed(name: String, description: String) {
@@ -66,7 +104,7 @@ class CreateClassroomViewModel(
                                     val data = request.body()
                                     Timber.wtf(data.toString())
                                     data?.forEach {
-                                        appRepository.insertClassroom(it.value)
+//                                        appRepository.insertClassroom(it.value)
                                     }
 
                                     withContext(Dispatchers.Main) {
@@ -97,18 +135,20 @@ class CreateClassroomViewModel(
                                 if (request.isSuccessful) {
                                     val data = request.body()
                                     data?.forEach {
-                                        appRepository.updateClassroom(it.value)
+//                                        appRepository.updateClassroom(it.value)
                                     }
 
-                                    withContext(Dispatchers.Main) {
-                                        hideProgressBar()
-                                        _navigateBackToClassroomFragment.value = 0
-                                    }
+
                                 } else {
                                     Timber.wtf("${request.code()}${request.raw()}")
                                 }
                             } catch (e: Exception) {
                                 Timber.wtf("oh no something went wrong!${e.printStackTrace()}${e.message}")
+                            } finally {
+                                withContext(Dispatchers.Main) {
+                                    hideProgressBar()
+                                    _navigateBackToClassroomFragment.value = 0
+                                }
                             }
                         }
                     }

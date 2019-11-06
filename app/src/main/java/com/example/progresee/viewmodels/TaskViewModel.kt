@@ -162,7 +162,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-                                appRepository.deleteClassroomById(it.value)
+//                                appRepository.deleteClassroomById(it.value)
                             }
                         }
                     } catch (e: Exception) {
@@ -194,7 +194,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             if (data != null) {
                                 Timber.wtf(data.toString())
                                 data.forEach {
-                                    appRepository.insertClassroom(it.value)
+//                                    appRepository.insertClassroom(it.value)
                                 }
                                 withContext(Dispatchers.Main) {
                                     hideProgressBar()

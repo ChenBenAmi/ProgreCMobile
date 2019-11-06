@@ -1,15 +1,9 @@
 package com.example.progresee.beans
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import java.io.Serializable
-import java.time.LocalDateTime
 import java.util.*
 
-@Entity
 data class Task(
 
-    @PrimaryKey
     val uid: String,
     var title: String,
     var description: String,
@@ -27,8 +21,8 @@ data class TaskFirestore(
     var title: String = "",
     var description: String = "",
     var referenceLink: String? = "",
-    val startDate: Date = Date(),
-    var endDate: Date = Date(),
+    val startDate: String="",
+    var endDate: String="",
     val classroomUid: String = "",
     var status: Boolean = false
 

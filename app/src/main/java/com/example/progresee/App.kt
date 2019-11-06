@@ -1,8 +1,6 @@
 package com.example.progresee
 
 import android.app.Application
-import androidx.room.Room
-import com.example.progresee.data.database.AppDatabase
 import com.example.progresee.data.AppRepository
 import com.example.progresee.data.network.ApiService
 import com.example.progresee.viewmodels.*
@@ -22,16 +20,9 @@ class App : Application() {
 
 
         val appModule = module {
-            single {
-                Room.databaseBuilder(get(), AppDatabase::class.java, "ProgreSeeDB")
-                    .fallbackToDestructiveMigration().build()
-            }
+
             single { ApiService() }
-            single { get<AppDatabase>().userDao() }
-            single { get<AppDatabase>().classroomDao() }
-            single { get<AppDatabase>().taskDao() }
-            single { get<AppDatabase>().exerciseDao() }
-            single { AppRepository(get(), get()) }
+            single { AppRepository(get()) }
 
             viewModel { SplashViewModel() }
             viewModel { (appRepository: AppRepository) -> HomeViewModel(appRepository) }

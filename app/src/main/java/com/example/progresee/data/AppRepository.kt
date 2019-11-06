@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.*
-import com.example.progresee.data.database.AppDatabase
 import com.example.progresee.data.network.ApiService
 import com.example.progresee.data.network.apicalls.ApiCalls
 import com.firebase.ui.firestore.paging.FirestoreDataSource
@@ -14,7 +13,7 @@ import kotlinx.coroutines.*
 import retrofit2.Response
 
 class AppRepository constructor(
-    private val dataBase: AppDatabase,
+
     private val network: ApiService
 ) {
 
@@ -30,24 +29,19 @@ class AppRepository constructor(
     val isAdmin
         get() = _isAdmin
 
-
-    val classrooms = MediatorLiveData<List<Classroom>>()
-
     val currentToken: LiveData<String?>
         get() = _currentToken
 
-    fun setToken(token: String?) {
+    fun setToken(token: String) {
         _currentToken.value = token
     }
 
-    private val user = MediatorLiveData<User?>()
-    fun getUser() = user
+    private val currentUser = MutableLiveData<User>()
+    fun getUser() = currentUser
 
-
-    private var _users = dataBase.userDao().getAllUsers()
-    val users
-        get() = _users
-
+    fun setCurrentUser(user: User) {
+        currentUser.value = user
+    }
 
     private val apiCalls: ApiCalls = network.retrofit()
 
@@ -62,82 +56,6 @@ class AppRepository constructor(
         return false
     }
 
-    fun fetchClassroomsFromDb() {
-        classrooms.addSource(dataBase.classroomDao().getClassrooms(), classrooms::setValue)
-    }
-
-    fun isUserExist(userId: String): Boolean {
-        return dataBase.userDao().isUserExist(userId)
-    }
-
-    fun insertUser(user: User) {
-        dataBase.userDao().insertUser(user)
-    }
-
-    fun insertUsers(data: List<User>?) {
-        dataBase.userDao().insertUsers(data)
-    }
-
-    fun getUser(userId: String): LiveData<User?> {
-        return dataBase.userDao().getUser(userId)
-    }
-
-    fun insertClassroom(classroom: Classroom?) {
-        dataBase.classroomDao().insert(classroom)
-    }
-
-    fun updateClassroom(classroom: Classroom?) {
-        dataBase.classroomDao().updateClassroom(classroom)
-    }
-
-    fun deleteClassroom(classroom: Classroom?) {
-        dataBase.classroomDao().deleteClassroom(classroom)
-    }
-
-    fun deleteClassroomById(classroomId: String?) {
-        dataBase.classroomDao().deleteClassroomById(classroomId)
-    }
-
-
-    fun getClassroom(classroomId: String): LiveData<Classroom?> {
-        return dataBase.classroomDao().getClassroom(classroomId)
-    }
-
-    fun insertTask(task: Task) {
-        dataBase.taskDao().insert(task)
-    }
-
-    fun getTask(taskId: String): LiveData<Task> {
-        return dataBase.taskDao().getTask(taskId)
-    }
-
-    fun updateTask(task: Task) {
-        dataBase.taskDao().updateTask(task)
-    }
-
-    fun getAllTasks(classroomId: String): LiveData<List<Task>> {
-        return dataBase.taskDao().getTasks(classroomId)
-    }
-
-    fun deleteTaskById(taskId: String) {
-        dataBase.taskDao().deleteTask(taskId)
-    }
-
-    fun getExercises(taskId: String): LiveData<List<Exercise>> {
-        return dataBase.exerciseDao().getExercises(taskId)
-    }
-
-    fun insertExercise(exercise: Exercise) {
-        dataBase.exerciseDao().insertExercise(exercise)
-    }
-
-    fun deleteExerciseById(exerciseId: String) {
-        dataBase.exerciseDao().deleteExercise(exerciseId)
-    }
-
-    fun updateExercise(exercise: Exercise) {
-        dataBase.exerciseDao().updateExercise(exercise)
-    }
 
     fun getCurrentUserAsync(token: String): Deferred<Response<User>> {
         return apiCalls.getCurrentUserAsync(token)
@@ -213,22 +131,6 @@ class AppRepository constructor(
 
     fun getClassroomsAsync(token: String): Deferred<Response<Map<String, Classroom>>> {
         return apiCalls.getClassroomsAsync(token)
-    }
-
-    fun clearUsers() {
-        dataBase.userDao().clearUsers()
-    }
-
-    fun removeUser(userId: String) {
-        dataBase.userDao().removeUser(userId)
-    }
-
-    fun insertUserFinishedIntoDB(userFinished: FinishedUser) {
-        dataBase.userFinishedDao().insertFinishedUser(userFinished)
-    }
-
-    fun getUserFinishedFromDB(exerciseId: String): LiveData<List<FinishedUser>> {
-        return dataBase.userFinishedDao().getFinishedUser(exerciseId)
     }
 
 

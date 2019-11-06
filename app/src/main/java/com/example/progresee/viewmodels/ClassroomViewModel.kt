@@ -44,75 +44,84 @@ class ClassroomViewModel constructor(
         getCurrentUser()
     }
 
+    private fun fetchClassrooms() {
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    Timber.wtf("triggered5")
+                    val request =
+                        appRepository.getClassroomsAsync(appRepository.currentToken.value!!).await()
+                    Timber.wtf("triggered6")
+                    if (request.isSuccessful) {
+                        val classroomsData = request.body()
+                        Timber.wtf("data -------->  $classroomsData")
+                        classroomsData?.forEach { classroomEntry ->
+                            setListeners(classroomEntry.key)
+                        }
+                    } else Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
+                } catch (e:Exception) {
+                    Timber.wtf("${e.message}${e.message}${e.stackTrace}")
+                }
+
+            }
+        }
+
+    }
+
     private fun getCurrentUser() {
+        Timber.wtf("triggered")
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
-            if (currentUser?.email.equals("chasdajsdas")) {
+            if (currentUser?.email.equals("chen24201@gmail.com")) {
                 _isAdmin.value = appRepository.isAdmin()
             } else {
                 _isAdmin.value = appRepository.notAdmin()
             }
             currentUser!!.getIdToken(true).addOnCompleteListener {
                 if (it.isSuccessful) {
+                    Timber.wtf("triggered2")
                     Timber.wtf(it.result?.token)
                     uiScope.launch {
                         showProgressBar()
-                        appRepository.setToken(it.result?.token)
+                        appRepository.setToken(it.result?.token!!)
                         val token = appRepository.currentToken.value
                         withContext(Dispatchers.IO) {
                             if (token != null) {
                                 try {
+                                    Timber.wtf("triggered3")
                                     val request =
                                         appRepository.getCurrentUserAsync(token).await()
-
+                                    Timber.wtf("triggered3")
                                     if (request.isSuccessful) {
-
+                                        Timber.wtf("triggered4")
                                         val data = request.body()
-                                        if (appRepository.isUserExist(data!!.uid)) {
-
+                                        data?.let { user ->
                                             withContext(Dispatchers.Main) {
-
-                                                appRepository.getUser().addSource(
-                                                    appRepository.getUser(data.uid),
-                                                    appRepository.getUser()::setValue
-                                                )
+                                                appRepository.setCurrentUser(user)
                                             }
-                                        } else {
-
-                                            appRepository.insertUser(data)
-                                            withContext(Dispatchers.Main) {
-                                                appRepository.getUser().addSource(
-                                                    appRepository.getUser(data.uid),
-                                                    appRepository.getUser()::setValue
-                                                )
-                                            }
+                                            fetchClassrooms()
                                         }
-                                        val request2 =
-                                            appRepository.getClassroomsAsync(token).await()
-                                        if (request2.isSuccessful) {
-                                            val classroomsData = request2.body()
-                                            Timber.wtf("data -------->  $classroomsData")
-                                            classroomsData?.forEach { classroomEntry ->
-                                                setListeners(classroomEntry.key)
-
-                                            }
-                                        } else Timber.wtf(" else 1 ${request2.code()}${request2.errorBody()} ${request2.message()}")
-                                    } else Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
+                                    }
                                 } catch (e: Exception) {
                                     Timber.e(" catch clause -> ${e.printStackTrace()}${e.message}")
+                                } finally {
+                                    withContext(Dispatchers.Main) {
+                                        hideProgressBar()
+                                    }
                                 }
                             }
                         }
-                        appRepository.fetchClassroomsFromDb()
-                        hideProgressBar()
+
                     }
                 }
             }
+        } else {
+            fetchClassrooms()
         }
     }
 
-   private fun setListeners(uid: String) {
+    private fun setListeners(uid: String) {
         val db = appRepository.getFirestoreDB()
         val docRef = db.collection("classrooms")
             .document(uid)
@@ -149,37 +158,38 @@ class ClassroomViewModel constructor(
             }
         }
     }
-        fun onClassroomClicked(uid: String) {
-            _navigateToTaskFragment.value = uid
-        }
 
-        fun doneNavigateToTaskFragment() {
-            _navigateToTaskFragment.value = null
-        }
+    fun onClassroomClicked(uid: String) {
+        _navigateToTaskFragment.value = uid
+    }
 
-        fun navigateToCreateClassroomFragment() {
-            _navigateToCreateClassroomFragment.value = true
-        }
+    fun doneNavigateToTaskFragment() {
+        _navigateToTaskFragment.value = null
+    }
 
-        fun doneNavigateToCreateClassroomFragment() {
-            _navigateToCreateClassroomFragment.value = null
-        }
+    fun navigateToCreateClassroomFragment() {
+        _navigateToCreateClassroomFragment.value = true
+    }
 
-        override fun showProgressBar() {
-            _showProgressBar.value = true
-        }
+    fun doneNavigateToCreateClassroomFragment() {
+        _navigateToCreateClassroomFragment.value = null
+    }
 
-        override fun hideProgressBar() {
-            _showProgressBar.value = false
-        }
+    override fun showProgressBar() {
+        _showProgressBar.value = true
+    }
+
+    override fun hideProgressBar() {
+        _showProgressBar.value = false
+    }
 
 
-        override fun onCleared() {
-            super.onCleared()
-            viewModelJob.cancel()
-            uiScope.cancel()
-
-        }
-
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+        uiScope.cancel()
 
     }
+
+
+}

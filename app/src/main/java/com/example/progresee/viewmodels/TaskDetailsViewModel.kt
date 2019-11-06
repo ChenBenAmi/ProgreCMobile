@@ -83,12 +83,6 @@ class TaskDetailsViewModel constructor(
         _changeExerciseStatus.value = exerciseId
     }
 
-    private suspend fun insertExercise(exercise: Exercise) {
-        withContext(Dispatchers.IO) {
-            appRepository.insertExercise(exercise)
-        }
-    }
-
 
     override fun onCleared() {
         super.onCleared()
@@ -230,7 +224,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach { _ ->
-                                appRepository.deleteTaskById(taskId)
+//                                appRepository.deleteTaskById(taskId)
                             }
                         }
                     } catch (e: Exception) {
@@ -263,7 +257,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-                                appRepository.insertExercise(it.value)
+//                                appRepository.insertExercise(it.value)
                             }
                         }
 
@@ -296,7 +290,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach { _ ->
-                                appRepository.deleteExerciseById(uid)
+//                                appRepository.deleteExerciseById(uid)
                             }
                         }
                     } catch (e: Exception) {
@@ -331,7 +325,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-                                appRepository.updateExercise(it.value)
+//                                appRepository.updateExercise(it.value)
                                 Timber.wtf("hey3")
                             }
                         }
@@ -367,7 +361,7 @@ class TaskDetailsViewModel constructor(
                                 val data = response.body()
                                 Timber.wtf(data.toString())
                                 data?.forEach {
-                                    appRepository.insertExercise(it.value)
+//                                    appRepository.insertExercise(it.value)
 
                                 }
                             }

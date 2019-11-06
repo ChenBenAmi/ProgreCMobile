@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Task
+import com.example.progresee.beans.TaskFirestore
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -26,7 +27,7 @@ class CreateTaskViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val task = MediatorLiveData<Task>()
+    private val task = MutableLiveData<Task>()
     fun getTask() = task
 
 
@@ -53,7 +54,34 @@ class CreateTaskViewModel(
 
     init {
         if (taskId != null) {
-            task.addSource(appRepository.getTask(taskId), task::setValue)
+            setTaskListeners(taskId)
+        }
+    }
+
+    private fun setTaskListeners(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("tasks")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val taskFirestore =
+                    snapshot.toObject(TaskFirestore::class.java)
+                Timber.wtf("classroom -> $taskFirestore")
+                taskFirestore?.let {
+                    val updatedTask = Task(taskFirestore.uid,taskFirestore.title,taskFirestore.description,taskFirestore.referenceLink,taskFirestore.startDate.toString(),taskFirestore.endDate.toString(),taskFirestore.classroomUid,taskFirestore.status)
+                    Timber.wtf("formatted classroom is -> $updatedTask")
+                    task.value=updatedTask
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
         }
     }
 
@@ -93,10 +121,10 @@ class CreateTaskViewModel(
 
     fun onSavePressed(title: String, description: String, link: String, date: String) {
         Timber.wtf("hey")
+        Timber.wtf(date)
         var sentDate: String = ""
         if (date == "00/00/0000") {
             sentDate = "$day/${month.plus(1)}/$year"
-
         } else {
             sentDate = date
         }
@@ -129,7 +157,7 @@ class CreateTaskViewModel(
                                     val data = request.body()
                                     Timber.wtf(data.toString())
                                     data?.forEach {
-                                        appRepository.insertTask(it.value)
+//                                        appRepository.insertTask(it.value)
                                     }
 
 
@@ -144,6 +172,7 @@ class CreateTaskViewModel(
                         }
                     } else {
                         val task = getTask().value
+
                         Timber.wtf(task.toString())
                         if (task != null) {
                             try {
@@ -161,7 +190,7 @@ class CreateTaskViewModel(
                                 if (request.isSuccessful) {
                                     val data = request.body()
                                     data?.forEach {
-                                        appRepository.updateTask(task)
+//                                        appRepository.updateTask(task)
                                     }
 
                                     withContext(Dispatchers.Main) {

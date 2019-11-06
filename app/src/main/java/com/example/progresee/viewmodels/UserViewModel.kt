@@ -99,7 +99,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
         val db = appRepository.getFirestoreDB()
         val docRef = db.collection("classrooms")
             .document(uid)
-        
+
         docRef.addSnapshotListener { snapshot, e ->
 
             if (e != null) {
@@ -192,7 +192,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                             if (request.isSuccessful) {
                                 val data = request.body()
                                 data?.forEach {
-                                    appRepository.insertClassroom(it.value)
+//                                    appRepository.insertClassroom(it.value)
                                 }
                                 withContext(Dispatchers.Main) {
                                     hideProgressBar()
@@ -222,8 +222,8 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                             if (request.isSuccessful) {
                                 val data = request.body()
                                 data?.forEach {
-                                    appRepository.insertClassroom(it.value)
-                                    appRepository.removeUser(userUid)
+//                                    appRepository.insertClassroom(it.value)
+//                                    appRepository.removeUser(userUid)
                                 }
                                 withContext(Dispatchers.Main) {
                                     hideProgressBar()
