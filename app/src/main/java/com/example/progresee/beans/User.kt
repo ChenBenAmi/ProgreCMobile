@@ -3,14 +3,25 @@ package com.example.progresee.beans
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 @Entity
 data class User(
     @PrimaryKey
-    val uid: String,
-    @SerializedName("profilePictureUrl") val profilePictureUrl: String,
-    @SerializedName("dateCreated") val dateCreated: String,
-    @SerializedName("signedIn") val signedIn: String,
-    @SerializedName("fullName") val fullName: String,
-    @SerializedName("email") val email: String
+    val uid: String = "",
+    val profilePictureUrl: String = "",
+    val dateCreated:  Date = Date(),
+    val signedIn:  Date = Date(),
+    val fullName: String = "",
+    val email: String = ""
 )
+
+//data class UserFirestore(
+//    val uid: String = "",
+//    val profilePictureUrl: String = "",
+//    val dateCreated: Date = Date(),
+//    val signedIn: Date = Date(),
+//    val fullName: String = "",
+//    val email: String = ""
+//)
+
