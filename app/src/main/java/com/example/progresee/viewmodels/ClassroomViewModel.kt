@@ -2,7 +2,6 @@ package com.example.progresee.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
-import com.example.progresee.beans.ClassroomFirestore
 import com.example.progresee.data.AppRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -48,10 +47,8 @@ class ClassroomViewModel constructor(
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    Timber.wtf("triggered5")
                     val request =
                         appRepository.getClassroomsAsync(appRepository.currentToken.value!!).await()
-                    Timber.wtf("triggered6")
                     if (request.isSuccessful) {
                         val classroomsData = request.body()
                         Timber.wtf("data -------->  $classroomsData")
@@ -69,7 +66,6 @@ class ClassroomViewModel constructor(
     }
 
     private fun getCurrentUser() {
-        Timber.wtf("triggered")
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
@@ -80,7 +76,6 @@ class ClassroomViewModel constructor(
             }
             currentUser!!.getIdToken(true).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Timber.wtf("triggered2")
                     Timber.wtf(it.result?.token)
                     uiScope.launch {
                         showProgressBar()
@@ -89,12 +84,9 @@ class ClassroomViewModel constructor(
                         withContext(Dispatchers.IO) {
                             if (token != null) {
                                 try {
-                                    Timber.wtf("triggered3")
                                     val request =
                                         appRepository.getCurrentUserAsync(token).await()
-                                    Timber.wtf("triggered3")
                                     if (request.isSuccessful) {
-                                        Timber.wtf("triggered4")
                                         val data = request.body()
                                         data?.let { user ->
                                             withContext(Dispatchers.Main) {
@@ -135,21 +127,11 @@ class ClassroomViewModel constructor(
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val classroomFirestore =
-                    snapshot.toObject(ClassroomFirestore::class.java)
+                    snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    val updatedClassroom = Classroom(
-                        classroomFirestore.uid,
-                        classroomFirestore.name,
-                        classroomFirestore.owner,
-                        classroomFirestore.ownerUid,
-                        classroomFirestore.userList,
-                        classroomFirestore.dateCreated.toString(),
-                        classroomFirestore.description,
-                        classroomFirestore.numberOfTasks
-                    )
-                    Timber.wtf("formatted classroom is -> $updatedClassroom")
-                    adapterList[updatedClassroom.uid] = updatedClassroom
+                    Timber.wtf("formatted classroom is -> $it")
+                    adapterList[it.uid] = it
                     classrooms.value = adapterList.values.toList()
 
                 }

@@ -1,10 +1,8 @@
 package com.example.progresee.viewmodels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
-import com.example.progresee.beans.ClassroomFirestore
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -51,7 +49,6 @@ class CreateClassroomViewModel(
             .document(uid)
 
         docRef.addSnapshotListener { snapshot, e ->
-
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
@@ -59,21 +56,11 @@ class CreateClassroomViewModel(
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val classroomFirestore =
-                    snapshot.toObject(ClassroomFirestore::class.java)
+                    snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    val updatedClassroom = Classroom(
-                        classroomFirestore.uid,
-                        classroomFirestore.name,
-                        classroomFirestore.owner,
-                        classroomFirestore.ownerUid,
-                        classroomFirestore.userList,
-                        classroomFirestore.dateCreated.toString(),
-                        classroomFirestore.description,
-                        classroomFirestore.numberOfTasks
-                    )
-                    Timber.wtf("formatted classroom is -> $updatedClassroom")
-                    classroom.value = updatedClassroom
+                    Timber.wtf("formatted classroom is -> $it")
+                    classroom.value = it
 
                 }
             } else {

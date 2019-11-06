@@ -136,6 +136,7 @@ fun TextView.setLinks(item: Task?) {
 @BindingAdapter("exerciseText")
 fun TextView.setExerciseText(item: Exercise?) {
     item?.let {
+        Timber.wtf("setExerciseText triggered with exercise -->> ${it.uid} and ${it.exerciseTitle}")
         text = item.exerciseTitle
     }
 }

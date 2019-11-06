@@ -37,8 +37,10 @@ class TaskDetailsViewModel constructor(
     fun getClassroom() = classroom
 
     private val adapterList = hashMapOf<String, Exercise>()
-    private val exercises = MutableLiveData<List<Exercise>>()
-    fun getExercises() = exercises
+
+    private val _exercises = MutableLiveData<List<Exercise>>()
+    val exercises
+        get() = _exercises
 
     private val _changeExerciseStatus = MutableLiveData<String?>()
     val changeExerciseStatus
@@ -84,10 +86,6 @@ class TaskDetailsViewModel constructor(
     }
 
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
     private fun setClassroomListener(uid: String) {
         val db = appRepository.getFirestoreDB()
         val docRef = db.collection("classrooms")
@@ -102,21 +100,11 @@ class TaskDetailsViewModel constructor(
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val classroomFirestore =
-                    snapshot.toObject(ClassroomFirestore::class.java)
+                    snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    val updatedClassroom = Classroom(
-                        classroomFirestore.uid,
-                        classroomFirestore.name,
-                        classroomFirestore.owner,
-                        classroomFirestore.ownerUid,
-                        classroomFirestore.userList,
-                        classroomFirestore.dateCreated.toString(),
-                        classroomFirestore.description,
-                        classroomFirestore.numberOfTasks
-                    )
-                    Timber.wtf("formatted classroom is -> $updatedClassroom")
-                    classroom.value=updatedClassroom
+                    Timber.wtf("formatted classroom is -> $it")
+                    classroom.value = it
 
                 }
             } else {
@@ -139,24 +127,23 @@ class TaskDetailsViewModel constructor(
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val taskFirestore =
-                    snapshot.toObject(TaskFirestore::class.java)
-                Timber.wtf("classroom -> $taskFirestore")
+                    snapshot.toObject(Task::class.java)
+                Timber.wtf("task -> $taskFirestore")
                 taskFirestore?.let {
-                    val updatedTask = Task(taskFirestore.uid,taskFirestore.title,taskFirestore.description,taskFirestore.referenceLink,taskFirestore.startDate.toString(),taskFirestore.endDate.toString(),taskFirestore.classroomUid,taskFirestore.status)
-                    Timber.wtf("formatted classroom is -> $updatedTask")
-                    task.value=updatedTask
+
+                    Timber.wtf("formatted task is -> $it")
+                    task.value = it
                 }
             } else {
                 Timber.wtf("Current data: null")
             }
         }
-        }
+    }
 
     private fun setExerciseListeners(uid: String) {
         val db = appRepository.getFirestoreDB()
         val docRef = db.collection("exercises")
             .document(uid)
-
         docRef.addSnapshotListener { snapshot, e ->
 
             if (e != null) {
@@ -166,11 +153,10 @@ class TaskDetailsViewModel constructor(
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val exerciseFirestore =
-                    snapshot.toObject(ExerciseFirestore::class.java)
-                Timber.wtf("classroom -> $exerciseFirestore")
+                    snapshot.toObject(Exercise::class.java)
+                Timber.wtf("exercise -> $exerciseFirestore")
                 exerciseFirestore?.let {
-                    val tempExercises=Exercise(it.uid,it.exerciseTitle,it.dateCreated.toString(),it.finishedUsersList,it.taskUid)
-                    adapterList[tempExercises.uid] = tempExercises
+                    adapterList[exerciseFirestore.uid] = exerciseFirestore
                     exercises.value = adapterList.values.toList()
                 }
             } else {
@@ -194,6 +180,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
+                                Timber.wtf("the exercise id is " + it.key)
                                 setExerciseListeners(it.key)
                             }
                         }
@@ -224,7 +211,6 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach { _ ->
-//                                appRepository.deleteTaskById(taskId)
                             }
                         }
                     } catch (e: Exception) {
@@ -257,7 +243,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-//                                appRepository.insertExercise(it.value)
+                                setExerciseListeners(it.key)
                             }
                         }
 
@@ -290,7 +276,6 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach { _ ->
-//                                appRepository.deleteExerciseById(uid)
                             }
                         }
                     } catch (e: Exception) {
@@ -311,7 +296,6 @@ class TaskDetailsViewModel constructor(
             withContext(Dispatchers.IO) {
                 if (appRepository.currentToken.value != null) {
                     try {
-                        Timber.wtf("hey")
                         exercise.exerciseTitle = newDescription
                         val response = appRepository.updateExerciseAsync(
                             appRepository.currentToken.value!!,
@@ -319,14 +303,10 @@ class TaskDetailsViewModel constructor(
                             taskId,
                             exercise
                         ).await()
-                        Timber.wtf("hey1")
                         if (response.isSuccessful) {
-                            Timber.wtf("hey2")
                             val data = response.body()
-                            Timber.wtf(data.toString())
                             data?.forEach {
-//                                appRepository.updateExercise(it.value)
-                                Timber.wtf("hey3")
+
                             }
                         }
                     } catch (e: Exception) {
@@ -348,20 +328,16 @@ class TaskDetailsViewModel constructor(
                 if (appRepository.currentToken.value != null) {
                     try {
                         checkedList.forEach { uid ->
-                            Timber.wtf("hey")
                             val response = appRepository.updateStatusAsync(
                                 appRepository.currentToken.value!!,
                                 classroomId,
                                 taskId,
                                 uid
                             ).await()
-                            Timber.wtf("hey1")
                             if (response.isSuccessful) {
-                                Timber.wtf("hey2")
                                 val data = response.body()
                                 Timber.wtf(data.toString())
                                 data?.forEach {
-//                                    appRepository.insertExercise(it.value)
 
                                 }
                             }
@@ -379,7 +355,6 @@ class TaskDetailsViewModel constructor(
     }
 
     fun onExerciseChecked(it: Exercise) {
-        Timber.wtf(it.exerciseTitle + "was clicked")
         if (checkedList.contains(it.uid)) {
             checkedList.remove(it.uid)
         } else {
@@ -463,6 +438,11 @@ class TaskDetailsViewModel constructor(
 
     fun hideCreateExerciseAlert() {
         _createExerciseAlert.value = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 
 

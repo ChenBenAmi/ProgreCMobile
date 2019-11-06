@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.progresee.beans.User
 import android.content.Context
 import android.view.View
+import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.ListItemUserBinding
+import com.example.progresee.views.ClassroomFragment
 import com.example.progresee.views.UserFragment
 
 
@@ -18,7 +20,7 @@ class UsersAdapter(private val clickListener: UserClickListener) : ListAdapter<U
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(clickListener, item)
-        if (UserFragment.owner) {
+        if (ClassroomFragment.owner) {
             holder.binding.threeDots.visibility=View.VISIBLE
         }
     }

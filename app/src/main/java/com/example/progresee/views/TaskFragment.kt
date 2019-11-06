@@ -35,7 +35,7 @@ class TaskFragment : Fragment() {
     private val appRepository: AppRepository by inject()
     private lateinit var classroomId: String
     private lateinit var taskViewModel: TaskViewModel
-    private lateinit var emailText: EditText
+
 
 
     override fun onCreateView(
@@ -46,11 +46,6 @@ class TaskFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_task, container, false)
 
         binding.lifecycleOwner = this
-
-        (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
-
-        emailText = EditText(context)
-        emailText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
         val arguments = TaskFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId
@@ -65,7 +60,8 @@ class TaskFragment : Fragment() {
 
         taskViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.classroom_menu)
+                (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
+                (activity as? AppCompatActivity)?.progresee_toolbar!!.inflateMenu(R.menu.classroom_menu)
                 setItems()
                 create_task_button.show()
             } else if (it == false) {
@@ -214,6 +210,8 @@ class TaskFragment : Fragment() {
 
     private fun addAlert() {
         val builder = AlertDialog.Builder(context!!)
+        val emailText = EditText(context)
+        emailText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         builder.setTitle(R.string.add_person)
         builder.setMessage(R.string.enter_user_email)
         builder.setView(emailText)

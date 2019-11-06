@@ -38,7 +38,6 @@ class TaskDetailsFragment : Fragment() {
     private lateinit var classroomId: String
     private lateinit var taskId: String
     private lateinit var taskDetailsViewModel: TaskDetailsViewModel
-    private lateinit var exerciseDescription: EditText
     private lateinit var binding: FragmentTaskDetailsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +71,6 @@ class TaskDetailsFragment : Fragment() {
             } else if (it == false) {
                 (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.client_menu)
                 setItemsClient()
-
                 createExercise_button.hide()
             }
         })
@@ -86,7 +84,6 @@ class TaskDetailsFragment : Fragment() {
         val manager = LinearLayoutManager(context)
         binding.exerciseList.layoutManager = manager
         val userEmail=appRepository.getCurrentUserEmail()
-        Timber.wtf("THE USER EMAIL IS "+userEmail)
         val adapter = ExerciseAdapter(ExerciseClickListener { exercise, context, view ->
             taskDetailsViewModel.onExerciseClicked(exercise, context, view)
         }, CheckedListener {
@@ -95,12 +92,10 @@ class TaskDetailsFragment : Fragment() {
 
         )
         binding.exerciseList.adapter = adapter
-        exerciseDescription = EditText(context)
-        exerciseDescription.inputType = InputType.TYPE_TEXT_VARIATION_NORMAL
         this.taskDetailsViewModel = taskDetailsViewModel
-        taskDetailsViewModel.getExercises().observe(viewLifecycleOwner, Observer {
+        taskDetailsViewModel.exercises.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.wtf(it.toString())
+                Timber.wtf("the list is now changed $it")
                 adapter.submitList(it)
                 context!!.getString(R.string.number_of_exercises, adapter.itemCount)
             }
@@ -240,6 +235,8 @@ class TaskDetailsFragment : Fragment() {
 
     private fun addAlertExercise() {
         val builder = AlertDialog.Builder(context!!)
+        val exerciseDescription = EditText(context)
+        exerciseDescription.inputType = InputType.TYPE_TEXT_VARIATION_NORMAL
         builder.setTitle(R.string.add_exercise)
         builder.setMessage(R.string.enter_exercise_description)
         builder.setView(exerciseDescription)
@@ -267,6 +264,8 @@ class TaskDetailsFragment : Fragment() {
     }
 
     private fun editAlertExercise(exercise: Exercise) {
+        val exerciseDescription = EditText(context)
+        exerciseDescription.inputType = InputType.TYPE_TEXT_VARIATION_NORMAL
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(getString(R.string.edit_exercise))
         exerciseDescription.setText(exercise.exerciseTitle)
@@ -278,11 +277,13 @@ class TaskDetailsFragment : Fragment() {
         }
         builder.setNegativeButton("Cancel") { dialog, which ->
             taskDetailsViewModel.hideEditExerciseDialog()
+
         }
 
         val dialog: AlertDialog = builder.create()
 
         dialog.show()
+
     }
 
     private fun deleteAlertExercise(uid: String) {

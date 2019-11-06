@@ -85,11 +85,6 @@ class UserFragment : Fragment() {
             }
         })
 
-        userViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
-            if (it == true){
-                owner = true
-            }
-        })
 
         userViewModel.transferSuccessful.observe(viewLifecycleOwner, Observer {
             if (it == true)
@@ -161,7 +156,5 @@ class UserFragment : Fragment() {
         dialog.show()
     }
 
-    companion object {
-        var owner = false
-    }
+
 }

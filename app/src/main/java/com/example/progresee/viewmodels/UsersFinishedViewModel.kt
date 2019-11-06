@@ -2,6 +2,7 @@ package com.example.progresee.viewmodels
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.FinishedUser
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
@@ -21,8 +22,10 @@ class UsersFinishedViewModel(
     val navigateBackToTaskFragment
         get() = _navigateBackToTaskFragment
 
-    private val usersFinished = MediatorLiveData<List<FinishedUser>>()
-    fun getUsersFinishedVariable() = usersFinished
+    private val adapterList = hashMapOf<String, FinishedUser>()
+    private val _usersFinished = MutableLiveData<List<FinishedUser>>()
+    val usersFinished
+        get() = _usersFinished
 
     private val _showProgressBar = MutableLiveData<Boolean?>()
     val showProgressBar
@@ -47,10 +50,13 @@ class UsersFinishedViewModel(
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach {
-                                val finishedUser = FinishedUser(it.key,it.value,exerciseId)
-//                                appRepository.insertUserFinishedIntoDB(finishedUser)
 
+                            data?.forEach {
+                                val finishedUser = FinishedUser(it.key, it.value, exerciseId)
+                                adapterList[it.key] = finishedUser
+                                withContext(Dispatchers.Main) {
+                                _usersFinished.value = adapterList.values.toList()
+                                }
                             }
                         }
                     } catch (e: Exception) {

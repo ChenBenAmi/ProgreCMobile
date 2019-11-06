@@ -53,16 +53,6 @@ o
 ?app/src/main/java/com/example/progresee/utils/AppGlideModule.kt,0\e\0e45c93e3f0ab122167e104e90febb6319921ed1
 m
 =app/src/main/java/com/example/progresee/utils/BindingUtils.kt,1\2\120b834ef131710b324088c3c5a579d4d9ab2b47
-o
-?app/src/main/java/com/example/progresee/utils/ConverterUtils.kt,9\f\9ff2fcc741a72eca1c0fda5729a5f5b4e9ee2945
-y
-Iapp/src/main/java/com/example/progresee/data/database/dao/ClassroomDao.kt,d\a\da702253eaab2a11578bdaeb64fb1fab6d01462e
-x
-Happ/src/main/java/com/example/progresee/data/database/dao/ExerciseDao.kt,3\7\37c936650fb52858bfa2d098bfbb1511a653048e
-t
-Dapp/src/main/java/com/example/progresee/data/database/dao/UserDao.kt,6\c\6c517d0dc54af92338003b30e839bdc777d9f6ae
-t
-Dapp/src/main/java/com/example/progresee/data/database/dao/TaskDao.kt,b\c\bcd31a6ef7cbc422694865ef218cd05c3d29ff89
 y
 Iapp/src/main/java/com/example/progresee/data/network/apicalls/ApiCalls.kt,8\a\8ae8cf5c0a0a104df476744ca21ee79a40d36375
 m
@@ -71,8 +61,6 @@ i
 9app/src/main/java/com/example/progresee/beans/Exercise.kt,e\f\ef7f9f64d23063f31267ab1827310c8a38049d26
 e
 5app/src/main/java/com/example/progresee/beans/Task.kt,6\7\67629e299d5bbe881d0f58d8a4d28f31c5b37dbe
-|
-Lapp/src/main/java/com/example/progresee/data/database/dao/UserFinishedDao.kt,8\7\875a6bcec405f440802b49542657a99435a11640
 j
 :app/src/main/java/com/example/progresee/beans/Classroom.kt,f\7\f77b04bfcf49abb9bfa58f8e31744f76377bffbe
 e
@@ -81,8 +69,6 @@ e
 Lapp/src/main/java/com/example/progresee/viewmodels/UsersFinishedViewModel.kt,f\4\f472865658841c4bc7c7f9ff224c08bd799c2be4
 r
 Bapp/src/main/java/com/example/progresee/data/network/ApiService.kt,1\3\133d1ab25a8f18e9ed45321d0eebe7b14f583a16
-t
-Dapp/src/main/java/com/example/progresee/data/database/AppDatabase.kt,3\8\38791bbde3c71cd186d17d940c79ff6d3e0731e3
 @
 app/build.gradle,f\4\f4a01d6a4fcb971362ec00a83903fd3902f52164
 x
@@ -91,3 +77,5 @@ m
 =app/src/main/java/com/example/progresee/beans/FinishedUser.kt,d\8\d8879033eedaa8c6c8d95f25677e1429bd831af3
 p
 @app/src/main/java/com/example/progresee/adapters/UsersAdapter.kt,6\a\6a4615274911275a0e8f7c528bb564502fa98e4c
+s
+Capp/src/main/java/com/example/progresee/adapters/ExerciseAdapter.kt,1\a\1a8119fc7dad8d6d26cd79c0c022b426119efc81

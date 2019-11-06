@@ -70,21 +70,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val classroomFirestore =
-                    snapshot.toObject(ClassroomFirestore::class.java)
+                    snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    val updatedClassroom = Classroom(
-                        classroomFirestore.uid,
-                        classroomFirestore.name,
-                        classroomFirestore.owner,
-                        classroomFirestore.ownerUid,
-                        classroomFirestore.userList,
-                        classroomFirestore.dateCreated.toString(),
-                        classroomFirestore.description,
-                        classroomFirestore.numberOfTasks
-                    )
-                    Timber.wtf("formatted classroom is -> $updatedClassroom")
-                    classroom.value=updatedClassroom
+                    Timber.wtf("formatted classroom is -> $it")
+                    classroom.value=it
 
                 }
             } else {
@@ -107,12 +97,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val taskFirestore =
-                    snapshot.toObject(TaskFirestore::class.java)
-                Timber.wtf("classroom -> $taskFirestore")
+                    snapshot.toObject(Task::class.java)
+                Timber.wtf("task -> $taskFirestore")
                 taskFirestore?.let {
-                    val updatedTask = Task(taskFirestore.uid,taskFirestore.title,taskFirestore.description,taskFirestore.referenceLink,taskFirestore.startDate.toString(),taskFirestore.endDate.toString(),taskFirestore.classroomUid,taskFirestore.status)
-                    Timber.wtf("formatted classroom is -> $updatedTask")
-                    adapterList[updatedTask.uid] = updatedTask
+                    Timber.wtf("formatted classroom is -> $it")
+                    adapterList[it.uid] = it
                     tasks.value = adapterList.values.toList()
 
                 }

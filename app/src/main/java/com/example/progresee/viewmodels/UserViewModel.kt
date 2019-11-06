@@ -61,7 +61,6 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     }
 
     private fun loadUsers() {
-        Timber.wtf("load users triggered")
         uiScope.launch {
             showProgressBar()
             withContext(Dispatchers.IO) {
@@ -74,12 +73,9 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                         ).await()
                         Timber.wtf("hey")
                         if (response.isSuccessful) {
-                            Timber.wtf("hey2")
                             val data = response.body()
                             data?.forEach {
-                                Timber.wtf("hey3")
                                 setUsersListeners(it.key)
-                                Timber.wtf("hey4")
                             }
                         } else {
                             Timber.wtf("Something went wrong ${response.code()} ${response.errorBody().toString()}")
@@ -109,21 +105,11 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val classroomFirestore =
-                    snapshot.toObject(ClassroomFirestore::class.java)
+                    snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    val updatedClassroom = Classroom(
-                        classroomFirestore.uid,
-                        classroomFirestore.name,
-                        classroomFirestore.owner,
-                        classroomFirestore.ownerUid,
-                        classroomFirestore.userList,
-                        classroomFirestore.dateCreated.toString(),
-                        classroomFirestore.description,
-                        classroomFirestore.numberOfTasks
-                    )
-                    Timber.wtf("formatted classroom is -> $updatedClassroom")
-                    classroom.value = updatedClassroom
+                    Timber.wtf("formatted classroom is -> $it")
+                    classroom.value = it
 
                 }
             } else {
@@ -146,11 +132,10 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val userFirestore =
-                    snapshot.toObject(UserFirestore::class.java)
-                Timber.wtf("classroom -> $userFirestore")
+                    snapshot.toObject(User::class.java)
+                Timber.wtf("user -> $userFirestore")
                 userFirestore?.let {
-                    val user=User(userFirestore.uid,userFirestore.profilePictureUrl,userFirestore.dateCreated.toString(),userFirestore.signedIn.toString(),userFirestore.fullName,userFirestore.email)
-                    adapterList[user.uid] = user
+                    adapterList[it.uid] = it
                     users.value = adapterList.values.toList()
                 }
             } else {

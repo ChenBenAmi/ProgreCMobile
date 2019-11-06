@@ -67,8 +67,9 @@ class UsersFinishedFragment : Fragment() {
 
         binding.usersFinishedList.adapter = adapter
 
-        viewModel.getUsersFinishedVariable().observe(viewLifecycleOwner, Observer {
+        viewModel.usersFinished.observe(viewLifecycleOwner, Observer {
             it?.let {
+                Timber.wtf("hey i have some users for you")
                 Timber.wtf(it.toString())
                 adapter.submitList(it)
             }

@@ -62,6 +62,8 @@ class ClassroomFragment : Fragment() {
         classroomViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
             if (it == false) {
                 createClassroom_button.hide()
+            } else if (it==true) {
+                owner=true
             }
         })
 
@@ -153,6 +155,10 @@ class ClassroomFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
+    }
+
+    companion object {
+        var owner = false
     }
 
 

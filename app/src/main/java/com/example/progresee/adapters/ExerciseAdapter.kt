@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.progresee.beans.Exercise
 import com.example.progresee.databinding.ListItemExerciseBinding
+import com.example.progresee.views.ClassroomFragment
 import com.example.progresee.views.UserFragment
 
 
@@ -22,7 +23,7 @@ class ExerciseAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(clickListener, checkedListener, item,userEmail)
-        if (UserFragment.owner) {
+        if (ClassroomFragment.owner) {
             holder.binding.threeDots.visibility = View.VISIBLE
         } else {
             holder.binding.threeDots.visibility = View.GONE

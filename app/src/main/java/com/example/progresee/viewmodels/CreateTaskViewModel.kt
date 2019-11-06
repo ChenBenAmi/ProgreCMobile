@@ -1,16 +1,12 @@
 package com.example.progresee.viewmodels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Task
-import com.example.progresee.beans.TaskFirestore
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.lang.Exception
-import java.text.SimpleDateFormat
 import java.util.*
 
 class CreateTaskViewModel(
@@ -72,12 +68,11 @@ class CreateTaskViewModel(
                 Timber.wtf("Current data: ${snapshot.data}")
 
                 val taskFirestore =
-                    snapshot.toObject(TaskFirestore::class.java)
+                    snapshot.toObject(Task::class.java)
                 Timber.wtf("classroom -> $taskFirestore")
                 taskFirestore?.let {
-                    val updatedTask = Task(taskFirestore.uid,taskFirestore.title,taskFirestore.description,taskFirestore.referenceLink,taskFirestore.startDate.toString(),taskFirestore.endDate.toString(),taskFirestore.classroomUid,taskFirestore.status)
-                    Timber.wtf("formatted classroom is -> $updatedTask")
-                    task.value=updatedTask
+                    Timber.wtf("formatted classroom is -> $it")
+                    task.value=it
                 }
             } else {
                 Timber.wtf("Current data: null")
