@@ -41,6 +41,7 @@ class UserFragment : Fragment() {
     ): View? {
 
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
 
         val binding: FragmentUsersBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_users, container, false)
@@ -100,8 +101,7 @@ class UserFragment : Fragment() {
                 showRemovedUserSnackBar()
             }
         })
-
-        userViewModel.loadUsers()
+        
         return binding.root
     }
 

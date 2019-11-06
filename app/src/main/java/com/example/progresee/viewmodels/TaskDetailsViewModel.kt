@@ -7,8 +7,7 @@ import android.widget.PopupMenu
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.R
-import com.example.progresee.beans.Exercise
-import com.example.progresee.beans.Task
+import com.example.progresee.beans.*
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -31,10 +30,14 @@ class TaskDetailsViewModel constructor(
     private val checkedList = mutableListOf<String>()
     fun getCheckedList() = checkedList
 
-    private val task = MediatorLiveData<Task>()
+    private val task = MutableLiveData<Task>()
     fun getTask() = task
 
-    private val exercises = MediatorLiveData<List<Exercise>>()
+    private val classroom = MutableLiveData<Classroom>()
+    fun getClassroom() = classroom
+
+    private val adapterList = hashMapOf<String, Exercise>()
+    private val exercises = MutableLiveData<List<Exercise>>()
     fun getExercises() = exercises
 
     private val _changeExerciseStatus = MutableLiveData<String?>()
@@ -71,7 +74,8 @@ class TaskDetailsViewModel constructor(
 
 
     init {
-        task.addSource(appRepository.getTask(taskId), task::setValue)
+        setClassroomListener(classroomId)
+        setTaskListeners(taskId)
         fetchExercisesFromFirebase()
     }
 
@@ -90,6 +94,97 @@ class TaskDetailsViewModel constructor(
         super.onCleared()
         viewModelJob.cancel()
     }
+    private fun setClassroomListener(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("classrooms")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val classroomFirestore =
+                    snapshot.toObject(ClassroomFirestore::class.java)
+                Timber.wtf("classroom -> $classroomFirestore")
+                classroomFirestore?.let {
+                    val updatedClassroom = Classroom(
+                        classroomFirestore.uid,
+                        classroomFirestore.name,
+                        classroomFirestore.owner,
+                        classroomFirestore.ownerUid,
+                        classroomFirestore.userList,
+                        classroomFirestore.dateCreated.toString(),
+                        classroomFirestore.description,
+                        classroomFirestore.numberOfTasks
+                    )
+                    Timber.wtf("formatted classroom is -> $updatedClassroom")
+                    classroom.value=updatedClassroom
+
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
+        }
+    }
+
+    private fun setTaskListeners(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("tasks")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val taskFirestore =
+                    snapshot.toObject(TaskFirestore::class.java)
+                Timber.wtf("classroom -> $taskFirestore")
+                taskFirestore?.let {
+                    val updatedTask = Task(taskFirestore.uid,taskFirestore.title,taskFirestore.description,taskFirestore.referenceLink,taskFirestore.startDate.toString(),taskFirestore.endDate.toString(),taskFirestore.classroomUid,taskFirestore.status)
+                    Timber.wtf("formatted classroom is -> $updatedTask")
+                    task.value=updatedTask
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
+        }
+        }
+
+    private fun setExerciseListeners(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("exercises")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val exerciseFirestore =
+                    snapshot.toObject(ExerciseFirestore::class.java)
+                Timber.wtf("classroom -> $exerciseFirestore")
+                exerciseFirestore?.let {
+                    val tempExercises=Exercise(it.uid,it.exerciseTitle,it.dateCreated.toString(),it.finishedUsersList,it.taskUid)
+                    adapterList[tempExercises.uid] = tempExercises
+                    exercises.value = adapterList.values.toList()
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
+        }
+    }
+
 
     private fun fetchExercisesFromFirebase() {
         uiScope.launch {
@@ -105,13 +200,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-                                appRepository.insertExercise(it.value)
-                            }
-                            withContext(Dispatchers.Main) {
-                                exercises.addSource(
-                                    appRepository.getExercises(taskId),
-                                    exercises::setValue
-                                )
+                                setExerciseListeners(it.key)
                             }
                         }
                     } catch (e: Exception) {

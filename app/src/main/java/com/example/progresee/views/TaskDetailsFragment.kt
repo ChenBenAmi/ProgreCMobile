@@ -117,6 +117,7 @@ class TaskDetailsFragment : Fragment() {
         })
         taskDetailsViewModel.getTask().observe(viewLifecycleOwner, Observer {
             it?.let {
+                Timber.wtf(it.toString())
                 (activity as? AppCompatActivity)?.supportActionBar?.title =
                     it.title
                 Timber.wtf("task is $it")

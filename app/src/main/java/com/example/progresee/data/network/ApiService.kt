@@ -33,6 +33,6 @@ class ApiService {
     }
 
     companion object {
-        private const val  BASE_URL = "http://172.20.10.6:5000"
+        private const val  BASE_URL = "http://192.168.43.47:5000"
     }
 }

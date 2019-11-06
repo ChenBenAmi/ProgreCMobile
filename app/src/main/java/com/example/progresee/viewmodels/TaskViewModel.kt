@@ -1,13 +1,10 @@
 package com.example.progresee.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.*
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.util.*
 
 class TaskViewModel(private val appRepository: AppRepository, private val classroomId: String) :
     BaseViewModel() {
@@ -22,6 +19,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         get() = _isAdmin
 
     private val adapterList = hashMapOf<String, Task>()
+
     private val _tasks=MutableLiveData<List<Task>>()
     val tasks
         get() = _tasks
@@ -95,7 +93,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         }
     }
 
-    private fun setTsakListners(uid: String) {
+    private fun setTaskListeners(uid: String) {
         val db = appRepository.getFirestoreDB()
         val docRef = db.collection("tasks")
             .document(uid)
@@ -138,7 +136,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-                                setTsakListners(it.key)
+                                setTaskListeners(it.key)
                             }
                         }
                     } catch (e: Exception) {
