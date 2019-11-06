@@ -20,3 +20,16 @@ data class Task(
     var status: Boolean
 
 )
+
+data class TaskFirestore(
+
+    val uid: String = "",
+    var title: String = "",
+    var description: String = "",
+    var referenceLink: String? = "",
+    val startDate: Date = Date(),
+    var endDate: Date = Date(),
+    val classroomUid: String = "",
+    var status: Boolean = false
+
+)

@@ -3,9 +3,7 @@ package com.example.progresee.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.Classroom
-import com.example.progresee.beans.Exercise
-import com.example.progresee.beans.Task
+import com.example.progresee.beans.*
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -23,11 +21,12 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val isAdmin
         get() = _isAdmin
 
-    private val _tasks: LiveData<List<Task>> = appRepository.getAllTasks(classroomId)
+    private val adapterList = hashMapOf<String, Task>()
+    private val _tasks=MutableLiveData<List<Task>>()
     val tasks
         get() = _tasks
 
-    private val classroom = MediatorLiveData<Classroom>()
+    private val classroom = MutableLiveData<Classroom>()
     fun getClassroom() = classroom
 
     private val _showProgressBar = MutableLiveData<Boolean?>()
@@ -55,7 +54,73 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     init {
         uiScope.launch {
             fetchTasksFromFirebase()
-            classroom.addSource(appRepository.getClassroom(classroomId), classroom::setValue)
+            setClassroomListener(classroomId)
+        }
+    }
+
+    private fun setClassroomListener(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("classrooms")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val classroomFirestore =
+                    snapshot.toObject(ClassroomFirestore::class.java)
+                Timber.wtf("classroom -> $classroomFirestore")
+                classroomFirestore?.let {
+                    val updatedClassroom = Classroom(
+                        classroomFirestore.uid,
+                        classroomFirestore.name,
+                        classroomFirestore.owner,
+                        classroomFirestore.ownerUid,
+                        classroomFirestore.userList,
+                        classroomFirestore.dateCreated.toString(),
+                        classroomFirestore.description,
+                        classroomFirestore.numberOfTasks
+                    )
+                    Timber.wtf("formatted classroom is -> $updatedClassroom")
+                    classroom.value=updatedClassroom
+
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
+        }
+    }
+
+    private fun setTsakListners(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("tasks")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val taskFirestore =
+                    snapshot.toObject(TaskFirestore::class.java)
+                Timber.wtf("classroom -> $taskFirestore")
+                taskFirestore?.let {
+                    val updatedTask = Task(taskFirestore.uid,taskFirestore.title,taskFirestore.description,taskFirestore.referenceLink,taskFirestore.startDate.toString(),taskFirestore.endDate.toString(),taskFirestore.classroomUid,taskFirestore.status)
+                    Timber.wtf("formatted classroom is -> $updatedTask")
+                    adapterList[updatedTask.uid] = updatedTask
+                    tasks.value = adapterList.values.toList()
+
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
         }
     }
 
@@ -73,7 +138,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-                                appRepository.insertTask(it.value)
+                                setTsakListners(it.key)
                             }
                         }
                     } catch (e: Exception) {

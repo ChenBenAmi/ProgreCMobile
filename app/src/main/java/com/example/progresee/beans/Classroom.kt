@@ -23,6 +23,19 @@ data class Classroom(
 )
 
 
+data class ClassroomFirestore(
+    val uid: String = "",
+    var name: String = "",
+    var owner: String ="",
+    var ownerUid: String="",
+    var userList: Map<String, String> = emptyMap(),
+    val dateCreated: Date = Date(),
+    var description: String = "",
+    var numberOfTasks: Int = 0
+)
+
+
+
 
 
 

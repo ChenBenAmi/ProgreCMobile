@@ -1,8 +1,8 @@
 package com.example.progresee.viewmodels
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.ClassroomFirestore
 import com.example.progresee.data.AppRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -22,7 +22,9 @@ class ClassroomViewModel constructor(
     val isAdmin
         get() = _isAdmin
 
-    val classrooms = appRepository.classrooms
+    private val adapterList = hashMapOf<String, Classroom>()
+    val classrooms = MutableLiveData<List<Classroom>>()
+
     val user = appRepository.getUser()
 
     private val _navigateToTaskFragment = MutableLiveData<String>()
@@ -38,10 +40,11 @@ class ClassroomViewModel constructor(
         get() = _showProgressBar
 
 
-    init{
+    init {
         getCurrentUser()
     }
-    fun getCurrentUser() {
+
+    private fun getCurrentUser() {
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
@@ -87,12 +90,12 @@ class ClassroomViewModel constructor(
                                         }
                                         val request2 =
                                             appRepository.getClassroomsAsync(token).await()
-
                                         if (request2.isSuccessful) {
                                             val classroomsData = request2.body()
                                             Timber.wtf("data -------->  $classroomsData")
                                             classroomsData?.forEach { classroomEntry ->
-                                                appRepository.insertClassroom(classroomEntry.value)
+                                                setListeners(classroomEntry.key)
+
                                             }
                                         } else Timber.wtf(" else 1 ${request2.code()}${request2.errorBody()} ${request2.message()}")
                                     } else Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
@@ -109,36 +112,74 @@ class ClassroomViewModel constructor(
         }
     }
 
-    fun onClassroomClicked(uid: String) {
-        _navigateToTaskFragment.value = uid
+   private fun setListeners(uid: String) {
+        val db = appRepository.getFirestoreDB()
+        val docRef = db.collection("classrooms")
+            .document(uid)
+
+        docRef.addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Timber.wtf("Listen failed $e")
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Timber.wtf("Current data: ${snapshot.data}")
+
+                val classroomFirestore =
+                    snapshot.toObject(ClassroomFirestore::class.java)
+                Timber.wtf("classroom -> $classroomFirestore")
+                classroomFirestore?.let {
+                    val updatedClassroom = Classroom(
+                        classroomFirestore.uid,
+                        classroomFirestore.name,
+                        classroomFirestore.owner,
+                        classroomFirestore.ownerUid,
+                        classroomFirestore.userList,
+                        classroomFirestore.dateCreated.toString(),
+                        classroomFirestore.description,
+                        classroomFirestore.numberOfTasks
+                    )
+                    Timber.wtf("formatted classroom is -> $updatedClassroom")
+                    adapterList[updatedClassroom.uid] = updatedClassroom
+                    classrooms.value = adapterList.values.toList()
+
+                }
+            } else {
+                Timber.wtf("Current data: null")
+            }
+        }
     }
+        fun onClassroomClicked(uid: String) {
+            _navigateToTaskFragment.value = uid
+        }
 
-    fun doneNavigateToTaskFragment() {
-        _navigateToTaskFragment.value = null
+        fun doneNavigateToTaskFragment() {
+            _navigateToTaskFragment.value = null
+        }
+
+        fun navigateToCreateClassroomFragment() {
+            _navigateToCreateClassroomFragment.value = true
+        }
+
+        fun doneNavigateToCreateClassroomFragment() {
+            _navigateToCreateClassroomFragment.value = null
+        }
+
+        override fun showProgressBar() {
+            _showProgressBar.value = true
+        }
+
+        override fun hideProgressBar() {
+            _showProgressBar.value = false
+        }
+
+
+        override fun onCleared() {
+            super.onCleared()
+            viewModelJob.cancel()
+            uiScope.cancel()
+
+        }
+
+
     }
-
-    fun navigateToCreateClassroomFragment() {
-        _navigateToCreateClassroomFragment.value = true
-    }
-
-    fun doneNavigateToCreateClassroomFragment() {
-        _navigateToCreateClassroomFragment.value = null
-    }
-
-    override fun showProgressBar() {
-        _showProgressBar.value = true
-    }
-
-    override fun hideProgressBar() {
-        _showProgressBar.value = false
-    }
-
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-        uiScope.cancel()
-    }
-
-
-}

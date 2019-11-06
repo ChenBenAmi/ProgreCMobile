@@ -7,7 +7,9 @@ import com.example.progresee.beans.*
 import com.example.progresee.data.database.AppDatabase
 import com.example.progresee.data.network.ApiService
 import com.example.progresee.data.network.apicalls.ApiCalls
+import com.firebase.ui.firestore.paging.FirestoreDataSource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import retrofit2.Response
 
@@ -16,6 +18,8 @@ class AppRepository constructor(
     private val network: ApiService
 ) {
 
+    private val firestoreDB = FirebaseFirestore.getInstance()
+    fun getFirestoreDB() = firestoreDB
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val currentUserEmail = firebaseAuth.currentUser?.email
     fun getCurrentUserEmail() = currentUserEmail
