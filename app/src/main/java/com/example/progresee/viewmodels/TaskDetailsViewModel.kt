@@ -27,6 +27,10 @@ class TaskDetailsViewModel constructor(
     val isAdmin
         get() = _isAdmin
 
+    private var _isEmpty = MutableLiveData<Boolean?>()
+    val isEmpty
+        get() = _isEmpty
+
     private val checkedList = mutableListOf<String>()
     fun getCheckedList() = checkedList
 
@@ -166,7 +170,7 @@ class TaskDetailsViewModel constructor(
     }
 
 
-    private fun fetchExercisesFromFirebase() {
+    fun fetchExercisesFromFirebase() {
         uiScope.launch {
             showProgressBar()
             withContext(Dispatchers.IO) {
@@ -182,6 +186,11 @@ class TaskDetailsViewModel constructor(
                             data?.forEach {
                                 Timber.wtf("the exercise id is " + it.key)
                                 setExerciseListeners(it.key)
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                _isEmpty.value = true
+                                Timber.wtf("no exercises available ${response.code()}")
                             }
                         }
                     } catch (e: Exception) {
@@ -242,8 +251,13 @@ class TaskDetailsViewModel constructor(
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach {
-                                setExerciseListeners(it.key)
+                            data?.let {
+                                data.forEach {
+                                    setExerciseListeners(it.key)
+                                }
+                                withContext(Dispatchers.Main) {
+                                    _isEmpty.value = null
+                                }
                             }
                         }
 

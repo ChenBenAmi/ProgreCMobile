@@ -115,26 +115,20 @@ class CreateTaskViewModel(
     }
 
     fun onSavePressed(title: String, description: String, link: String, date: String) {
-        Timber.wtf("hey")
+
         Timber.wtf(date)
-        var sentDate: String = ""
-        if (date == "00/00/0000") {
-            sentDate = "$day/${month.plus(1)}/$year"
-        } else {
-            sentDate = date
-        }
         when {
             title.length > 60 -> _stringLength.value = 1
             title.isEmpty() -> _stringLength.value = 2
             description.length > 100 -> _descriptionStringLength.value = 1
             description.isEmpty() -> _descriptionStringLength.value = 2
             else -> uiScope.launch {
-                Timber.wtf("hey1")
                 showProgressBar()
                 withContext(Dispatchers.IO) {
                     if (taskId == null) {
                         if (appRepository.currentToken.value != null) {
                             try {
+                                Timber.wtf("heyBEFOREREQ")
                                 val request =
                                     appRepository.createTaskAsync(
                                         appRepository.currentToken.value!!,
@@ -142,24 +136,21 @@ class CreateTaskViewModel(
                                         title,
                                         description,
                                         link,
-                                        sentDate
+                                        date
                                     ).await()
-                                Timber.wtf("hey2")
-
                                 if (request.isSuccessful) {
-                                    Timber.wtf("heySux3")
-
+                                    Timber.wtf("hey")
                                     val data = request.body()
                                     Timber.wtf(data.toString())
                                     data?.forEach {
-//                                        appRepository.insertTask(it.value)
                                     }
-
-
+                                    Timber.wtf("hey1")
                                     withContext(Dispatchers.Main) {
                                         hideProgressBar()
                                         _navigateBackToTaskFragment.value = true
                                     }
+                                } else {
+                                    Timber.wtf("req not successfull :( ${request.code()}")
                                 }
                             } catch (e: Exception) {
                                 Timber.wtf("${e.message}${e.printStackTrace()}")
@@ -173,7 +164,7 @@ class CreateTaskViewModel(
                             try {
                                 task.title = title
                                 task.description = description
-                                task.endDate = sentDate
+                                task.endDate = date
                                 task.referenceLink = link
                                 val request =
                                     appRepository.updateTaskAsync(

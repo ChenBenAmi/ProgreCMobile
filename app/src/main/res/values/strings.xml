@@ -87,6 +87,10 @@
     <string name="save_changes">Save Changes</string>
     <string name="update_exercises">Update exercises</string>
     <string name="update_exercises_status">Are you sure you want to update the status for %1$d exercises?</string>
+    <string name="no_classrooms_available">No Classrooms Available</string>
+    <string name="no_tasks_available">No Tasks Available</string>
+    <string name="no_exercises_available">No Exercises Available</string>
+    <string name="refresh">Refresh</string>
 
 
 </resources>

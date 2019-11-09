@@ -14,6 +14,7 @@ class ClassroomViewModel constructor(
 ) :
     BaseViewModel() {
 
+
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -23,6 +24,11 @@ class ClassroomViewModel constructor(
 
     private val adapterList = hashMapOf<String, Classroom>()
     val classrooms = MutableLiveData<List<Classroom>>()
+
+    private var _isEmpty = MutableLiveData<Boolean?>()
+    val isEmpty
+        get() = _isEmpty
+
 
     val user = appRepository.getUser()
 
@@ -43,7 +49,7 @@ class ClassroomViewModel constructor(
         getCurrentUser()
     }
 
-    private fun fetchClassrooms() {
+    fun fetchClassrooms() {
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -55,8 +61,14 @@ class ClassroomViewModel constructor(
                         classroomsData?.forEach { classroomEntry ->
                             setListeners(classroomEntry.key)
                         }
-                    } else Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
-                } catch (e:Exception) {
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            _isEmpty.value = true
+                            Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
+
+                        }
+                    }
+                } catch (e: Exception) {
                     Timber.wtf("${e.message}${e.message}${e.stackTrace}")
                 }
 
@@ -69,7 +81,7 @@ class ClassroomViewModel constructor(
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
-            if (currentUser?.email.equals("chen24201@gmail.com")) {
+            if (currentUser?.email.equals("hedsean@gmail.com")) {
                 _isAdmin.value = appRepository.isAdmin()
             } else {
                 _isAdmin.value = appRepository.notAdmin()

@@ -11,7 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.SharedElementCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -19,6 +22,7 @@ import com.example.progresee.R
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentCreateTaskBinding
 import com.example.progresee.viewmodels.CreateTaskViewModel
+import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_task.*
@@ -37,7 +41,7 @@ class CreateTaskFragment : Fragment() {
     private val year = c.get(Calendar.YEAR)
     private val month = c.get(Calendar.MONTH)
     private val day = c.get(Calendar.DAY_OF_MONTH)
-
+    private lateinit var classroomId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,22 +50,23 @@ class CreateTaskFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.supportActionBar?.title =
             context?.getString(R.string.create_task)
-
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
 
         val binding: FragmentCreateTaskBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_task, container, false)
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
 
 
         val args = CreateTaskFragmentArgs.fromBundle(arguments!!)
         val taskId = args.taskId
-        val classroomId = args.classroomId
+        classroomId = args.classroomId
         val createTaskViewModel: CreateTaskViewModel = getViewModel {
             parametersOf(
                 appRepository,
                 classroomId, taskId
             )
         }
+
 
         binding.lifecycleOwner = this
 
@@ -134,10 +139,22 @@ class CreateTaskFragment : Fragment() {
             }
         })
 
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(
+                    CreateTaskFragmentDirections.actionCreateTaskToTaskFragment(
+                        classroomId
+                    )
+                )
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
 
         return binding.root
     }
+
+
 
     private fun showSnackBar(id: Int) {
         Snackbar.make(
@@ -180,6 +197,5 @@ class CreateTaskFragment : Fragment() {
         dpd.show()
         current_end_date.visibility = View.VISIBLE
     }
-
 
 }

@@ -154,7 +154,15 @@ class TaskFragment : Fragment() {
             }
         })
 
-
+        taskViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+            if (it == true){
+                empty_tasks_view.visibility = View.VISIBLE
+                task_list.visibility = View.GONE
+            } else {
+                empty_tasks_view.visibility = View.GONE
+                task_list.visibility = View.VISIBLE
+            }
+        })
         return binding.root
 
     }
@@ -175,6 +183,9 @@ class TaskFragment : Fragment() {
                 }
                 R.id.add_user_menu_item -> {
                     addAlert()
+                }
+                R.id.refresh_task -> {
+                    taskViewModel.fetchTasksFromFirebase()
                 }
             }
             true

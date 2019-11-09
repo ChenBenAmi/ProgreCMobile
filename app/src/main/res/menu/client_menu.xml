@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+        android:id="@+id/refresh_client"
+        android:icon="@drawable/ic_refresh_24px"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
+
+
     <item
         android:id="@+id/save_progress_client"
         android:icon="@drawable/ic_note_add_24px"

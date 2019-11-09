@@ -23,14 +23,18 @@ class AppRepository constructor(
     private val currentUserEmail = firebaseAuth.currentUser?.email
     fun getCurrentUserEmail() = currentUserEmail
 
-    private var _currentToken = MutableLiveData<String?>()
 
     private var _isAdmin = MutableLiveData<Boolean?>()
     val isAdmin
         get() = _isAdmin
 
+    private var _currentToken = MutableLiveData<String?>()
     val currentToken: LiveData<String?>
         get() = _currentToken
+
+    fun removeToken() {
+        _currentToken.value = null
+    }
 
     fun setToken(token: String) {
         _currentToken.value = token

@@ -2,8 +2,11 @@ package com.example.progresee.views
 
 
 import android.os.Bundle
+import android.transition.Visibility
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.SharedElementCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,6 +29,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_classroom.*
 import kotlinx.android.synthetic.main.fragment_create_classroom.*
 import kotlinx.android.synthetic.main.fragment_create_classroom.layout_progress_bar
+import org.koin.android.ext.android.get
 import timber.log.Timber
 
 
@@ -62,8 +66,8 @@ class ClassroomFragment : Fragment() {
         classroomViewModel.isAdmin.observe(viewLifecycleOwner, Observer {
             if (it == false) {
                 createClassroom_button.hide()
-            } else if (it==true) {
-                owner=true
+            } else if (it == true) {
+                owner = true
             }
         })
 
@@ -83,6 +87,7 @@ class ClassroomFragment : Fragment() {
                 adapter.submitList(it)
                 classroom_list.visibility = View.VISIBLE
             }
+
         })
 
 
@@ -120,20 +125,28 @@ class ClassroomFragment : Fragment() {
         })
 
 
+        classroomViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                empty_classroom_view.visibility = View.VISIBLE
+                classroom_list.visibility = View.GONE
+            } else {
+                empty_classroom_view.visibility = View.GONE
+                classroom_list.visibility = View.VISIBLE
+            }
+        })
+
         return binding.root
 
     }
+
+
 
     //TODO change when network layer is ready
     private fun setItems() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.setting_menu_item -> {
-                    Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        "setting",
-                        Snackbar.LENGTH_LONG
-                    ).show()
+                R.id.refresh_classroom -> {
+                  classroomViewModel.fetchClassrooms()
                 }
                 R.id.logout_menu_item -> {
                     logout()
@@ -147,6 +160,7 @@ class ClassroomFragment : Fragment() {
     private fun logout() {
         AuthUI.getInstance().signOut(context!!.applicationContext)
             .addOnCompleteListener {
+                appRepository.removeToken()
                 this.findNavController()
                     .navigate(ClassroomFragmentDirections.actionClassroomFragmentToHomeFragment())
                 Snackbar.make(
@@ -156,6 +170,9 @@ class ClassroomFragment : Fragment() {
                 ).show()
             }
     }
+
+
+
 
     companion object {
         var owner = false

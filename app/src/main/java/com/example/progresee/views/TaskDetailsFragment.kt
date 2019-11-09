@@ -24,6 +24,7 @@ import com.example.progresee.databinding.FragmentTaskDetailsBinding
 import com.example.progresee.viewmodels.TaskDetailsViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_classroom.*
 import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.android.synthetic.main.fragment_task_details.*
 import org.koin.android.ext.android.inject
@@ -160,7 +161,15 @@ class TaskDetailsFragment : Fragment() {
             }
         })
 
-
+        taskDetailsViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+            if (it == true){
+                empty_exercises_list.visibility = View.VISIBLE
+                exercise_list.visibility = View.INVISIBLE
+            } else {
+                empty_exercises_list.visibility = View.GONE
+                exercise_list.visibility = View.VISIBLE
+            }
+        })
 
 
         return binding.root
@@ -179,9 +188,11 @@ class TaskDetailsFragment : Fragment() {
                 R.id.delete_task_menu_item -> {
                     deleteAlertTask()
                 }
-
                 R.id.see_progress_menu_item -> {
-//TODO See the entire graph
+                    //TODO See the entire graph
+                }
+                R.id.refresh_exercise -> {
+                    taskDetailsViewModel.fetchExercisesFromFirebase()
                 }
             }
             true
@@ -196,7 +207,11 @@ class TaskDetailsFragment : Fragment() {
                 R.id.save_progress_client -> {
                     updateExercisesStatus()
                 }
+                R.id.refresh_client -> {
+                    taskDetailsViewModel.fetchExercisesFromFirebase()
+                }
             }
+
             true
         }
     }

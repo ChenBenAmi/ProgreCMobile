@@ -9,7 +9,6 @@ import com.example.progresee.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
@@ -18,22 +17,15 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(progresee_toolbar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        progresee_toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24px)
         navController = this.findNavController(R.id.myNavHostFragment)
-        progresee_toolbar.elevation= 4.0F
-        progresee_toolbar.setNavigationOnClickListener {
-            when {
-                navController.currentDestination?.id == R.id.homeFragment -> exitApp()
-                else -> navController.navigateUp()
-            }
-
-        }
+        progresee_toolbar.elevation = 4.0F
     }
 
 
     override fun onBackPressed() {
         when {
             navController.currentDestination?.id == R.id.homeFragment -> exitApp()
+            navController.currentDestination?.id == R.id.classroomFragment -> exitApp()
             else -> super.onBackPressed()
         }
     }

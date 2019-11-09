@@ -18,9 +18,13 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val isAdmin
         get() = _isAdmin
 
+    private var _isEmpty = MutableLiveData<Boolean?>()
+    val isEmpty
+        get() = _isEmpty
+
     private val adapterList = hashMapOf<String, Task>()
 
-    private val _tasks=MutableLiveData<List<Task>>()
+    private val _tasks = MutableLiveData<List<Task>>()
     val tasks
         get() = _tasks
 
@@ -74,7 +78,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
                     Timber.wtf("formatted classroom is -> $it")
-                    classroom.value=it
+                    classroom.value = it
 
                 }
             } else {
@@ -111,7 +115,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         }
     }
 
-    private fun fetchTasksFromFirebase() {
+    fun fetchTasksFromFirebase() {
         uiScope.launch {
             showProgressBar()
             withContext(Dispatchers.IO) {
@@ -126,6 +130,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             Timber.wtf(data.toString())
                             data?.forEach {
                                 setTaskListeners(it.key)
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                _isEmpty.value = true
+                                Timber.wtf("no tasks available ${response.code()}")
                             }
                         }
                     } catch (e: Exception) {
@@ -151,7 +160,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach {
-//                                appRepository.deleteClassroomById(it.value)
+                                //                                appRepository.deleteClassroomById(it.value)
                             }
                         }
                     } catch (e: Exception) {
@@ -183,7 +192,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             if (data != null) {
                                 Timber.wtf(data.toString())
                                 data.forEach {
-//                                    appRepository.insertClassroom(it.value)
+                                    //                                    appRepository.insertClassroom(it.value)
                                 }
                                 withContext(Dispatchers.Main) {
                                     hideProgressBar()
@@ -200,9 +209,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
             }
         }
     }
-
-
-
 
 
     fun onTaskClicked(id: String) {

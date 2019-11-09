@@ -63,7 +63,9 @@
         android:label="CreateClassroomFragment">
         <action
             android:id="@+id/action_createClassroomFragment_to_classroomFragment"
-            app:destination="@id/classroomFragment" />
+            app:destination="@id/classroomFragment"
+            app:popUpTo="@+id/classroomFragment"
+            app:popUpToInclusive="false" />
         <argument
             android:name="classroomId"
             app:argType="string"
@@ -87,7 +89,7 @@
             app:destination="@id/classroomFragment" />
         <action
             android:id="@+id/action_taskFragment_to_userFragment"
-            app:destination="@id/userFragment"/>
+            app:destination="@id/userFragment" />
         <action
             android:id="@+id/action_taskFragment_to_createTask"
             app:destination="@id/createTask" />
@@ -139,7 +141,9 @@
         <action
             android:id="@+id/action_createTask_to_taskFragment"
             app:destination="@id/taskFragment"
-            app:popUpTo="@+id/taskFragment" />
+            app:launchSingleTop="false"
+            app:popUpTo="@+id/taskFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="classroomId"
             app:argType="string" />

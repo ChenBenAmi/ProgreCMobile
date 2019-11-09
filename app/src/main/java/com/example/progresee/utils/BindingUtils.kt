@@ -11,6 +11,11 @@ import com.example.progresee.R
 import com.example.progresee.beans.*
 import timber.log.Timber
 import java.util.*
+import androidx.core.content.ContextCompat.startActivity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 
 
 @BindingAdapter("setFullName")
@@ -98,14 +103,8 @@ fun TextView.setCurrentDate(a: Int) {
 fun TextView.setTaskDueDate(item: Task?) {
     item?.let {
 
-        val tempDate = item.endDate.substring(0, 10)
 
-        val year = tempDate.substring(0, 4)
-        val month = tempDate.substring(5, 7)
-        val day = tempDate.substring(8, 10)
-        val dateToShow = "$day/$month/$year"
-
-        text = context.getString(R.string.due_by, dateToShow)
+        text = context.getString(R.string.due_by, it.endDate)
     }
 }
 
@@ -128,8 +127,31 @@ fun TextView.setTaskDescription(item: Task?) {
 
 @BindingAdapter("setLinks")
 fun TextView.setLinks(item: Task?) {
-    item?.let {
-        text = it.referenceLink
+    item?.let { task ->
+        var url = task.referenceLink
+        this.setOnClickListener {
+            if (!url!!.startsWith("http://") && !url!!.startsWith("https://"))
+                url = "http://$url"
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            val packageManager = context.packageManager
+
+            val activities: List<ResolveInfo> = packageManager.queryIntentActivities(
+                browserIntent,
+                PackageManager.MATCH_DEFAULT_ONLY
+            )
+
+            // Always use string resources for UI text.
+            // This says something like "Share this photo with"
+//            val title = resources.getString(R.string.chooser_title)
+            // Create intent to show chooser
+//            val chooser = Intent.createChooser(intent, title)
+
+            // Verify the intent will resolve to at least one activity
+            if (browserIntent.resolveActivity(packageManager) != null) {
+                startActivity(context, browserIntent, null)
+            }
+        }
+        text = task.referenceLink
     }
 }
 
@@ -164,7 +186,10 @@ fun CheckBox.setUserFinishedRadio(item: FinishedUser?) {
     }
 }
 
-@BindingAdapter(value=["android:setRadioExercise", "android:setRadioUserEmail"], requireAll = true)
+@BindingAdapter(
+    value = ["android:setRadioExercise", "android:setRadioUserEmail"],
+    requireAll = true
+)
 fun CheckBox.setRadio(item: Exercise?, userEmail: String?) {
     item?.let { exercise ->
         userEmail?.let {

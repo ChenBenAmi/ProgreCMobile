@@ -43,7 +43,7 @@ class CreateClassroomFragment : Fragment() {
 
         val binding: FragmentCreateClassroomBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_create_classroom, container, false)
-
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
         binding.lifecycleOwner = this
         val arguments = TaskFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId

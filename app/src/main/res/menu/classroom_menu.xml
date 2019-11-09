@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+
+    <item
+    android:id="@+id/refresh_task"
+    android:icon="@drawable/ic_refresh_24px"
+    android:title="@string/refresh"
+    app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/edit_menu_item"
         android:icon="@drawable/ic_edit_24px"
