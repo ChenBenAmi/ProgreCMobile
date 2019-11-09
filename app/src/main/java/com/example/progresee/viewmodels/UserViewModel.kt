@@ -82,9 +82,10 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                         }
                     } catch (e: Exception) {
                         Timber.wtf("${e.message}${e.printStackTrace()}")
-                    }
-                    withContext(Dispatchers.Main) {
-                        hideProgressBar()
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }
@@ -145,134 +146,135 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     }
 
 
-        fun onUserClicked(user: User, context: Context, view: View) {
-            val popup = PopupMenu(context, view)
-            popup.inflate(R.menu.users_menu)
-            popup.setOnMenuItemClickListener { item: MenuItem? ->
-                when (item!!.itemId) {
-                    R.id.remove_user -> {
-                        showRemoveUserDialog(user.fullName, user.uid)
-                    }
-                    R.id.transfer -> {
-                        showTransferDialog(user.fullName, user.uid)
-                    }
+    fun onUserClicked(user: User, context: Context, view: View) {
+        val popup = PopupMenu(context, view)
+        popup.inflate(R.menu.users_menu)
+        popup.setOnMenuItemClickListener { item: MenuItem? ->
+            when (item!!.itemId) {
+                R.id.remove_user -> {
+                    showRemoveUserDialog(user.fullName, user.uid)
                 }
-                true
-            }
-            popup.show()
-        }
-
-
-        fun transferClassroom(userUid: String) {
-            uiScope.launch {
-                showProgressBar()
-                withContext(Dispatchers.IO) {
-                    if (appRepository.currentToken.value != null) {
-                        try {
-                            val request = appRepository.transferClassroomAsync(
-                                appRepository.currentToken.value!!,
-                                classroomId,
-                                userUid
-                            ).await()
-                            if (request.isSuccessful) {
-                                val data = request.body()
-                                data?.forEach {
-//                                    appRepository.insertClassroom(it.value)
-                                }
-                                withContext(Dispatchers.Main) {
-                                    hideProgressBar()
-                                    showTransferSuccessful()
-                                }
-                            } else Timber.wtf("${request.code()}${request.errorBody()}")
-                        } catch (e: Exception) {
-                            Timber.wtf("${e.printStackTrace()}${e.message}")
-                        }
-                    }
-                }
-
-            }
-        }
-
-        fun removeUser(userUid: String) {
-            uiScope.launch {
-                showProgressBar()
-                withContext(Dispatchers.IO) {
-                    if (appRepository.currentToken.value != null) {
-                        try {
-                            val request = appRepository.removeUserAsync(
-                                appRepository.currentToken.value!!,
-                                classroomId,
-                                userUid
-                            ).await()
-                            if (request.isSuccessful) {
-                                val data = request.body()
-                                data?.forEach {
-//                                    appRepository.insertClassroom(it.value)
-//                                    appRepository.removeUser(userUid)
-                                }
-                                withContext(Dispatchers.Main) {
-                                    hideProgressBar()
-                                    showRemovedUser()
-                                }
-                            } else Timber.wtf("${request.code()}${request.errorBody()}")
-                        } catch (e: Exception) {
-                            Timber.wtf("${e.printStackTrace()}${e.message}")
-                        }
-                    }
+                R.id.transfer -> {
+                    showTransferDialog(user.fullName, user.uid)
                 }
             }
+            true
         }
-
-
-        override fun navigate() {
-            super.navigate()
-        }
-
-        override fun onDoneNavigating() {
-            super.onDoneNavigating()
-        }
-
-        override fun showProgressBar() {
-            super.showProgressBar()
-            _showProgressBar.value = true
-        }
-
-        override fun hideProgressBar() {
-            super.hideProgressBar()
-            _showProgressBar.value = null
-        }
-
-        private fun showRemoveUserDialog(userName: String, userUid: String) {
-            _removeUser.value = userName to userUid
-        }
-
-        fun hideRemoveUserDialog() {
-            _removeUser.value = null
-        }
-
-        private fun showTransferDialog(userName: String, userUid: String) {
-            _transfer.value = userName to userUid
-        }
-
-        fun hideTransferDialog() {
-            _transfer.value = null
-        }
-
-        private fun showTransferSuccessful() {
-            _transferSuccessful.value = true
-        }
-
-        fun hideTransferSuccessful() {
-            _transferSuccessful.value = null
-        }
-
-        private fun showRemovedUser() {
-            _removedUserSnackBar.value = true
-        }
-
-        fun hideRemoveUserSnackBar() {
-            _removedUserSnackBar.value = null
-        }
-
-
+        popup.show()
     }
+
+
+    fun transferClassroom(userUid: String) {
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        val request = appRepository.transferClassroomAsync(
+                            appRepository.currentToken.value!!,
+                            classroomId,
+                            userUid
+                        ).await()
+                        if (request.isSuccessful) {
+                            val data = request.body()
+                            data?.forEach {
+                                //                                    appRepository.insertClassroom(it.value)
+                            }
+                            withContext(Dispatchers.Main) {
+                                hideProgressBar()
+                                showTransferSuccessful()
+                            }
+                        } else Timber.wtf("${request.code()}${request.errorBody()}")
+                    } catch (e: Exception) {
+                        Timber.wtf("${e.printStackTrace()}${e.message}")
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun removeUser(userUid: String) {
+        uiScope.launch {
+            showProgressBar()
+            withContext(Dispatchers.IO) {
+                if (appRepository.currentToken.value != null) {
+                    try {
+                        val request = appRepository.removeUserAsync(
+                            appRepository.currentToken.value!!,
+                            classroomId,
+                            userUid
+                        ).await()
+                        if (request.isSuccessful) {
+                            val data = request.body()
+                            data?.forEach {
+                            }
+                            withContext(Dispatchers.Main) {
+                                showRemovedUser()
+                            }
+                        } else Timber.wtf("${request.code()}${request.errorBody()}")
+                    } catch (e: Exception) {
+                        Timber.wtf("${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    override fun navigate() {
+        super.navigate()
+    }
+
+    override fun onDoneNavigating() {
+        super.onDoneNavigating()
+    }
+
+    override fun showProgressBar() {
+        super.showProgressBar()
+        _showProgressBar.value = true
+    }
+
+    override fun hideProgressBar() {
+        super.hideProgressBar()
+        _showProgressBar.value = null
+    }
+
+    private fun showRemoveUserDialog(userName: String, userUid: String) {
+        _removeUser.value = userName to userUid
+    }
+
+    fun hideRemoveUserDialog() {
+        _removeUser.value = null
+    }
+
+    private fun showTransferDialog(userName: String, userUid: String) {
+        _transfer.value = userName to userUid
+    }
+
+    fun hideTransferDialog() {
+        _transfer.value = null
+    }
+
+    private fun showTransferSuccessful() {
+        _transferSuccessful.value = true
+    }
+
+    fun hideTransferSuccessful() {
+        _transferSuccessful.value = null
+    }
+
+    private fun showRemovedUser() {
+        _removedUserSnackBar.value = true
+    }
+
+    fun hideRemoveUserSnackBar() {
+        _removedUserSnackBar.value = null
+    }
+
+
+}

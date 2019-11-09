@@ -259,14 +259,16 @@ class TaskDetailsViewModel constructor(
                                     _isEmpty.value = null
                                 }
                             }
+                            withContext(Dispatchers.Main) {
+                                showSnackBar()
+                            }
                         }
-
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
                     } finally {
                         withContext(Dispatchers.Main) {
                             hideProgressBar()
-                            showSnackBar()
+
                         }
                     }
                 }

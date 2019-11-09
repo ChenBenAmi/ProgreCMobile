@@ -139,10 +139,13 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }
-            hideProgressBar()
         }
     }
 
@@ -162,14 +165,20 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             data?.forEach {
                                 //                                appRepository.deleteClassroomById(it.value)
                             }
+                            withContext(Dispatchers.Main) {
+                                onClassroomDeleted()
+                            }
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }
-            hideProgressBar()
-            onClassroomDeleted()
+
         }
 
     }
@@ -195,7 +204,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                                     //                                    appRepository.insertClassroom(it.value)
                                 }
                                 withContext(Dispatchers.Main) {
-                                    hideProgressBar()
                                     showSnackBar()
                                 }
                             }
@@ -204,6 +212,10 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         }
                     } catch (e: Exception) {
                         Timber.wtf("${e.message}${e.printStackTrace()}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }

@@ -72,7 +72,7 @@ class CreateTaskViewModel(
                 Timber.wtf("classroom -> $taskFirestore")
                 taskFirestore?.let {
                     Timber.wtf("formatted classroom is -> $it")
-                    task.value=it
+                    task.value = it
                 }
             } else {
                 Timber.wtf("Current data: null")
@@ -146,7 +146,6 @@ class CreateTaskViewModel(
                                     }
                                     Timber.wtf("hey1")
                                     withContext(Dispatchers.Main) {
-                                        hideProgressBar()
                                         _navigateBackToTaskFragment.value = true
                                     }
                                 } else {
@@ -154,40 +153,47 @@ class CreateTaskViewModel(
                                 }
                             } catch (e: Exception) {
                                 Timber.wtf("${e.message}${e.printStackTrace()}")
+                            } finally {
+                                withContext(Dispatchers.Main) {
+                                    hideProgressBar()
+                                }
                             }
-                        }
-                    } else {
-                        val task = getTask().value
+                        } else {
+                            val task = getTask().value
 
-                        Timber.wtf(task.toString())
-                        if (task != null) {
-                            try {
-                                task.title = title
-                                task.description = description
-                                task.endDate = date
-                                task.referenceLink = link
-                                val request =
-                                    appRepository.updateTaskAsync(
-                                        appRepository.currentToken.value!!,
-                                        classroomId,
-                                        task
-                                    )
-                                        .await()
-                                if (request.isSuccessful) {
-                                    val data = request.body()
-                                    data?.forEach {
-//                                        appRepository.updateTask(task)
+                            Timber.wtf(task.toString())
+                            if (task != null) {
+                                try {
+                                    task.title = title
+                                    task.description = description
+                                    task.endDate = date
+                                    task.referenceLink = link
+                                    val request =
+                                        appRepository.updateTaskAsync(
+                                            appRepository.currentToken.value!!,
+                                            classroomId,
+                                            task
+                                        )
+                                            .await()
+                                    if (request.isSuccessful) {
+                                        val data = request.body()
+                                        data?.forEach {
+                                            //                                        appRepository.updateTask(task)
+                                        }
+
+                                        withContext(Dispatchers.Main) {
+                                            navigateBackToTaskFragment.value = true
+                                        }
+                                    } else {
+                                        Timber.wtf("${request.code()}${request.raw()}")
                                     }
-
+                                } catch (e: Exception) {
+                                    Timber.wtf("oh no something went wrong!${e.printStackTrace()}${e.message}")
+                                } finally {
                                     withContext(Dispatchers.Main) {
                                         hideProgressBar()
-                                        navigateBackToTaskFragment.value = true
                                     }
-                                } else {
-                                    Timber.wtf("${request.code()}${request.raw()}")
                                 }
-                            } catch (e: Exception) {
-                                Timber.wtf("oh no something went wrong!${e.printStackTrace()}${e.message}")
                             }
                         }
                     }

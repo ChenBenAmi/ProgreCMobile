@@ -55,16 +55,19 @@ class UsersFinishedViewModel(
                                 val finishedUser = FinishedUser(it.key, it.value, exerciseId)
                                 adapterList[it.key] = finishedUser
                                 withContext(Dispatchers.Main) {
-                                _usersFinished.value = adapterList.values.toList()
+                                    _usersFinished.value = adapterList.values.toList()
                                 }
                             }
                         }
                     } catch (e: Exception) {
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
+                    } finally {
+                        withContext(Dispatchers.Main) {
+                            hideProgressBar()
+                        }
                     }
                 }
             }
-            hideProgressBar()
         }
     }
 
