@@ -124,7 +124,7 @@ class TaskDetailsFragment : Fragment() {
 
         taskDetailsViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showExerciseAdded()
+                showSnackBar("Exercise added")
                 taskDetailsViewModel.snackBarShown()
             }
         })
@@ -176,6 +176,19 @@ class TaskDetailsFragment : Fragment() {
             if (it == true){
                 this.findNavController().navigate(TaskDetailsFragmentDirections.actionTaskDetailsFragmentToClassroomFragment())
                 taskDetailsViewModel.onDoneNavigatingToClassroomFragment()
+            }
+        })
+
+        taskDetailsViewModel.showSnackBarClassroom.observe(viewLifecycleOwner, Observer {
+            if (it==true) {
+                showSnackBar("Classroom has been deleted :(")
+                taskDetailsViewModel.hideSnackBarClassroom()
+            }
+        })
+        taskDetailsViewModel.showSnackBarTask.observe(viewLifecycleOwner, Observer {
+            if (it==true) {
+                showSnackBar("Task has been deleted :(")
+                taskDetailsViewModel.hideSnackBarTask()
             }
         })
 
@@ -278,10 +291,10 @@ class TaskDetailsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showExerciseAdded() {
+    private fun showSnackBar(message:String) {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            "Exercise added",
+            message,
             Snackbar.LENGTH_LONG
         ).show()
     }

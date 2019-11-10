@@ -127,7 +127,7 @@ class TaskFragment : Fragment() {
 
         taskViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showUserAdded()
+                showSnackBar("User added")
                 taskViewModel.snackBarShown()
             }
         })
@@ -161,6 +161,13 @@ class TaskFragment : Fragment() {
             } else {
                 empty_tasks_view.visibility = View.GONE
                 task_list.visibility = View.VISIBLE
+            }
+        })
+
+        taskViewModel.showSnackBarClassroom.observe(viewLifecycleOwner, Observer {
+            if (it==true) {
+                showSnackBar("The classroom has been deleted :(")
+                taskViewModel.hideSnackBarClassroomDeleted()
             }
         })
         return binding.root
@@ -211,10 +218,10 @@ class TaskFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showUserAdded() {
+    private fun showSnackBar(message:String) {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            "User added",
+            message,
             Snackbar.LENGTH_LONG
         ).show()
     }

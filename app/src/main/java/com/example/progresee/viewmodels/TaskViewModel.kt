@@ -39,6 +39,9 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val showSnackBar
         get() = _showSnackBar
 
+    private val _showSnackBarClassroom = MutableLiveData<Boolean?>()
+    val showSnackBarClassroom
+        get() = _showSnackBarClassroom
 
     private val _navigateTooTaskDetailsFragment = MutableLiveData<String>()
     val navigateToTaskDetailsFragment
@@ -82,6 +85,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         classroom.value = it
                     } else {
                         if (!appRepository.isAdmin()){
+                            showSnackBarClassroomDeleted()
                             onClassroomDeleted()
                         }
                     }
@@ -267,6 +271,13 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
 
     override fun snackBarShown() {
         _showSnackBar.value = null
+    }
+
+    fun showSnackBarClassroomDeleted() {
+        _showSnackBarClassroom.value=true
+    }
+    fun hideSnackBarClassroomDeleted() {
+        _showSnackBarClassroom.value=null
     }
 
     override fun onCleared() {

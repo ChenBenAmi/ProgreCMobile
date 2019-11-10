@@ -70,6 +70,14 @@ class TaskDetailsViewModel constructor(
     val showSnackBar
         get() = _showSnackBar
 
+    private val _showSnackBarClassroom = MutableLiveData<Boolean?>()
+    val showSnackBarClassroom
+        get() = _showSnackBarClassroom
+
+    private val _showSnackBarTask = MutableLiveData<Boolean?>()
+    val showSnackBarTask
+        get() = _showSnackBarTask
+
     private val _editExercise = MutableLiveData<Exercise?>()
     val editExercise
         get() = _editExercise
@@ -81,6 +89,7 @@ class TaskDetailsViewModel constructor(
     private val _createExerciseAlert = MutableLiveData<Boolean?>()
     val createExerciseAlert
         get() = _createExerciseAlert
+
 
 
     init {
@@ -148,6 +157,7 @@ class TaskDetailsViewModel constructor(
                         task.value = it
                     } else {
                         if (!appRepository.isAdmin()) {
+
                             navigate()
                         }
                     }
@@ -446,6 +456,22 @@ class TaskDetailsViewModel constructor(
 
     override fun navigate() {
         _navigateTooTaskFragment.value = true
+    }
+
+    fun showSnackBarClassroom() {
+        _showSnackBarClassroom.value=true
+    }
+
+    fun hideSnackBarClassroom() {
+        _showSnackBarClassroom.value=null
+    }
+
+    fun showSnackBarTask() {
+        _showSnackBarTask.value=true
+    }
+
+    fun hideSnackBarTask() {
+        _showSnackBarTask.value=null
     }
 
     fun onDoneNavigatingToUsersFinished() {
