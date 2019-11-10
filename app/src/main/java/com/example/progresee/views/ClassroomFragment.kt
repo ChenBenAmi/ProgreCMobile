@@ -142,7 +142,6 @@ class ClassroomFragment : Fragment() {
 
 
 
-    //TODO change when network layer is ready
     private fun setItems() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {

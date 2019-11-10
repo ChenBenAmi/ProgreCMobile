@@ -42,6 +42,8 @@ class UserFragment : Fragment() {
 
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
+        (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.users_in_classroom_menu)
+        setItems()
 
         val binding: FragmentUsersBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_users, container, false)
@@ -96,7 +98,21 @@ class UserFragment : Fragment() {
                 showRemovedUserSnackBar()
             }
         })
-        
+
+        userViewModel.navigateBackToClassroomFragment.observe(viewLifecycleOwner, Observer {
+            if (it == true){
+                this.findNavController().navigate(UserFragmentDirections.actionUserFragmentToClassroomFragment())
+                userViewModel.doneNavigateToClassroomFragment()
+            }
+        })
+
+        userViewModel.showSnackBarClassroom.observe(viewLifecycleOwner, Observer {
+            if (it == true){
+                showSnackBar("Classroom has been deleted :(")
+                userViewModel.hideSnackBarClassroomDeleted()
+            }
+        })
+
         return binding.root
     }
 
@@ -157,4 +173,22 @@ class UserFragment : Fragment() {
     }
 
 
+    private fun setItems() {
+        (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.refresh_users_in_classroom -> {
+                    userViewModel.loadUsers()
+                }
+            }
+            true
+        }
+    }
+
+    private fun showSnackBar(message:String) {
+        Snackbar.make(
+            activity!!.findViewById(android.R.id.content),
+            message,
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
 }

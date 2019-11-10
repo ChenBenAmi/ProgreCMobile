@@ -54,13 +54,20 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     val showProgressBar
         get() = _showProgressBar
 
+    private val _showSnackBarClassroom = MutableLiveData<Boolean?>()
+    val showSnackBarClassroom
+        get() = _showSnackBarClassroom
+
+    private val _navigateBackToClassroomFragment = MutableLiveData<Boolean?>()
+    val navigateBackToClassroomFragment
+        get() = _navigateBackToClassroomFragment
+
     init {
-        //TODO WHEN CLASSROOM DELETED
         setClassroomListener(classroomId)
         loadUsers()
     }
 
-    private fun loadUsers() {
+    fun loadUsers() {
         uiScope.launch {
             showProgressBar()
             withContext(Dispatchers.IO) {
@@ -109,9 +116,15 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    Timber.wtf("formatted classroom is -> $it")
-                    classroom.value = it
-
+                    if (!it.archived) {
+                        Timber.wtf("formatted classroom is -> $it")
+                        classroom.value = it
+                    } else {
+                        if (appRepository.isAdmin.value == false) {
+                            showSnackBarClassroomDeleted()
+                            onClassroomDeleted()
+                        }
+                    }
                 }
             } else {
                 Timber.wtf("Current data: null")
@@ -177,8 +190,8 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                         ).await()
                         if (request.isSuccessful) {
                             val data = request.body()
-                            data?.forEach {
-                                //                                    appRepository.insertClassroom(it.value)
+                            data?.let{
+                                loadUsers()
                             }
                             withContext(Dispatchers.Main) {
                                 hideProgressBar()
@@ -207,8 +220,9 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                         ).await()
                         if (request.isSuccessful) {
                             val data = request.body()
-                            data?.forEach {
-                            }
+                           data?.let{
+                               loadUsers()
+                           }
                             withContext(Dispatchers.Main) {
                                 showRemovedUser()
                             }
@@ -226,13 +240,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     }
 
 
-    override fun navigate() {
-        super.navigate()
-    }
 
-    override fun onDoneNavigating() {
-        super.onDoneNavigating()
-    }
 
     override fun showProgressBar() {
         super.showProgressBar()
@@ -276,5 +284,20 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
         _removedUserSnackBar.value = null
     }
 
+    fun showSnackBarClassroomDeleted() {
+        _showSnackBarClassroom.value = true
+    }
+
+    fun hideSnackBarClassroomDeleted() {
+        _showSnackBarClassroom.value = null
+    }
+
+    private fun onClassroomDeleted() {
+        _navigateBackToClassroomFragment.value = true
+    }
+
+    fun doneNavigateToClassroomFragment() {
+        _navigateBackToClassroomFragment.value = null
+    }
 
 }

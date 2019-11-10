@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
     <item
-    android:id="@+id/refresh_task"
-    android:icon="@drawable/ic_refresh_24px"
-    android:title="@string/refresh"
-    app:showAsAction="ifRoom" />
+        android:id="@+id/refresh_task"
+        android:icon="@drawable/ic_refresh_24px"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/edit_menu_item"
@@ -16,23 +15,20 @@
         android:title="@string/edit"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/delete_menu_item"
-        android:icon="@drawable/ic_delete_24px"
-        android:title="@string/delete"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/add_user_menu_item"
         android:icon="@drawable/ic_person_add_24px"
         android:title="@string/add_user"
         app:showAsAction="ifRoom" />
-
+    <item
+        android:id="@+id/delete_menu_item"
+        android:icon="@drawable/ic_delete_24px"
+        android:title="@string/delete"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/leave_menu_item"
         android:title="@string/leave_classroom"
         android:visible="false"
         app:showAsAction="never" />
-
 
 
 </menu>

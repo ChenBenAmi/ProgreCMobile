@@ -185,9 +185,8 @@ fun CheckBox.setUserFinishedRadio(item: FinishedUser?) {
 fun CheckBox.setRadio(item: Exercise?, userEmail: String?) {
     item?.let { exercise ->
         userEmail?.let {
-            if (exercise.finishedUsersList[it] != "N/A") {
-                this.isChecked = true
-            }
+            Timber.wtf("exercise setRadio -> ${exercise.finishedUsersList}" )
+            this.isChecked = exercise.finishedUsersList[it] != "N/A"
         }
     }
 }

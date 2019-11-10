@@ -136,7 +136,9 @@
         android:label="UserFragment" >
         <action
             android:id="@+id/action_userFragment_to_classroomFragment"
-            app:destination="@id/classroomFragment" />
+            app:destination="@id/classroomFragment"
+            app:popUpTo="@+id/classroomFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="classroomId"
             app:argType="string" />
