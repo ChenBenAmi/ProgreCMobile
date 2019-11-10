@@ -6,7 +6,8 @@
         android:title="@string/remove_user" />
     <item
         android:id="@+id/transfer"
-        android:title="@string/transfer_ownership" />
+        android:title="@string/transfer_ownership"
+        android:visible="false"/>
 
 
 </menu>
