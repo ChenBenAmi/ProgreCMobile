@@ -134,6 +134,7 @@ class ClassroomFragment : Fragment() {
                 classroom_list.visibility = View.VISIBLE
             }
         })
+        appRepository.setUserEmail()
 
         return binding.root
 

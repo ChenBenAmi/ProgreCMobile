@@ -230,7 +230,7 @@ class TaskFragment : Fragment() {
         val builder = AlertDialog.Builder(context!!)
         val emailText = EditText(context)
         emailText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-        builder.setTitle(R.string.add_person)
+        builder.setTitle(R.string.add_user)
         builder.setMessage(R.string.enter_user_email)
         builder.setView(emailText)
         builder.setPositiveButton("Confirm") { dialog, which ->

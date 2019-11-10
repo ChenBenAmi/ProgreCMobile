@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import retrofit2.Response
+import timber.log.Timber
 
 class AppRepository constructor(
 
@@ -20,8 +21,13 @@ class AppRepository constructor(
     private val firestoreDB = FirebaseFirestore.getInstance()
     fun getFirestoreDB() = firestoreDB
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val currentUserEmail = firebaseAuth.currentUser?.email
+
+    private var currentUserEmail = firebaseAuth.currentUser?.email
     fun getCurrentUserEmail() = currentUserEmail
+
+    fun setUserEmail() {
+        currentUserEmail=firebaseAuth.currentUser?.email
+    }
 
 
     private var _isAdmin = MutableLiveData<Boolean?>()
@@ -221,6 +227,7 @@ class AppRepository constructor(
     ): Deferred<Response<Map<String, Exercise>>> {
         return apiCalls.updateStatusAsync(token, classroomId, taskId, exerciseId)
     }
+
 
 
 }

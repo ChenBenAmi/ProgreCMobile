@@ -59,7 +59,7 @@
     <string name="please_wait">Please wait ...</string>
     <string name="saving">Saving...</string>
     <string name="owner">Owner</string>
-    <string name="add_person">Add person</string>
+    <string name="add_user">Add user</string>
     <string name="leave_classroom">Leave classroom</string>
     <string name="transfer_ownership">Transfer ownership</string>
     <string name="remove_user">Remove user</string>
