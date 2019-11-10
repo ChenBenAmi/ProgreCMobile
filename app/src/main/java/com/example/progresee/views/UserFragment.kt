@@ -73,6 +73,7 @@ class UserFragment : Fragment() {
         userViewModel.users.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
+                adapter.notifyDataSetChanged()
             }
         })
 

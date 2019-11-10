@@ -67,7 +67,7 @@ interface ApiCalls {
     @PUT("user/removeUser")
     fun removeUserAsync(
         @Header("Authorization") token: String, @Query("classroomId") classroomId: String, @Query("userId") userId: String
-    ): Deferred<Response<Map<String, Classroom>>>
+    ): Deferred<Response<Map<String, String>>>
 
     //Task Controller
     @GET("task/getAllTasks")

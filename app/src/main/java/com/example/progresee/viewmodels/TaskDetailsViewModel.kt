@@ -329,8 +329,15 @@ class TaskDetailsViewModel constructor(
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach { _ ->
+                            data?.let {
+
+                                withContext(Dispatchers.Main) {
+
+                                    adapterList.remove(uid)
+                                    exercises.value=adapterList.values.toList()
+                                }
                                 fetchExercisesFromFirebase()
+
                             }
                         }
                     } catch (e: Exception) {

@@ -123,7 +123,7 @@ class AppRepository constructor(
         token: String,
         classroomId: String,
         userId: String
-    ): Deferred<Response<Map<String, Classroom>>> {
+    ): Deferred<Response<Map<String, String>>> {
         return apiCalls.removeUserAsync(token, classroomId, userId)
     }
 

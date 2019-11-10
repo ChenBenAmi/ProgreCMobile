@@ -143,7 +143,6 @@ class ClassroomViewModel constructor(
             .document(uid)
 
         docRef.addSnapshotListener { snapshot, e ->
-
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }

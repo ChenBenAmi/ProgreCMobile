@@ -221,6 +221,10 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                         if (request.isSuccessful) {
                             val data = request.body()
                            data?.let{
+                               withContext(Dispatchers.Main) {
+                                   adapterList.remove(userUid)
+                                   users.value=adapterList.values.toList()
+                               }
                                loadUsers()
                            }
                             withContext(Dispatchers.Main) {
@@ -228,7 +232,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                             }
                         } else Timber.wtf("${request.code()}${request.errorBody()}")
                     } catch (e: Exception) {
-                        Timber.wtf("${e.printStackTrace()}${e.message}")
+                        Timber.wtf("${e.printStackTrace()}${e.cause}")
                     } finally {
                         withContext(Dispatchers.Main) {
                             hideProgressBar()
