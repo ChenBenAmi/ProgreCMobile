@@ -58,8 +58,15 @@ class ClassroomViewModel constructor(
                     if (request.isSuccessful) {
                         val classroomsData = request.body()
                         Timber.wtf("data -------->  $classroomsData")
-                        classroomsData?.forEach { classroomEntry ->
-                            setListeners(classroomEntry.key)
+                        classroomsData?.let {
+                            if (it.isNotEmpty()) {
+                                withContext(Dispatchers.Main) {
+                                    _isEmpty.value = false
+                                }
+                                classroomsData.forEach { classroomEntry ->
+                                    setListeners(classroomEntry.key)
+                                }
+                            }
                         }
                     } else {
                         withContext(Dispatchers.Main) {

@@ -91,7 +91,6 @@ class TaskDetailsViewModel constructor(
         get() = _createExerciseAlert
 
 
-
     init {
         setClassroomListener(classroomId)
         setTaskListeners(taskId)
@@ -124,7 +123,8 @@ class TaskDetailsViewModel constructor(
                         Timber.wtf("formatted classroom is -> $it")
                         classroom.value = it
                     } else {
-                        if (appRepository.isAdmin()) {
+                        if (appRepository.isAdmin.value == false) {
+                            showSnackBarClassroom()
                             navigatingToClassroomFragment()
                         }
                     }
@@ -156,8 +156,8 @@ class TaskDetailsViewModel constructor(
                         Timber.wtf("formatted task is -> $it")
                         task.value = it
                     } else {
-                        if (!appRepository.isAdmin()) {
-
+                        if (appRepository.isAdmin.value == false) {
+                            showSnackBarTask()
                             navigate()
                         }
                     }
@@ -208,10 +208,16 @@ class TaskDetailsViewModel constructor(
                         ).await()
                         if (response.isSuccessful) {
                             val data = response.body()
-                            Timber.wtf(data.toString())
-                            data?.forEach {
-                                Timber.wtf("the exercise id is " + it.key)
-                                setExerciseListeners(it.key)
+                            data?.let {
+
+                                if (it.isNotEmpty()) {
+                                    withContext(Dispatchers.Main) {
+                                        _isEmpty.value = false
+                                    }
+                                    data.forEach { exercise ->
+                                        setExerciseListeners(exercise.key)
+                                    }
+                                }
                             }
                         } else {
                             withContext(Dispatchers.Main) {
@@ -459,19 +465,19 @@ class TaskDetailsViewModel constructor(
     }
 
     fun showSnackBarClassroom() {
-        _showSnackBarClassroom.value=true
+        _showSnackBarClassroom.value = true
     }
 
     fun hideSnackBarClassroom() {
-        _showSnackBarClassroom.value=null
+        _showSnackBarClassroom.value = null
     }
 
     fun showSnackBarTask() {
-        _showSnackBarTask.value=true
+        _showSnackBarTask.value = true
     }
 
     fun hideSnackBarTask() {
-        _showSnackBarTask.value=null
+        _showSnackBarTask.value = null
     }
 
     fun onDoneNavigatingToUsersFinished() {

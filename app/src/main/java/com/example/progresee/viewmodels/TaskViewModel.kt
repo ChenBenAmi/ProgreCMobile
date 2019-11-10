@@ -84,7 +84,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         Timber.wtf("formatted classroom is -> $it")
                         classroom.value = it
                     } else {
-                        if (!appRepository.isAdmin()){
+                        if (appRepository.isAdmin.value == false) {
                             showSnackBarClassroomDeleted()
                             onClassroomDeleted()
                         }
@@ -138,8 +138,15 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach {
-                                setTaskListeners(it.key)
+                            data?.let {
+                                if (it.isNotEmpty()) {
+                                    withContext(Dispatchers.Main) {
+                                        _isEmpty.value = false
+                                    }
+                                    data.forEach { task ->
+                                        setTaskListeners(task.key)
+                                    }
+                                }
                             }
                         } else {
                             withContext(Dispatchers.Main) {
@@ -274,10 +281,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     }
 
     fun showSnackBarClassroomDeleted() {
-        _showSnackBarClassroom.value=true
+        _showSnackBarClassroom.value = true
     }
+
     fun hideSnackBarClassroomDeleted() {
-        _showSnackBarClassroom.value=null
+        _showSnackBarClassroom.value = null
     }
 
     override fun onCleared() {

@@ -84,12 +84,12 @@ class TaskDetailsFragment : Fragment() {
         binding.taskDetailsViewModel = taskDetailsViewModel
         val manager = LinearLayoutManager(context)
         binding.exerciseList.layoutManager = manager
-        val userEmail=appRepository.getCurrentUserEmail()
+        val userEmail = appRepository.getCurrentUserEmail()
         val adapter = ExerciseAdapter(ExerciseClickListener { exercise, context, view ->
             taskDetailsViewModel.onExerciseClicked(exercise, context, view)
         }, CheckedListener {
             taskDetailsViewModel.onExerciseChecked(it)
-        },userEmail!!
+        }, userEmail!!
 
         )
         binding.exerciseList.adapter = adapter
@@ -162,7 +162,7 @@ class TaskDetailsFragment : Fragment() {
         })
 
         taskDetailsViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
-            if (it == true){
+            if (it == true) {
                 empty_exercises_list.visibility = View.VISIBLE
                 exercise_list.visibility = View.INVISIBLE
             } else {
@@ -173,20 +173,21 @@ class TaskDetailsFragment : Fragment() {
 
 
         taskDetailsViewModel.navigateToClassroomFragment.observe(viewLifecycleOwner, Observer {
-            if (it == true){
-                this.findNavController().navigate(TaskDetailsFragmentDirections.actionTaskDetailsFragmentToClassroomFragment())
+            if (it == true) {
+                this.findNavController()
+                    .navigate(TaskDetailsFragmentDirections.actionTaskDetailsFragmentToClassroomFragment())
                 taskDetailsViewModel.onDoneNavigatingToClassroomFragment()
             }
         })
 
         taskDetailsViewModel.showSnackBarClassroom.observe(viewLifecycleOwner, Observer {
-            if (it==true) {
+            if (it == true) {
                 showSnackBar("Classroom has been deleted :(")
                 taskDetailsViewModel.hideSnackBarClassroom()
             }
         })
         taskDetailsViewModel.showSnackBarTask.observe(viewLifecycleOwner, Observer {
-            if (it==true) {
+            if (it == true) {
                 showSnackBar("Task has been deleted :(")
                 taskDetailsViewModel.hideSnackBarTask()
             }
@@ -225,7 +226,7 @@ class TaskDetailsFragment : Fragment() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save_progress_client -> {
-                    updateExercisesStatus()
+                    if (taskDetailsViewModel.getCheckedList().size > 0) updateExercisesStatus()
                 }
                 R.id.refresh_client -> {
                     taskDetailsViewModel.fetchExercisesFromFirebase()
@@ -239,7 +240,12 @@ class TaskDetailsFragment : Fragment() {
     private fun updateExercisesStatus() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(getString(R.string.update_exercises))
-        builder.setMessage(getString(R.string.update_exercises_status,taskDetailsViewModel.getCheckedList().size))
+        builder.setMessage(
+            getString(
+                R.string.update_exercises_status,
+                taskDetailsViewModel.getCheckedList().size
+            )
+        )
         builder.setPositiveButton("YES") { dialog, which ->
             taskDetailsViewModel.updateExercisesStatus()
             dialog.cancel()
@@ -252,6 +258,7 @@ class TaskDetailsFragment : Fragment() {
 
         dialog.show()
     }
+
     private fun deleteAlertTask() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle(R.string.delete)
@@ -291,7 +298,7 @@ class TaskDetailsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showSnackBar(message:String) {
+    private fun showSnackBar(message: String) {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
             message,
