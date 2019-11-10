@@ -81,7 +81,7 @@ class ClassroomViewModel constructor(
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
-            if (currentUser?.email.equals("hedsean@gmail.com")) {
+            if (currentUser?.email.equals("chen24201@gmail.com")) {
                 _isAdmin.value = appRepository.isAdmin()
             } else {
                 _isAdmin.value = appRepository.notAdmin()
@@ -142,7 +142,7 @@ class ClassroomViewModel constructor(
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    if (!it.isArchived) {
+                    if (!it.archived) {
                         Timber.wtf("formatted classroom is -> $it")
                         adapterList[it.uid] = it
                         classrooms.value = adapterList.values.toList()

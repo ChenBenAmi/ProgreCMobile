@@ -111,7 +111,7 @@ fun TextView.setTaskDueDate(item: Task?) {
 @BindingAdapter("setTaskStatus")
 fun ImageView.setTaskStatus(item: Task?) {
     item?.let {
-        if (it.status) {
+        if (!it.completed) {
             this.setImageResource(R.drawable.ic_lock_open_24px)
         } else this.setImageResource(R.drawable.ic_lock_24px)
     }
@@ -139,14 +139,6 @@ fun TextView.setLinks(item: Task?) {
                 browserIntent,
                 PackageManager.MATCH_DEFAULT_ONLY
             )
-
-            // Always use string resources for UI text.
-            // This says something like "Share this photo with"
-//            val title = resources.getString(R.string.chooser_title)
-            // Create intent to show chooser
-//            val chooser = Intent.createChooser(intent, title)
-
-            // Verify the intent will resolve to at least one activity
             if (browserIntent.resolveActivity(packageManager) != null) {
                 startActivity(context, browserIntent, null)
             }

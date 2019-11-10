@@ -8,7 +8,7 @@ data class Exercise(
     val dateCreated: String = "",
     var finishedUsersList: Map<String, String> = emptyMap(),
     val taskUid: String = "",
-    val isArchived : Boolean = false
+    val archived : Boolean = false
 
 )
 

@@ -111,7 +111,7 @@ class TaskDetailsViewModel constructor(
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    if (!it.isArchived) {
+                    if (!it.archived) {
                         Timber.wtf("formatted classroom is -> $it")
                         classroom.value = it
                     } else {
@@ -143,7 +143,7 @@ class TaskDetailsViewModel constructor(
                     snapshot.toObject(Task::class.java)
                 Timber.wtf("task -> $taskFirestore")
                 taskFirestore?.let {
-                    if (!it.isArchived) {
+                    if (!it.archived) {
                         Timber.wtf("formatted task is -> $it")
                         task.value = it
                     } else {
@@ -174,7 +174,7 @@ class TaskDetailsViewModel constructor(
                     snapshot.toObject(Exercise::class.java)
                 Timber.wtf("exercise -> $exerciseFirestore")
                 exerciseFirestore?.let {
-                    if (!it.isArchived) {
+                    if (!it.archived) {
                         adapterList[exerciseFirestore.uid] = exerciseFirestore
                         exercises.value = adapterList.values.toList()
                     }

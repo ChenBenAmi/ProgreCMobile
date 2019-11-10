@@ -11,7 +11,7 @@ data class Classroom(
     val dateCreated: String = "",
     var description: String = "",
     var numberOfTasks: Int = 0,
-    val isArchived : Boolean = false
+    val archived : Boolean = false
 )
 
 

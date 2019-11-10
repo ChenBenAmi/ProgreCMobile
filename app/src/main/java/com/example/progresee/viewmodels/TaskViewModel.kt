@@ -77,7 +77,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    if (!it.isArchived) {
+                    if (!it.archived) {
                         Timber.wtf("formatted classroom is -> $it")
                         classroom.value = it
                     } else {
@@ -109,7 +109,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                     snapshot.toObject(Task::class.java)
                 Timber.wtf("task -> $taskFirestore")
                 taskFirestore?.let {
-                    if (!it.isArchived) {
+                    if (!it.archived) {
                         Timber.wtf("formatted classroom is -> $it")
                         adapterList[it.uid] = it
                         tasks.value = adapterList.values.toList()
