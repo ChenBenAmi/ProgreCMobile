@@ -86,7 +86,9 @@
             app:destination="@+id/createClassroomFragment" />
         <action
             android:id="@+id/action_taskFragment_to_classroomFragment"
-            app:destination="@id/classroomFragment" />
+            app:destination="@id/classroomFragment"
+            app:popUpTo="@+id/classroomFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_taskFragment_to_userFragment"
             app:destination="@id/userFragment" />
@@ -113,6 +115,11 @@
         <action
             android:id="@+id/action_taskDetailsFragment_to_usersFinishedFragment"
             app:destination="@id/usersFinishedFragment" />
+        <action
+            android:id="@+id/action_taskDetailsFragment_to_classroomFragment"
+            app:destination="@id/classroomFragment"
+            app:popUpTo="@+id/classroomFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

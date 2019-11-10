@@ -172,6 +172,13 @@ class TaskDetailsFragment : Fragment() {
         })
 
 
+        taskDetailsViewModel.navigateToClassroomFragment.observe(viewLifecycleOwner, Observer {
+            if (it == true){
+                this.findNavController().navigate(TaskDetailsFragmentDirections.actionTaskDetailsFragmentToClassroomFragment())
+                taskDetailsViewModel.onDoneNavigatingToClassroomFragment()
+            }
+        })
+
         return binding.root
     }
 

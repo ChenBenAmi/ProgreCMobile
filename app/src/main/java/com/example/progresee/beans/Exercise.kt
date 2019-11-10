@@ -7,7 +7,8 @@ data class Exercise(
     var exerciseTitle: String = "",
     val dateCreated: String = "",
     var finishedUsersList: Map<String, String> = emptyMap(),
-    val taskUid: String = ""
+    val taskUid: String = "",
+    val isArchived : Boolean = false
 
 )
 

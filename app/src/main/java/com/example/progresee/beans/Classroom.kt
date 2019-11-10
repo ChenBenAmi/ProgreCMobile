@@ -10,7 +10,8 @@ data class Classroom(
     var userList: Map<String, String> = emptyMap(),
     val dateCreated: String = "",
     var description: String = "",
-    var numberOfTasks: Int = 0
+    var numberOfTasks: Int = 0,
+    val isArchived : Boolean = false
 )
 
 

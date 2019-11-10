@@ -142,10 +142,11 @@ class ClassroomViewModel constructor(
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    Timber.wtf("formatted classroom is -> $it")
-                    adapterList[it.uid] = it
-                    classrooms.value = adapterList.values.toList()
-
+                    if (!it.isArchived) {
+                        Timber.wtf("formatted classroom is -> $it")
+                        adapterList[it.uid] = it
+                        classrooms.value = adapterList.values.toList()
+                    }
                 }
             } else {
                 Timber.wtf("Current data: null")

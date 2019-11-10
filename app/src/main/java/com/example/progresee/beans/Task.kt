@@ -10,6 +10,8 @@ data class Task(
     val startDate: String="",
     var endDate: String="",
     val classroomUid: String = "",
-    var status: Boolean = false
+    var status: Boolean = false,
+    val isArchived : Boolean = false
+
 
 )

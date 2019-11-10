@@ -77,9 +77,14 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    Timber.wtf("formatted classroom is -> $it")
-                    classroom.value = it
-
+                    if (!it.isArchived) {
+                        Timber.wtf("formatted classroom is -> $it")
+                        classroom.value = it
+                    } else {
+                        if (!appRepository.isAdmin()){
+                            onClassroomDeleted()
+                        }
+                    }
                 }
             } else {
                 Timber.wtf("Current data: null")
@@ -104,10 +109,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                     snapshot.toObject(Task::class.java)
                 Timber.wtf("task -> $taskFirestore")
                 taskFirestore?.let {
-                    Timber.wtf("formatted classroom is -> $it")
-                    adapterList[it.uid] = it
-                    tasks.value = adapterList.values.toList()
-
+                    if (!it.isArchived) {
+                        Timber.wtf("formatted classroom is -> $it")
+                        adapterList[it.uid] = it
+                        tasks.value = adapterList.values.toList()
+                    }
                 }
             } else {
                 Timber.wtf("Current data: null")

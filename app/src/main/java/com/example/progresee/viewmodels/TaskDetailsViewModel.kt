@@ -58,6 +58,10 @@ class TaskDetailsViewModel constructor(
     val navigateToUsersFinished
         get() = _navigateToUsersFinished
 
+    private val _navigateToClassroomFragment = MutableLiveData<Boolean?>()
+    val navigateToClassroomFragment
+        get() = _navigateToClassroomFragment
+
     private val _showProgressBar = MutableLiveData<Boolean?>()
     val showProgressBar
         get() = _showProgressBar
@@ -107,9 +111,14 @@ class TaskDetailsViewModel constructor(
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    Timber.wtf("formatted classroom is -> $it")
-                    classroom.value = it
-
+                    if (!it.isArchived) {
+                        Timber.wtf("formatted classroom is -> $it")
+                        classroom.value = it
+                    } else {
+                        if (appRepository.isAdmin()) {
+                            navigatingToClassroomFragment()
+                        }
+                    }
                 }
             } else {
                 Timber.wtf("Current data: null")
@@ -134,9 +143,14 @@ class TaskDetailsViewModel constructor(
                     snapshot.toObject(Task::class.java)
                 Timber.wtf("task -> $taskFirestore")
                 taskFirestore?.let {
-
-                    Timber.wtf("formatted task is -> $it")
-                    task.value = it
+                    if (!it.isArchived) {
+                        Timber.wtf("formatted task is -> $it")
+                        task.value = it
+                    } else {
+                        if (!appRepository.isAdmin()) {
+                            navigate()
+                        }
+                    }
                 }
             } else {
                 Timber.wtf("Current data: null")
@@ -160,8 +174,10 @@ class TaskDetailsViewModel constructor(
                     snapshot.toObject(Exercise::class.java)
                 Timber.wtf("exercise -> $exerciseFirestore")
                 exerciseFirestore?.let {
-                    adapterList[exerciseFirestore.uid] = exerciseFirestore
-                    exercises.value = adapterList.values.toList()
+                    if (!it.isArchived) {
+                        adapterList[exerciseFirestore.uid] = exerciseFirestore
+                        exercises.value = adapterList.values.toList()
+                    }
                 }
             } else {
                 Timber.wtf("Current data: null")
@@ -219,7 +235,8 @@ class TaskDetailsViewModel constructor(
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach { _ ->
+                            data?.let {
+                                navigate()
                             }
                         }
                     } catch (e: Exception) {
@@ -227,7 +244,6 @@ class TaskDetailsViewModel constructor(
                     } finally {
                         withContext(Dispatchers.Main) {
                             hideProgressBar()
-                            navigate()
                         }
                     }
                 }
@@ -292,6 +308,7 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.forEach { _ ->
+                                fetchExercisesFromFirebase()
                             }
                         }
                     } catch (e: Exception) {
@@ -437,6 +454,14 @@ class TaskDetailsViewModel constructor(
 
     private fun navigatingToUsersFinished(uid: String) {
         _navigateToUsersFinished.value = uid
+    }
+
+    fun onDoneNavigatingToClassroomFragment() {
+        _navigateToClassroomFragment.value = null
+    }
+
+    private fun navigatingToClassroomFragment() {
+        _navigateToClassroomFragment.value = true
     }
 
     private fun showSnackBar() {
