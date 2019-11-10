@@ -217,6 +217,12 @@ class TaskDetailsViewModel constructor(
                                     data.forEach { exercise ->
                                         setExerciseListeners(exercise.key)
                                     }
+                                } else {
+                                    withContext(Dispatchers.Main) {
+                                        _isEmpty.value = true
+                                        Timber.wtf("no exercises available ")
+
+                                    }
                                 }
                             }
                         } else {
@@ -386,9 +392,10 @@ class TaskDetailsViewModel constructor(
                             if (response.isSuccessful) {
                                 val data = response.body()
                                 Timber.wtf(data.toString())
-                                data?.forEach {
-
-                                }
+                               data?.let {
+                                   checkedList.clear()
+                                   Timber.wtf(checkedList.toString())
+                               }
                             }
                         }
                     } catch (e: Exception) {

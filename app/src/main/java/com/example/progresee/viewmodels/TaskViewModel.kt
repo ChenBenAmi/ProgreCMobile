@@ -146,11 +146,17 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                                     data.forEach { task ->
                                         setTaskListeners(task.key)
                                     }
+                                } else {
+                                    withContext(Dispatchers.Main) {
+                                        _isEmpty.value = true
+                                        Timber.wtf("no tasks available ${response.code()}")
+                                    }
                                 }
                             }
                         } else {
                             withContext(Dispatchers.Main) {
                                 _isEmpty.value = true
+                                //TODO error message
                                 Timber.wtf("no tasks available ${response.code()}")
                             }
                         }

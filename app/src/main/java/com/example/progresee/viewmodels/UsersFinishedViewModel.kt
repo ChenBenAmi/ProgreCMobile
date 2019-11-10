@@ -18,9 +18,9 @@ class UsersFinishedViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
 
-    private val _navigateBackToTaskFragment = MutableLiveData<Boolean?>()
-    val navigateBackToTaskFragment
-        get() = _navigateBackToTaskFragment
+    private var _isEmpty = MutableLiveData<Boolean?>()
+    val isEmpty
+        get() = _isEmpty
 
     private val adapterList = hashMapOf<String, FinishedUser>()
     private val _usersFinished = MutableLiveData<List<FinishedUser>>()
@@ -50,13 +50,26 @@ class UsersFinishedViewModel(
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-
-                            data?.forEach {
-                                val finishedUser = FinishedUser(it.key, it.value, exerciseId)
-                                adapterList[it.key] = finishedUser
-                                withContext(Dispatchers.Main) {
-                                    _usersFinished.value = adapterList.values.toList()
+                            data?.let {
+                                if (it.isNotEmpty()) {
+                                    withContext(Dispatchers.Main) {
+                                        _isEmpty.value = false
+                                    }
+                                    data.forEach { user ->
+                                        val finishedUser =
+                                            FinishedUser(user.key, user.value, exerciseId)
+                                        adapterList[user.key] = finishedUser
+                                        withContext(Dispatchers.Main) {
+                                            _usersFinished.value = adapterList.values.toList()
+                                        }
+                                    }
+                                } else {
+                                    withContext(Dispatchers.Main) {
+                                        _isEmpty.value = true
+                                        Timber.wtf("no users available ${response.code()}")
+                                    }
                                 }
+
                             }
                         }
                     } catch (e: Exception) {

@@ -91,6 +91,7 @@
     <string name="no_tasks_available">No Tasks Available</string>
     <string name="no_exercises_available">No Exercises Available</string>
     <string name="refresh">Refresh</string>
+    <string name="no_user_has_completed_the_exercise_yet">No user has completed the exercise yet...</string>
 
 
 </resources>

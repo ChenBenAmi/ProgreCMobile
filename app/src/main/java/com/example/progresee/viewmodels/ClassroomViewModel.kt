@@ -66,6 +66,11 @@ class ClassroomViewModel constructor(
                                 classroomsData.forEach { classroomEntry ->
                                     setListeners(classroomEntry.key)
                                 }
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    _isEmpty.value = true
+                                    Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
+                                }
                             }
                         }
                     } else {

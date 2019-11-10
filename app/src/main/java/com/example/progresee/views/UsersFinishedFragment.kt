@@ -23,6 +23,8 @@ import com.example.progresee.databinding.UsersFinishedFragmentBinding
 import com.example.progresee.viewmodels.TaskDetailsViewModel
 import com.example.progresee.viewmodels.UsersFinishedViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_task_details.*
+import kotlinx.android.synthetic.main.users_finished_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -39,7 +41,7 @@ class UsersFinishedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.completed_list_title)
+
         val binding: UsersFinishedFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.users_finished_fragment, container, false)
 
@@ -67,9 +69,19 @@ class UsersFinishedFragment : Fragment() {
 
         binding.usersFinishedList.adapter = adapter
 
+        viewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.completed_list_title)
+                empty_finished_users_list.visibility = View.VISIBLE
+                users_finished_list.visibility = View.INVISIBLE
+            } else {
+                (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.completed_list_title)
+                empty_finished_users_list.visibility = View.GONE
+                users_finished_list.visibility = View.VISIBLE
+            }
+        })
         viewModel.usersFinished.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.wtf("hey i have some users for you")
                 Timber.wtf(it.toString())
                 adapter.submitList(it)
             }
