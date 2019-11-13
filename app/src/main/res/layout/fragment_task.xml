@@ -20,7 +20,7 @@
         tools:context=".views.TaskFragment">
 
         <include
-            android:id="@+id/layout_progress_bar"
+            android:id="@+id/layout_progress_bar_task"
             layout="@layout/progress_bar_layout"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

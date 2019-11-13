@@ -36,7 +36,6 @@ class TaskFragment : Fragment() {
     private lateinit var taskViewModel: TaskViewModel
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,11 +76,11 @@ class TaskFragment : Fragment() {
 
         taskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                layout_progress_bar.visibility = View.VISIBLE
+                layout_progress_bar_task.visibility = View.VISIBLE
                 create_task_button.isEnabled = false
             }
             if (it == null) {
-                layout_progress_bar.visibility = View.GONE
+                layout_progress_bar_task.visibility = View.GONE
                 create_task_button.isEnabled = true
             }
         })
@@ -126,7 +125,7 @@ class TaskFragment : Fragment() {
 
         taskViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("User added")
+                R.string.user_added.showSnackBar()
                 taskViewModel.snackBarShown()
             }
         })
@@ -153,8 +152,9 @@ class TaskFragment : Fragment() {
             }
         })
 
+
         taskViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
-            if (it == true){
+            if (it == true) {
                 empty_tasks_view.visibility = View.VISIBLE
                 task_list.visibility = View.GONE
             } else {
@@ -164,16 +164,45 @@ class TaskFragment : Fragment() {
         })
 
         taskViewModel.showSnackBarClassroom.observe(viewLifecycleOwner, Observer {
-            if (it==true) {
-                showSnackBar("The classroom has been deleted :(")
+            if (it == true) {
+                R.string.classroom_has_been_deleted_msg.showSnackBar()
                 taskViewModel.hideSnackBarClassroomDeleted()
             }
         })
 
         taskViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Refreshing...")
+                R.string.refreshing_string.showSnackBar()
                 taskViewModel.hideRefreshSnackBar()
+            }
+        })
+
+        taskViewModel.showSnackBarHttpError.observe(viewLifecycleOwner, Observer {
+            if (it == 1) {
+                R.string.no_tasks_available.showSnackBar()
+                taskViewModel.hideHttpErrorSnackBar()
+            } else if (it == 2) {
+                R.string.network_error.showSnackBar()
+                taskViewModel.hideHttpErrorSnackBar()
+            }
+
+            when (it) {
+                1 -> {
+                    R.string.no_tasks_available.showSnackBar()
+                    taskViewModel.hideHttpErrorSnackBar()
+                }
+                2 -> {
+                    R.string.network_error.showSnackBar()
+                    taskViewModel.hideHttpErrorSnackBar()
+                }
+                3 -> {
+                    R.string.failed_to_complete_action.showSnackBar()
+                    taskViewModel.hideHttpErrorSnackBar()
+                }
+                4 -> {
+                    R.string.no_user_in_system.showSnackBar()
+                    taskViewModel.hideHttpErrorSnackBar()
+                }
             }
         })
         return binding.root
@@ -225,10 +254,10 @@ class TaskFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showSnackBar(message:String) {
+    private fun Int.showSnackBar() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            message,
+            getString(this),
             Snackbar.LENGTH_LONG
         ).show()
     }

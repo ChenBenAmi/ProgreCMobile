@@ -62,6 +62,7 @@
     <string name="saving">Saving…</string>
     <string name="owner">Owner</string>
     <string name="add_user">Add user</string>
+    <string name="user_added">User added…</string>
     <string name="leave_classroom">Leave classroom</string>
     <string name="transfer_ownership">Transfer ownership</string>
     <string name="remove_user">Remove user</string>
@@ -94,6 +95,18 @@
     <string name="no_exercises_available">No Exercises Available</string>
     <string name="refresh">Refresh</string>
     <string name="no_user_has_completed_the_exercise_yet">No user has completed the exercise yet…</string>
+    <string name="not_part_of_classroom_error">You are not part of any classroom :(</string>
+    <string name="refreshing_string">Refreshing…</string>
+    <string name="classroom_has_been_deleted_msg">The classroom has been deleted :(</string>
+    <string name="exercise_updated">Exercise Updated</string>
+    <string name="task_has_been_deleted_msg">Task has been deleted :(</string>
+    <string name="exercise_added">Exercise added</string>
+    <string name="network_error">Network error :S</string>
+    <string name="failed_to_save_classroom">The system has failed to save the classroom...</string>
+    <string name="failed_to_save_task">The system has failed to save the Task</string>
+    <string name="no_users_finished">No users finished the exercise yet...</string>
+    <string name="failed_to_complete_action">Failed to complete the requested action</string>
+    <string name="no_user_in_system">No user with such email in the system</string>
 
 
 </resources>

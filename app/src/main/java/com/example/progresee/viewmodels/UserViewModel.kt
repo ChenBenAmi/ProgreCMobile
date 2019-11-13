@@ -9,6 +9,7 @@ import com.example.progresee.R
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.User
 import com.example.progresee.data.AppRepository
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -38,10 +39,6 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     val transfer
         get() = _transfer
 
-    private val _navigateBackToTaskFragment = MutableLiveData<Boolean?>()
-    val navigateBackToTaskFragment
-        get() = _navigateBackToTaskFragment
-
     private val _transferSuccessful = MutableLiveData<Boolean?>()
     val transferSuccessful
         get() = _transferSuccessful
@@ -66,6 +63,11 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     val navigateBackToClassroomFragment
         get() = _navigateBackToClassroomFragment
 
+    private val _showSnackBarHttpError = MutableLiveData<Int?>()
+    val showSnackBarHttpError
+        get() = _showSnackBarHttpError
+
+    private val listenersList= mutableListOf<ListenerRegistration>()
 
     init {
         setClassroomListener(classroomId)
@@ -83,16 +85,21 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                             appRepository.currentToken.value!!,
                             classroomId
                         ).await()
-                        Timber.wtf("hey")
                         if (response.isSuccessful) {
                             val data = response.body()
                             data?.forEach {
                                 setUsersListeners(it.key)
                             }
                         } else {
+                            withContext(Dispatchers.Main) {
+                                showHttpErrorSnackBar400()
+                            }
                             Timber.wtf("Something went wrong ${response.code()} ${response.errorBody().toString()}")
                         }
                     } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            showHttpErrorSnackBarNetwork()
+                        }
                         Timber.wtf("${e.message}${e.printStackTrace()}")
                     } finally {
                         withContext(Dispatchers.Main) {
@@ -109,20 +116,16 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
         val docRef = db.collection("classrooms")
             .document(uid)
 
-        docRef.addSnapshotListener { snapshot, e ->
-
+        val listener=docRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
             if (snapshot != null && snapshot.exists()) {
-                Timber.wtf("Current data: ${snapshot.data}")
-
                 val classroomFirestore =
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
                     if (!it.archived) {
-                        Timber.wtf("formatted classroom is -> $it")
                         classroom.value = it
                     } else {
                         if (appRepository.isAdmin.value == false) {
@@ -135,21 +138,18 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: null")
             }
         }
+        listenersList.add(listener)
     }
 
     private fun setUsersListeners(uid: String) {
         val db = appRepository.getFirestoreDB()
         val docRef = db.collection("users")
             .document(uid)
-
-        docRef.addSnapshotListener { snapshot, e ->
-
+        val listener=docRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
             if (snapshot != null && snapshot.exists()) {
-                Timber.wtf("Current data: ${snapshot.data}")
-
                 val userFirestore =
                     snapshot.toObject(User::class.java)
                 Timber.wtf("user -> $userFirestore")
@@ -161,6 +161,7 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: null")
             }
         }
+        listenersList.add(listener)
     }
 
 
@@ -202,8 +203,15 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                                 hideProgressBar()
                                 showTransferSuccessful()
                             }
-                        } else Timber.wtf("${request.code()}${request.errorBody()}")
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                showHttpErrorSnackBar400()
+                            }
+                        }
                     } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            showHttpErrorSnackBarNetwork()
+                        }
                         Timber.wtf("${e.printStackTrace()}${e.message}")
                     }
                 }
@@ -229,14 +237,19 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
                                withContext(Dispatchers.Main) {
                                    adapterList.remove(userUid)
                                    users.value=adapterList.values.toList()
+                                   showRemovedUser()
                                }
                                loadUsers()
                            }
+                        } else {
                             withContext(Dispatchers.Main) {
-                                showRemovedUser()
+                                showHttpErrorSnackBar400()
                             }
-                        } else Timber.wtf("${request.code()}${request.errorBody()}")
+                        }
                     } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            showHttpErrorSnackBarNetwork()
+                        }
                         Timber.wtf("${e.printStackTrace()}${e.cause}")
                     } finally {
                         withContext(Dispatchers.Main) {
@@ -310,13 +323,33 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
         _showSnackBarRefresh.value = null
     }
 
-
     private fun onClassroomDeleted() {
         _navigateBackToClassroomFragment.value = true
     }
 
     fun doneNavigateToClassroomFragment() {
         _navigateBackToClassroomFragment.value = null
+    }
+
+
+    override fun showHttpErrorSnackBar400() {
+        _showSnackBarHttpError.value=1
+    }
+
+    override fun showHttpErrorSnackBarNetwork() {
+        _showSnackBarHttpError.value=2
+    }
+    override fun hideHttpErrorSnackBar() {
+        _showSnackBarHttpError.value=null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+        uiScope.cancel()
+        listenersList.forEach {
+            it.remove()
+        }
     }
 
 }

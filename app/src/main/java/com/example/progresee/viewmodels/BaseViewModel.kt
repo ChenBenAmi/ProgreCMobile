@@ -14,6 +14,16 @@ open class BaseViewModel : ViewModel() {
 
     open fun navigate() {}
 
+    open fun showHttpErrorSnackBar400() {}
+
+    open fun showHttpErrorSnackBarNetwork() {}
+
+    open fun showHttpErrorSnackBarServer() {}
+
+    open fun hideHttpErrorSnackBar() {}
+
+
+
 
 
 

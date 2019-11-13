@@ -21,7 +21,6 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_classroom.*
-import kotlinx.android.synthetic.main.fragment_create_classroom.layout_progress_bar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -45,9 +44,11 @@ class ClassroomFragment : Fragment() {
 
         classroomViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true)
-                layout_progress_bar.visibility = View.VISIBLE
+                layout_progress_bar_classroom.visibility = View.VISIBLE
+            createClassroom_button.isEnabled=false
             if (it == false) {
-                classroom_list.visibility = View.VISIBLE
+                layout_progress_bar_classroom.visibility = View.GONE
+                createClassroom_button.isEnabled=true
             }
         })
 
@@ -112,14 +113,6 @@ class ClassroomFragment : Fragment() {
             }
         })
 
-        classroomViewModel.user.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                layout_progress_bar.visibility = View.GONE
-                Timber.wtf(it.toString())
-            }
-        })
-
-
         classroomViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 empty_classroom_view.visibility = View.VISIBLE
@@ -132,21 +125,31 @@ class ClassroomFragment : Fragment() {
 
         classroomViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Refreshing...")
+                R.string.refreshing_string.showSnackBar()
                 classroomViewModel.hideRefreshSnackBar()
             }
         })
         appRepository.setUserEmail()
+
+        classroomViewModel.showSnackBarHttpError.observe(viewLifecycleOwner, Observer {
+            if (it==1) {
+                R.string.not_part_of_classroom_error.showSnackBar()
+                classroomViewModel.hideHttpErrorSnackBar()
+            } else if (it==2) {
+                R.string.network_error.showSnackBar()
+                classroomViewModel.hideHttpErrorSnackBar()
+            }
+        })
 
         return binding.root
 
     }
 
 
-    private fun showSnackBar(message: String) {
+    private fun Int.showSnackBar() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            message,
+            getString(this),
             Snackbar.LENGTH_LONG
         ).show()
     }

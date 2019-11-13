@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.*
 import timber.log.Timber
 
 class CreateClassroomViewModel(
-    private val appRepository: AppRepository, classroomId: String?
+    private val appRepository: AppRepository, classroomId: String
 ) : BaseViewModel() {
 
 
@@ -35,8 +36,14 @@ class CreateClassroomViewModel(
     val showProgressBar
         get() = _showProgressBar
 
+    private val _showSnackBarHttpError = MutableLiveData<Int?>()
+    val showSnackBarHttpError
+        get() = _showSnackBarHttpError
+
+    private val listenersList= mutableListOf<ListenerRegistration>()
+
     init {
-        if (classroomId != "none" && classroomId != null) {
+        if (classroomId != "none") {
             setListeners(classroomId)
         }
         token = appRepository.currentToken
@@ -47,18 +54,15 @@ class CreateClassroomViewModel(
         val docRef = db.collection("classrooms")
             .document(uid)
 
-        docRef.addSnapshotListener { snapshot, e ->
+       val listener= docRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
             if (snapshot != null && snapshot.exists()) {
-                Timber.wtf("Current data: ${snapshot.data}")
-
                 val classroomFirestore =
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
-                    Timber.wtf("formatted classroom is -> $it")
                     classroom.value = it
 
                 }
@@ -66,6 +70,7 @@ class CreateClassroomViewModel(
                 Timber.wtf("Current data: null")
             }
         }
+        listenersList.add(listener)
     }
 
     fun onSavePressed(name: String, description: String) {
@@ -94,9 +99,21 @@ class CreateClassroomViewModel(
                                             _navigateBackToClassroomFragment.value = 0
                                         }
                                     }
+                                } else {
+                                    withContext(Dispatchers.Main) {
+                                        showHttpErrorSnackBar400()
+                                    }
                                 }
                             } catch (e: Exception) {
                                 Timber.wtf("${e.message}${e.printStackTrace()}")
+                                withContext(Dispatchers.Main) {
+                                    showHttpErrorSnackBarNetwork()
+                                    hideProgressBar()
+                                }
+                            } finally {
+                                withContext(Dispatchers.Main) {
+                                    hideProgressBar()
+                                }
                             }
                         }
                     } else {
@@ -121,9 +138,15 @@ class CreateClassroomViewModel(
                                         _navigateBackToClassroomFragment.value = 0
                                     }
                                 } else {
+                                    withContext(Dispatchers.Main) {
+                                        showHttpErrorSnackBar400()
+                                    }
                                     Timber.wtf("${request.code()}${request.raw()}")
                                 }
                             } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    showHttpErrorSnackBarNetwork()
+                                }
                                 Timber.wtf("oh no something went wrong!${e.printStackTrace()}${e.message}")
                             } finally {
                                 withContext(Dispatchers.Main) {
@@ -155,10 +178,26 @@ class CreateClassroomViewModel(
         _navigateBackToClassroomFragment.value = null
     }
 
+    override fun showHttpErrorSnackBar400() {
+        _showSnackBarHttpError.value = 1
+    }
+
+    override fun showHttpErrorSnackBarNetwork() {
+        _showSnackBarHttpError.value = 2
+    }
+
+    override fun hideHttpErrorSnackBar() {
+        _showSnackBarHttpError.value = null
+    }
+
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+        uiScope.cancel()
+        listenersList.forEach {
+            it.remove()
+        }
     }
 
 

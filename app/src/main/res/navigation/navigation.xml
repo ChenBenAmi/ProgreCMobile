@@ -163,7 +163,7 @@
     </fragment>
     <fragment
         android:id="@+id/usersFinishedFragment"
-        android:name="com.example.progresee.views.UsersFinishedFragment"
+        android:name="com.example.progresee.views.FinishedUsersFragment"
         android:label="UsersFinishedFragment" >
         <argument
             android:name="classroomId"

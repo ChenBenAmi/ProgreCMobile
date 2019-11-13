@@ -5,16 +5,13 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.transition.Visibility
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.SharedElementCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -22,11 +19,9 @@ import com.example.progresee.R
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentCreateTaskBinding
 import com.example.progresee.viewmodels.CreateTaskViewModel
-import com.google.android.gms.dynamic.SupportFragmentWrapper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_task.*
-import kotlinx.android.synthetic.main.fragment_task.layout_progress_bar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -92,9 +87,13 @@ class CreateTaskFragment : Fragment() {
         createTaskViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 hideKeyboard()
-                layout_progress_bar.visibility = View.VISIBLE
+                layout_progress_bar_create_task.visibility = View.VISIBLE
                 save_task.isEnabled = false
                 save_task.text = getString(R.string.saving)
+            } else {
+                layout_progress_bar_create_task.visibility = View.GONE
+                save_task.isEnabled = true
+                save_task.text = getString(R.string.save)
             }
         })
 
@@ -114,20 +113,20 @@ class CreateTaskFragment : Fragment() {
 
         createTaskViewModel.stringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
-                showSnackBar(R.string.name_too_long)
+                R.string.name_too_long.showSnackBar()
                 createTaskViewModel.snackBarShown()
             } else if (it == 2) {
-                showSnackBar(R.string.name_cant_be_empty)
+                R.string.name_cant_be_empty.showSnackBar()
                 createTaskViewModel.snackBarShown()
             }
         })
 
         createTaskViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
-                showSnackBar(R.string.description_too_long)
+                R.string.description_too_long.showSnackBar()
                 createTaskViewModel.snackBarShown()
             } else if (it == 2) {
-                showSnackBar(R.string.description_cant_be_empty)
+                R.string.description_cant_be_empty.showSnackBar()
                 createTaskViewModel.snackBarShown()
             }
         })
@@ -136,6 +135,15 @@ class CreateTaskFragment : Fragment() {
             if (it == true) {
                 datePicker()
                 createTaskViewModel.onPickDateFinished()
+            }
+        })
+        createTaskViewModel.showSnackBarHttpError.observe(viewLifecycleOwner, Observer {
+            if (it==1) {
+                R.string.failed_to_save_task.showSnackBar()
+                createTaskViewModel.hideHttpErrorSnackBar()
+            } else if (it==2) {
+                R.string.network_error.showSnackBar()
+                createTaskViewModel.hideHttpErrorSnackBar()
             }
         })
 
@@ -156,10 +164,10 @@ class CreateTaskFragment : Fragment() {
 
 
 
-    private fun showSnackBar(id: Int) {
+    private fun Int.showSnackBar() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            getString(id),
+            getString(this),
             Snackbar.LENGTH_LONG
         ).show()
 

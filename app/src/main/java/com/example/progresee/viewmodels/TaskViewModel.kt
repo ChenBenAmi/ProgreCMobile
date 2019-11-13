@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -60,6 +61,11 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     val showSnackBarRefresh
         get() = _showSnackBarRefresh
 
+    private val _showSnackBarHttpError = MutableLiveData<Int?>()
+    val showSnackBarHttpError
+        get() = _showSnackBarHttpError
+
+    private val listenersList= mutableListOf<ListenerRegistration>()
 
     init {
         uiScope.launch {
@@ -73,20 +79,17 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         val docRef = db.collection("classrooms")
             .document(uid)
 
-        docRef.addSnapshotListener { snapshot, e ->
+       val listener= docRef.addSnapshotListener { snapshot, e ->
 
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
             if (snapshot != null && snapshot.exists()) {
-                Timber.wtf("Current data: ${snapshot.data}")
-
                 val classroomFirestore =
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
                     if (!it.archived) {
-                        Timber.wtf("formatted classroom is -> $it")
                         classroom.value = it
                     } else {
                         if (appRepository.isAdmin.value == false) {
@@ -99,6 +102,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: null")
             }
         }
+        listenersList.add(listener)
     }
 
     private fun setTaskListeners(uid: String) {
@@ -106,20 +110,17 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         val docRef = db.collection("tasks")
             .document(uid)
 
-        docRef.addSnapshotListener { snapshot, e ->
+        val listener=docRef.addSnapshotListener { snapshot, e ->
 
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
             if (snapshot != null && snapshot.exists()) {
-                Timber.wtf("Current data: ${snapshot.data}")
-
                 val taskFirestore =
                     snapshot.toObject(Task::class.java)
                 Timber.wtf("task -> $taskFirestore")
                 taskFirestore?.let {
                     if (!it.archived) {
-                        Timber.wtf("formatted classroom is -> $it")
                         adapterList[it.uid] = it
                         tasks.value = adapterList.values.toList()
                     }
@@ -128,6 +129,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                 Timber.wtf("Current data: null")
             }
         }
+        listenersList.add(listener)
     }
 
     fun fetchTasksFromFirebase() {
@@ -144,28 +146,27 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.let {
-                                if (it.isNotEmpty()) {
-                                    withContext(Dispatchers.Main) {
-                                        _isEmpty.value = false
-                                    }
-                                    data.forEach { task ->
-                                        setTaskListeners(task.key)
-                                    }
-                                } else {
-                                    withContext(Dispatchers.Main) {
-                                        _isEmpty.value = true
-                                        Timber.wtf("no tasks available ${response.code()}")
-                                    }
+                                withContext(Dispatchers.Main) {
+                                    _isEmpty.value = false
+                                }
+
+                                data.forEach { task ->
+                                    Timber.wtf(task.key)
+                                    setTaskListeners(task.key)
                                 }
                             }
                         } else {
                             withContext(Dispatchers.Main) {
                                 _isEmpty.value = true
-                                //TODO error message
-                                Timber.wtf("no tasks available ${response.code()}")
+                                showHttpErrorSnackBar400()
                             }
+                            Timber.wtf("no tasks available ${response.code()}")
                         }
                     } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            hideRefreshSnackBar()
+                            showHttpErrorSnackBarNetwork()
+                        }
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
                     } finally {
                         withContext(Dispatchers.Main) {
@@ -190,14 +191,20 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         if (response.isSuccessful) {
                             val data = response.body()
                             Timber.wtf(data.toString())
-                            data?.forEach {
-                                //                                appRepository.deleteClassroomById(it.value)
+                            data?.let {
+                                withContext(Dispatchers.Main) {
+                                    onClassroomDeleted()
+                                }
                             }
+                        } else {
                             withContext(Dispatchers.Main) {
-                                onClassroomDeleted()
+                                showHttpErrorSnackBarServer()
                             }
                         }
                     } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            showHttpErrorSnackBarNetwork()
+                        }
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
                     } finally {
                         withContext(Dispatchers.Main) {
@@ -225,6 +232,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                             text
                         ).await()
                         if (response.isSuccessful) {
+                            Timber.wtf("the request code is ${response.code()}")
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.let {
@@ -233,9 +241,15 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                                 }
                             }
                         } else {
+                            withContext(Dispatchers.Main) {
+                                showHttpErrorSnackBarWrongEmail()
+                            }
                             Timber.wtf("${response.code()}${response.errorBody()}")
                         }
                     } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            showHttpErrorSnackBarNetwork()
+                        }
                         Timber.wtf("${e.message}${e.printStackTrace()}")
                     } finally {
                         withContext(Dispatchers.Main) {
@@ -268,10 +282,6 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         _navigateToCreateTask.value = true
     }
 
-    fun doneNavigationToCreateTaskFragment() {
-        _navigateToCreateTask.value = null
-    }
-
     override fun showProgressBar() {
         _showProgressBar.value = true
     }
@@ -288,7 +298,7 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         _showSnackBar.value = null
     }
 
-    fun showSnackBarClassroomDeleted() {
+    private fun showSnackBarClassroomDeleted() {
         _showSnackBarClassroom.value = true
     }
 
@@ -304,10 +314,35 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
         _showSnackBarRefresh.value = null
     }
 
+    override fun showHttpErrorSnackBar400() {
+        _showSnackBarHttpError.value = 1
+    }
+
+    override fun showHttpErrorSnackBarNetwork() {
+        _showSnackBarHttpError.value = 2
+    }
+
+    override fun showHttpErrorSnackBarServer() {
+        _showSnackBarHttpError.value = 3
+    }
+
+     private fun showHttpErrorSnackBarWrongEmail() {
+        _showSnackBarHttpError.value = 4
+    }
+
+    override fun hideHttpErrorSnackBar() {
+        _showSnackBarHttpError.value = null
+    }
+
+
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
         uiScope.cancel()
+        listenersList.forEach {
+            it.remove()
+        }
     }
 
 

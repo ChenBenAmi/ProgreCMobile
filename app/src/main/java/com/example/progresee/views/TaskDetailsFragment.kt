@@ -101,6 +101,16 @@ class TaskDetailsFragment : Fragment() {
             }
         })
 
+        taskDetailsViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                layout_progress_bar_task_details.visibility = View.VISIBLE
+            createExercise_button.isEnabled=false
+            if (it == false) {
+                layout_progress_bar_task_details.visibility = View.GONE
+                createExercise_button.isEnabled=true
+            }
+        })
+
         taskDetailsViewModel.navigateToTaskFragment.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 this.findNavController().navigate(
@@ -122,7 +132,7 @@ class TaskDetailsFragment : Fragment() {
 
         taskDetailsViewModel.showSnackBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Exercise added")
+                R.string.exercise_added.showSnackBar()
                 taskDetailsViewModel.snackBarShown()
             }
         })
@@ -180,30 +190,49 @@ class TaskDetailsFragment : Fragment() {
 
         taskDetailsViewModel.showSnackBarClassroom.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Classroom has been deleted :(")
+                R.string.classroom_has_been_deleted_msg.showSnackBar()
                 taskDetailsViewModel.hideSnackBarClassroom()
             }
         })
         taskDetailsViewModel.showSnackBarTask.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Task has been deleted :(")
+                R.string.task_has_been_deleted_msg.showSnackBar()
                 taskDetailsViewModel.hideSnackBarTask()
             }
         })
 
         taskDetailsViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Refreshing...")
+                R.string.refreshing_string.showSnackBar()
                 taskDetailsViewModel.hideRefreshSnackBar()
             }
         })
 
         taskDetailsViewModel.showSnackBarUpdatedExercise.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Exercise Updated")
+                R.string.exercise_updated.showSnackBar()
                 taskDetailsViewModel.hideSnackBarUpdatedExercise()
             }
         })
+
+        taskDetailsViewModel.showSnackBarHttpError.observe(viewLifecycleOwner, Observer {
+
+            when (it) {
+                1 -> {
+                    R.string.failed_to_complete_action.showSnackBar()
+                    taskDetailsViewModel.hideHttpErrorSnackBar()
+                }
+                2 -> {
+                    R.string.network_error.showSnackBar()
+                    taskDetailsViewModel.hideHttpErrorSnackBar()
+                }
+                3 -> {
+                    R.string.not_part_of_classroom_error.showSnackBar()
+                    taskDetailsViewModel.hideHttpErrorSnackBar()
+                }
+            }
+        })
+
         return binding.root
     }
 
@@ -310,10 +339,10 @@ class TaskDetailsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showSnackBar(message: String) {
+    private fun Int.showSnackBar() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            message,
+            getString(this),
             Snackbar.LENGTH_LONG
         ).show()
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
@@ -46,6 +47,12 @@ class CreateTaskViewModel(
     val descriptionStringLength: LiveData<Int?>
         get() = _descriptionStringLength
 
+    private val _showSnackBarHttpError = MutableLiveData<Int?>()
+    val showSnackBarHttpError
+        get() = _showSnackBarHttpError
+
+    private val listenersList= mutableListOf<ListenerRegistration>()
+
 
     init {
         if (taskId != null) {
@@ -57,64 +64,26 @@ class CreateTaskViewModel(
         val db = appRepository.getFirestoreDB()
         val docRef = db.collection("tasks")
             .document(uid)
-
-        docRef.addSnapshotListener { snapshot, e ->
-
+        val listener=docRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
             if (snapshot != null && snapshot.exists()) {
-                Timber.wtf("Current data: ${snapshot.data}")
-
                 val taskFirestore =
                     snapshot.toObject(Task::class.java)
                 Timber.wtf("classroom -> $taskFirestore")
                 taskFirestore?.let {
-                    Timber.wtf("formatted classroom is -> $it")
                     task.value = it
                 }
             } else {
                 Timber.wtf("Current data: null")
             }
         }
+        listenersList.add(listener)
     }
 
-    fun onPressedDatePick() {
-        _pickDate.value = true
-    }
-
-    fun onPickDateFinished() {
-        _pickDate.value = null
-    }
-
-    override fun showProgressBar() {
-        _showProgressBar.value = true
-    }
-
-    override fun hideProgressBar() {
-        _showProgressBar.value = null
-    }
-
-    override fun navigate() {
-        _navigateBackToTaskFragment.value = true
-    }
-
-    override fun onDoneNavigating() {
-        _navigateBackToTaskFragment.value = null
-    }
-
-    override fun snackBarShown() {
-        _stringLength.value = null
-        _descriptionStringLength.value = null
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
 
     fun onSavePressed(title: String, description: String, link: String, date: String) {
-        Timber.wtf(date)
         when {
             title.length > 60 -> _stringLength.value = 1
             title.isEmpty() -> _stringLength.value = 2
@@ -144,9 +113,15 @@ class CreateTaskViewModel(
                                         }
                                     }
                                 } else {
-                                    Timber.wtf("req not successfull :( ${request.code()}")
+                                    withContext(Dispatchers.Main) {
+                                        showHttpErrorSnackBar400()
+                                    }
+                                    Timber.wtf("request failed :( ${request.code()}")
                                 }
                             } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    showHttpErrorSnackBarNetwork()
+                                }
                                 Timber.wtf("${e.message}${e.printStackTrace()}")
                             } finally {
                                 withContext(Dispatchers.Main) {
@@ -195,4 +170,56 @@ class CreateTaskViewModel(
             }
         }
     }
+
+    fun onPressedDatePick() {
+        _pickDate.value = true
+    }
+
+    fun onPickDateFinished() {
+        _pickDate.value = null
+    }
+
+    override fun showProgressBar() {
+        _showProgressBar.value = true
+    }
+
+
+    override fun hideProgressBar() {
+        _showProgressBar.value = null
+    }
+
+    override fun navigate() {
+        _navigateBackToTaskFragment.value = true
+    }
+
+    override fun onDoneNavigating() {
+        _navigateBackToTaskFragment.value = null
+    }
+
+    override fun snackBarShown() {
+        _stringLength.value = null
+        _descriptionStringLength.value = null
+    }
+
+
+    override fun showHttpErrorSnackBar400() {
+        _showSnackBarHttpError.value=1
+    }
+
+    override fun showHttpErrorSnackBarNetwork() {
+        _showSnackBarHttpError.value=2
+    }
+    override fun hideHttpErrorSnackBar() {
+        _showSnackBarHttpError.value=null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+        uiScope.cancel()
+        listenersList.forEach {
+            it.remove()
+        }
+    }
+
 }

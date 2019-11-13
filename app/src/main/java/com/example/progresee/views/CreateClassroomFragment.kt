@@ -28,7 +28,7 @@ import org.koin.core.parameter.parametersOf
 class CreateClassroomFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
-    private lateinit var classroomId: String
+
     private lateinit var createClassroomViewModel: CreateClassroomViewModel
 
 
@@ -46,7 +46,7 @@ class CreateClassroomFragment : Fragment() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
         binding.lifecycleOwner = this
         val arguments = TaskFragmentArgs.fromBundle(arguments!!)
-        classroomId = arguments.classroomId
+        val classroomId = arguments.classroomId
         val createClassroomViewModel: CreateClassroomViewModel by viewModel {
             parametersOf(
                 appRepository,
@@ -80,35 +80,49 @@ class CreateClassroomFragment : Fragment() {
         createClassroomViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 hideKeyboard()
-                layout_progress_bar.visibility = View.VISIBLE
-                save_button.isEnabled = false
-                save_button.text = getString(R.string.saving)
-            } else layout_progress_bar.visibility = View.VISIBLE
+                layout_progress_bar_create_classroom.visibility = View.VISIBLE
+                save_classroom.isEnabled = false
+                save_classroom.text = getString(R.string.saving)
+            } else {
+                layout_progress_bar_create_classroom.visibility = View.GONE
+                save_classroom.isEnabled = true
+                save_classroom.text = getString(R.string.save)
+            }
 
         })
 
         createClassroomViewModel.stringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
-                showSnackBar(R.string.name_too_long)
+                R.string.name_too_long.showSnackBar()
             } else if (it == 2) {
-                showSnackBar(R.string.name_cant_be_empty)
+                R.string.name_cant_be_empty.showSnackBar()
             }
         })
 
         createClassroomViewModel.descriptionStringLength.observe(viewLifecycleOwner, Observer {
             if (it == 1) {
-                showSnackBar(R.string.description_too_long)
+                R.string.description_too_long.showSnackBar()
             } else if (it == 2) {
-                showSnackBar(R.string.description_cant_be_empty)
+                R.string.description_cant_be_empty.showSnackBar()
             }
         })
+        createClassroomViewModel.showSnackBarHttpError.observe(viewLifecycleOwner, Observer {
+            if (it==1) {
+                R.string.failed_to_save_classroom.showSnackBar()
+                createClassroomViewModel.hideHttpErrorSnackBar()
+            } else if (it==2) {
+                R.string.network_error.showSnackBar()
+                createClassroomViewModel.hideHttpErrorSnackBar()
+            }
+        })
+
         return binding.root
     }
 
-    private fun showSnackBar(id: Int) {
+    private fun Int.showSnackBar() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            getString(id),
+            getString(this),
             Snackbar.LENGTH_LONG
         ).show()
         createClassroomViewModel.snackBarShown()

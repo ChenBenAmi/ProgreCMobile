@@ -12,17 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.progresee.R
 import com.example.progresee.adapters.UserFinishedAdapter
 import com.example.progresee.data.AppRepository
-import com.example.progresee.databinding.UsersFinishedFragmentBinding
+import com.example.progresee.databinding.FinishedUsersFragmentBinding
 import com.example.progresee.viewmodels.UsersFinishedViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.users_finished_fragment.*
+import kotlinx.android.synthetic.main.finished_users_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class UsersFinishedFragment : Fragment() {
+class FinishedUsersFragment : Fragment() {
 
     private val appRepository: AppRepository by inject()
     private lateinit var classroomId: String
@@ -34,8 +34,8 @@ class UsersFinishedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding: UsersFinishedFragmentBinding =
-            DataBindingUtil.inflate(inflater, R.layout.users_finished_fragment, container, false)
+        val binding: FinishedUsersFragmentBinding =
+            DataBindingUtil.inflate(inflater, R.layout.finished_users_fragment, container, false)
 
         val title: String = getString(R.string.finished_users)
         (activity as? AppCompatActivity)?.progresee_toolbar?.title = title
@@ -46,28 +46,28 @@ class UsersFinishedFragment : Fragment() {
         binding.lifecycleOwner = this
 
 
-        val arguments = UsersFinishedFragmentArgs.fromBundle(arguments!!)
+        val arguments = FinishedUsersFragmentArgs.fromBundle(arguments!!)
         classroomId = arguments.classroomId
         exerciseId = arguments.exerciseId
 
         Timber.wtf("classroomId is $classroomId exerciseId is $exerciseId")
-        val viewModel: UsersFinishedViewModel by viewModel {
+        val finishedUsersViewModel: UsersFinishedViewModel by viewModel {
             parametersOf(
                 appRepository, classroomId, exerciseId
             )
         }
-        this.viewModel = viewModel
+        this.viewModel = finishedUsersViewModel
         (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
 
 
-        binding.usersFinishedViewModel = viewModel
+        binding.usersFinishedViewModel = finishedUsersViewModel
         val manager = LinearLayoutManager(context)
         binding.usersFinishedList.layoutManager = manager
         val adapter = UserFinishedAdapter()
 
         binding.usersFinishedList.adapter = adapter
 
-        viewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+        finishedUsersViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.completed_list_title)
                 empty_finished_users_list.visibility = View.VISIBLE
@@ -78,27 +78,44 @@ class UsersFinishedFragment : Fragment() {
                 users_finished_list.visibility = View.VISIBLE
             }
         })
-        viewModel.usersFinished.observe(viewLifecycleOwner, Observer {
+        finishedUsersViewModel.usersFinished.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Timber.wtf(it.toString())
                 adapter.submitList(it)
             }
         })
 
-        viewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
+        finishedUsersViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Refreshing...")
-                viewModel.hideRefreshSnackBar()
+                R.string.refreshing_string.showSnackBar()
+                finishedUsersViewModel.hideRefreshSnackBar()
+            }
+        })
+        finishedUsersViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                layout_progress_bar_finished_users.visibility = View.VISIBLE
+            if (it == false) {
+                layout_progress_bar_finished_users.visibility = View.GONE
+            }
+        })
+
+        finishedUsersViewModel.showSnackBarHttpError.observe(viewLifecycleOwner, Observer {
+            if (it==1) {
+                R.string.no_users_finished.showSnackBar()
+                finishedUsersViewModel.hideHttpErrorSnackBar()
+            } else if (it==2) {
+                R.string.network_error.showSnackBar()
+                finishedUsersViewModel.hideHttpErrorSnackBar()
             }
         })
 
         return binding.root
     }
 
-    private fun showSnackBar(message: String) {
+    private fun Int.showSnackBar() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            message,
+            getString(this),
             Snackbar.LENGTH_LONG
         ).show()
     }

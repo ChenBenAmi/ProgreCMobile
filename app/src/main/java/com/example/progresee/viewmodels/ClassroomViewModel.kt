@@ -5,6 +5,8 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.SnapshotMetadata
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -47,12 +49,19 @@ class ClassroomViewModel constructor(
     val showSnackBarRefresh
         get() = _showSnackBarRefresh
 
+    private val _showSnackBarHttpError = MutableLiveData<Int?>()
+    val showSnackBarHttpError
+        get() = _showSnackBarHttpError
+
+    private val listenersList= mutableListOf<ListenerRegistration>()
+
 
     init {
         getCurrentUser()
     }
 
     fun fetchClassrooms() {
+        listenersList.clear()
         uiScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -60,31 +69,30 @@ class ClassroomViewModel constructor(
                         appRepository.getClassroomsAsync(appRepository.currentToken.value!!).await()
                     if (request.isSuccessful) {
                         val classroomsData = request.body()
-                        Timber.wtf("data -------->  $classroomsData")
                         classroomsData?.let {
-                            if (it.isNotEmpty()) {
-                                withContext(Dispatchers.Main) {
-                                    _isEmpty.value = false
-                                }
-                                classroomsData.forEach { classroomEntry ->
-                                    setListeners(classroomEntry.key)
-                                }
-                            } else {
-                                withContext(Dispatchers.Main) {
-                                    _isEmpty.value = true
-                                    Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
-                                }
+                            withContext(Dispatchers.Main) {
+                                _isEmpty.value = false
+                            }
+                            classroomsData.forEach { classroomEntry ->
+                                setListeners(classroomEntry.key)
                             }
                         }
                     } else {
                         withContext(Dispatchers.Main) {
                             _isEmpty.value = true
-                            Timber.wtf("else 2 ${request.code()}${request.errorBody()}")
-
+                            Timber.wtf("request failed ${request.code()}${request.errorBody()}")
+                            showHttpErrorSnackBar400()
                         }
                     }
                 } catch (e: Exception) {
                     Timber.wtf("${e.message}${e.message}${e.stackTrace}")
+                    withContext(Dispatchers.Main) {
+                        showHttpErrorSnackBarNetwork()
+                    }
+                } finally {
+                    withContext(Dispatchers.Main) {
+                        hideProgressBar()
+                    }
                 }
             }
         }
@@ -120,8 +128,16 @@ class ClassroomViewModel constructor(
                                             }
                                             fetchClassrooms()
                                         }
+                                    } else {
+                                        Timber.wtf("the error code is ${request.code()}")
+                                        withContext(Dispatchers.Main) {
+                                            showHttpErrorSnackBarServer()
+                                        }
                                     }
                                 } catch (e: Exception) {
+                                    withContext(Dispatchers.Main) {
+                                        showHttpErrorSnackBarNetwork()
+                                    }
                                     Timber.e(" catch clause -> ${e.printStackTrace()}${e.message}")
                                 } finally {
                                     withContext(Dispatchers.Main) {
@@ -144,19 +160,17 @@ class ClassroomViewModel constructor(
         val docRef = db.collection("classrooms")
             .document(uid)
 
-        docRef.addSnapshotListener { snapshot, e ->
+        val listener=docRef.addSnapshotListener { snapshot, e ->
+
             if (e != null) {
                 Timber.wtf("Listen failed $e")
             }
             if (snapshot != null && snapshot.exists()) {
-                Timber.wtf("Current data: ${snapshot.data}")
-
                 val classroomFirestore =
                     snapshot.toObject(Classroom::class.java)
                 Timber.wtf("classroom -> $classroomFirestore")
                 classroomFirestore?.let {
                     if (!it.archived) {
-                        Timber.wtf("formatted classroom is -> $it")
                         adapterList[it.uid] = it
                         classrooms.value = adapterList.values.toList()
                     }
@@ -164,7 +178,9 @@ class ClassroomViewModel constructor(
             } else {
                 Timber.wtf("Current data: null")
             }
+
         }
+        listenersList.add(listener)
     }
 
     fun onClassroomClicked(uid: String) {
@@ -199,10 +215,31 @@ class ClassroomViewModel constructor(
         _showSnackBarRefresh.value = null
     }
 
+
+    override fun showHttpErrorSnackBar400() {
+        _showSnackBarHttpError.value = 1
+    }
+
+    override fun showHttpErrorSnackBarNetwork() {
+        _showSnackBarHttpError.value = 2
+    }
+
+    override fun showHttpErrorSnackBarServer() {
+        _showSnackBarHttpError.value=3
+    }
+
+    override fun hideHttpErrorSnackBar() {
+        _showSnackBarHttpError.value = null
+    }
+
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
         uiScope.cancel()
+        listenersList.forEach {
+            it.remove()
+        }
 
     }
 

@@ -21,16 +21,14 @@
         android:layout_height="match_parent"
         tools:context=".views.CreateTaskFragment">
 
+
         <include
-            android:id="@+id/layout_progress_bar"
+            android:id="@+id/layout_progress_bar_create_task"
             layout="@layout/progress_bar_layout"
-            android:layout_width="76dp"
-            android:layout_height="13dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/create_classroom_title"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
 
 
         <Button

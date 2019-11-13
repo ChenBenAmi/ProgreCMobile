@@ -20,6 +20,7 @@ import com.example.progresee.databinding.FragmentUsersBinding
 import com.example.progresee.viewmodels.UserViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_users.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -105,15 +106,34 @@ class UserFragment : Fragment() {
 
         userViewModel.showSnackBarClassroom.observe(viewLifecycleOwner, Observer {
             if (it == true){
-                showSnackBar("Classroom has been deleted :(")
+                R.string.not_part_of_classroom_error.showSnackBar()
                 userViewModel.hideSnackBarClassroomDeleted()
             }
         })
 
         userViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showSnackBar("Refreshing...")
+                R.string.refreshing_string.showSnackBar()
                 userViewModel.hideRefreshSnackBar()
+            }
+        })
+
+        userViewModel.showSnackBarHttpError.observe(viewLifecycleOwner, Observer {
+            if (it==1) {
+                R.string.failed_to_complete_action.showSnackBar()
+                userViewModel.hideHttpErrorSnackBar()
+            } else if (it==2) {
+                R.string.network_error.showSnackBar()
+                userViewModel.hideHttpErrorSnackBar()
+            }
+        })
+
+        userViewModel.showProgressBar.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                layout_progress_bar_users.visibility = View.VISIBLE
+            }
+            if (it == null) {
+                layout_progress_bar_users.visibility = View.GONE
             }
         })
 
@@ -189,10 +209,10 @@ class UserFragment : Fragment() {
         }
     }
 
-    private fun showSnackBar(message:String) {
+    private fun Int.showSnackBar() {
         Snackbar.make(
             activity!!.findViewById(android.R.id.content),
-            message,
+            getString(this),
             Snackbar.LENGTH_LONG
         ).show()
     }

@@ -60,22 +60,22 @@
             android:inputType="textCapWords"
             android:singleLine="true"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/save_button"
+            app:layout_constraintBottom_toTopOf="@+id/save_classroom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_classroom_name" />
 
         <include
-            android:id="@+id/layout_progress_bar"
+            android:id="@+id/layout_progress_bar_create_classroom"
             layout="@layout/progress_bar_layout"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/create_classroom_title"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <Button
-            android:id="@+id/save_button"
+            android:id="@+id/save_classroom"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:onClick="@{()->createClassroomViewModel.onSavePressed(editTextClassroomName.getText().toString(),editTextClassroomDescription.getText().toString() )}"
@@ -98,7 +98,7 @@
             app:layout_constraintBottom_toTopOf="@+id/generated_link"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/save_button" />
+            app:layout_constraintTop_toBottomOf="@+id/save_classroom" />
 
         <TextView
             android:id="@+id/generated_link"

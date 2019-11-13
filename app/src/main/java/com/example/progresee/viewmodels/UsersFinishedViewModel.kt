@@ -33,6 +33,9 @@ class UsersFinishedViewModel(
     val showSnackBarRefresh
         get() = _showSnackBarRefresh
 
+    private val _showSnackBarHttpError = MutableLiveData<Int?>()
+    val showSnackBarHttpError
+        get() = _showSnackBarHttpError
 
     init {
         getUsersFinished()
@@ -53,7 +56,6 @@ class UsersFinishedViewModel(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.let {
-                                if (it.isNotEmpty()) {
                                     withContext(Dispatchers.Main) {
                                         _isEmpty.value = false
                                     }
@@ -65,16 +67,16 @@ class UsersFinishedViewModel(
                                             _usersFinished.value = adapterList.values.toList()
                                         }
                                     }
-                                } else {
-                                    withContext(Dispatchers.Main) {
-                                        _isEmpty.value = true
-                                        Timber.wtf("no users available ${response.code()}")
-                                    }
                                 }
-
+                            } else {
+                            withContext(Dispatchers.Main) {
+                                showHttpErrorSnackBar400()
                             }
                         }
                     } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            showHttpErrorSnackBarNetwork()
+                        }
                         Timber.wtf("Something went wrong${e.printStackTrace()}${e.message}")
                     } finally {
                         withContext(Dispatchers.Main) {
@@ -86,14 +88,6 @@ class UsersFinishedViewModel(
         }
     }
 
-
-    override fun navigate() {
-        super.navigate()
-    }
-
-    override fun onDoneNavigating() {
-        super.onDoneNavigating()
-    }
 
     override fun showProgressBar() {
         super.showProgressBar()
@@ -111,6 +105,24 @@ class UsersFinishedViewModel(
 
     fun hideRefreshSnackBar() {
         _showSnackBarRefresh.value = null
+    }
+
+    override fun showHttpErrorSnackBar400() {
+        _showSnackBarHttpError.value = 1
+    }
+
+    override fun showHttpErrorSnackBarNetwork() {
+        _showSnackBarHttpError.value = 2
+    }
+
+    override fun hideHttpErrorSnackBar() {
+        _showSnackBarHttpError.value = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+        uiScope.cancel()
     }
 
 

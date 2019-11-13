@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit
 class ApiService {
 
     private val client = OkHttpClient()
-        .newBuilder().readTimeout(60, TimeUnit.SECONDS)
-        .writeTimeout(60, TimeUnit.SECONDS)
+        .newBuilder().readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
     private val moshi = Moshi.Builder()
