@@ -2,34 +2,29 @@ package com.example.progresee.views
 
 
 import android.os.Bundle
-import android.transition.Visibility
-import android.view.*
-import androidx.appcompat.app.AlertDialog
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.SharedElementCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.progresee.R
 import com.example.progresee.adapters.ClassroomAdapter
 import com.example.progresee.adapters.ClassroomClickListener
 import com.example.progresee.data.AppRepository
 import com.example.progresee.databinding.FragmentClassroomBinding
 import com.example.progresee.viewmodels.ClassroomViewModel
+import com.firebase.ui.auth.AuthUI
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_classroom.*
+import kotlinx.android.synthetic.main.fragment_create_classroom.layout_progress_bar
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import com.firebase.ui.auth.AuthUI
-import com.example.progresee.R
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_classroom.*
-import kotlinx.android.synthetic.main.fragment_create_classroom.*
-import kotlinx.android.synthetic.main.fragment_create_classroom.layout_progress_bar
-import org.koin.android.ext.android.get
 import timber.log.Timber
 
 
@@ -57,8 +52,8 @@ class ClassroomFragment : Fragment() {
         })
 
         val title: String = getString(R.string.progresee)
-        (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
         (activity as? AppCompatActivity)?.progresee_toolbar?.title = title
+        (activity as? AppCompatActivity)?.progresee_toolbar?.menu?.clear()
         (activity as? AppCompatActivity)?.progresee_toolbar?.inflateMenu(R.menu.main_menu)
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnClickListener(null)
         setItems()
@@ -134,6 +129,13 @@ class ClassroomFragment : Fragment() {
                 classroom_list.visibility = View.VISIBLE
             }
         })
+
+        classroomViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                showSnackBar("Refreshing...")
+                classroomViewModel.hideRefreshSnackBar()
+            }
+        })
         appRepository.setUserEmail()
 
         return binding.root
@@ -141,12 +143,20 @@ class ClassroomFragment : Fragment() {
     }
 
 
+    private fun showSnackBar(message: String) {
+        Snackbar.make(
+            activity!!.findViewById(android.R.id.content),
+            message,
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
 
     private fun setItems() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.refresh_classroom -> {
                   classroomViewModel.fetchClassrooms()
+                    classroomViewModel.showSnackBarRefresh()
                 }
                 R.id.logout_menu_item -> {
                     logout()

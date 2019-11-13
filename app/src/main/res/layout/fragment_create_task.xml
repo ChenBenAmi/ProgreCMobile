@@ -27,9 +27,10 @@
             android:layout_width="76dp"
             android:layout_height="13dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/pick_date"
-            app:layout_constraintTop_toBottomOf="@+id/add_link_task"
-            tools:layout_editor_absoluteX="206dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <Button
@@ -39,9 +40,9 @@
             android:onClick="@{()->createTaskViewModel.onPressedDatePick()}"
             android:text="@string/end_date"
             app:layout_constraintBottom_toTopOf="@+id/current_end_date_string"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_progress_bar" />
+            app:layout_constraintEnd_toEndOf="@+id/current_end_date_string"
+            app:layout_constraintStart_toStartOf="@+id/current_end_date_string"
+            app:layout_constraintTop_toBottomOf="@+id/add_link_task" />
 
         <TextView
             android:id="@+id/current_end_date_string"
@@ -49,8 +50,8 @@
             android:layout_height="wrap_content"
             android:text="@string/current_end_date_string"
             app:layout_constraintBottom_toTopOf="@+id/current_end_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/current_end_date"
+            app:layout_constraintStart_toStartOf="@+id/current_end_date"
             app:layout_constraintTop_toBottomOf="@+id/pick_date" />
 
         <TextView
@@ -60,9 +61,8 @@
             android:layout_height="wrap_content"
             android:text="@string/date_mock"
             app:layout_constraintBottom_toTopOf="@+id/save_task"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/save_task"
+            app:layout_constraintStart_toStartOf="@+id/save_task"
             app:layout_constraintTop_toBottomOf="@+id/current_end_date_string" />
 
         <EditText
@@ -73,9 +73,9 @@
             android:hint="@string/resource_link"
             android:importantForAutofill="no"
             android:inputType="textUri"
-            app:layout_constraintBottom_toTopOf="@+id/layout_progress_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/pick_date"
+            app:layout_constraintEnd_toEndOf="@+id/pick_date"
+            app:layout_constraintStart_toStartOf="@+id/pick_date"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_task_description" />
 
         <EditText
@@ -86,8 +86,8 @@
             android:importantForAutofill="no"
             android:inputType="text"
             app:layout_constraintBottom_toTopOf="@+id/add_link_task"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/add_link_task"
+            app:layout_constraintStart_toStartOf="@+id/add_link_task"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_task_title" />
 
         <EditText
@@ -98,8 +98,8 @@
             android:importantForAutofill="no"
             android:inputType="textCapWords"
             app:layout_constraintBottom_toTopOf="@+id/edit_text_task_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_text_task_description"
+            app:layout_constraintStart_toStartOf="@+id/edit_text_task_description"
             app:layout_constraintTop_toBottomOf="@+id/create_task_title" />
 
         <TextView
@@ -112,8 +112,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/edit_text_task_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/edit_text_task_title"
+            app:layout_constraintStart_toStartOf="@+id/edit_text_task_title"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button

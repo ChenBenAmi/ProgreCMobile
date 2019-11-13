@@ -6,7 +6,6 @@ import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.lang.Exception
 import java.util.*
 
 class CreateTaskViewModel(
@@ -115,7 +114,6 @@ class CreateTaskViewModel(
     }
 
     fun onSavePressed(title: String, description: String, link: String, date: String) {
-
         Timber.wtf(date)
         when {
             title.length > 60 -> _stringLength.value = 1
@@ -128,7 +126,6 @@ class CreateTaskViewModel(
                     if (taskId == null) {
                         if (appRepository.currentToken.value != null) {
                             try {
-                                Timber.wtf("heyBEFOREREQ")
                                 val request =
                                     appRepository.createTaskAsync(
                                         appRepository.currentToken.value!!,
@@ -139,14 +136,12 @@ class CreateTaskViewModel(
                                         date
                                     ).await()
                                 if (request.isSuccessful) {
-                                    Timber.wtf("hey")
                                     val data = request.body()
                                     Timber.wtf(data.toString())
-                                    data?.forEach {
-                                    }
-                                    Timber.wtf("hey1")
-                                    withContext(Dispatchers.Main) {
-                                        _navigateBackToTaskFragment.value = true
+                                    data?.let {
+                                        withContext(Dispatchers.Main) {
+                                            _navigateBackToTaskFragment.value = true
+                                        }
                                     }
                                 } else {
                                     Timber.wtf("req not successfull :( ${request.code()}")
@@ -158,45 +153,44 @@ class CreateTaskViewModel(
                                     hideProgressBar()
                                 }
                             }
-                        } else {
-                            val task = getTask().value
+                        }
+                    } else {
+                        val task = getTask().value
 
-                            Timber.wtf(task.toString())
-                            if (task != null) {
-                                try {
-                                    task.title = title
-                                    task.description = description
-                                    task.endDate = date
-                                    task.referenceLink = link
-                                    val request =
-                                        appRepository.updateTaskAsync(
-                                            appRepository.currentToken.value!!,
-                                            classroomId,
-                                            task
-                                        )
-                                            .await()
-                                    if (request.isSuccessful) {
-                                        val data = request.body()
-                                        data?.forEach {
-                                            //                                        appRepository.updateTask(task)
-                                        }
-
+                        Timber.wtf(task.toString())
+                        if (task != null) {
+                            try {
+                                task.title = title
+                                task.description = description
+                                task.endDate = date
+                                task.referenceLink = link
+                                val request =
+                                    appRepository.updateTaskAsync(
+                                        appRepository.currentToken.value!!,
+                                        classroomId,
+                                        task
+                                    )
+                                        .await()
+                                if (request.isSuccessful) {
+                                    val data = request.body()
+                                    data?.let {
                                         withContext(Dispatchers.Main) {
                                             navigateBackToTaskFragment.value = true
                                         }
-                                    } else {
-                                        Timber.wtf("${request.code()}${request.raw()}")
                                     }
-                                } catch (e: Exception) {
-                                    Timber.wtf("oh no something went wrong!${e.printStackTrace()}${e.message}")
-                                } finally {
-                                    withContext(Dispatchers.Main) {
-                                        hideProgressBar()
-                                    }
+                                } else {
+                                    Timber.wtf("${request.code()}${request.raw()}")
+                                }
+                            } catch (e: Exception) {
+                                Timber.wtf("oh no something went wrong!${e.printStackTrace()}${e.message}")
+                            } finally {
+                                withContext(Dispatchers.Main) {
+                                    hideProgressBar()
                                 }
                             }
                         }
                     }
+
                 }
             }
         }

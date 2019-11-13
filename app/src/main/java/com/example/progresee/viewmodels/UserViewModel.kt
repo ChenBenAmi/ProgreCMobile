@@ -6,9 +6,9 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.R
-import com.example.progresee.beans.*
+import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.User
 import com.example.progresee.data.AppRepository
-import com.firebase.ui.firestore.ChangeEventListener
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -58,9 +58,14 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     val showSnackBarClassroom
         get() = _showSnackBarClassroom
 
+    private val _showSnackBarRefresh = MutableLiveData<Boolean?>()
+    val showSnackBarRefresh
+        get() = _showSnackBarRefresh
+
     private val _navigateBackToClassroomFragment = MutableLiveData<Boolean?>()
     val navigateBackToClassroomFragment
         get() = _navigateBackToClassroomFragment
+
 
     init {
         setClassroomListener(classroomId)
@@ -295,6 +300,16 @@ class UserViewModel(private val appRepository: AppRepository, private val classr
     fun hideSnackBarClassroomDeleted() {
         _showSnackBarClassroom.value = null
     }
+
+
+    fun showSnackBarRefresh() {
+        _showSnackBarRefresh.value = true
+    }
+
+    fun hideRefreshSnackBar() {
+        _showSnackBarRefresh.value = null
+    }
+
 
     private fun onClassroomDeleted() {
         _navigateBackToClassroomFragment.value = true

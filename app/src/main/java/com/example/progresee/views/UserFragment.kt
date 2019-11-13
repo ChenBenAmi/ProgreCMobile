@@ -2,16 +2,17 @@ package com.example.progresee.views
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.progresee.R
 import com.example.progresee.adapters.UserClickListener
 import com.example.progresee.adapters.UsersAdapter
 import com.example.progresee.data.AppRepository
@@ -22,11 +23,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import androidx.core.view.children
-import androidx.core.view.forEach
-import com.example.progresee.R
-import kotlinx.android.synthetic.main.list_item_user.view.*
-import timber.log.Timber
 
 
 class UserFragment : Fragment() {
@@ -114,6 +110,13 @@ class UserFragment : Fragment() {
             }
         })
 
+        userViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                showSnackBar("Refreshing...")
+                userViewModel.hideRefreshSnackBar()
+            }
+        })
+
         return binding.root
     }
 
@@ -179,6 +182,7 @@ class UserFragment : Fragment() {
             when (it.itemId) {
                 R.id.refresh_users_in_classroom -> {
                     userViewModel.loadUsers()
+                    userViewModel.showSnackBarRefresh()
                 }
             }
             true

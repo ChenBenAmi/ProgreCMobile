@@ -6,7 +6,6 @@ import com.example.progresee.beans.Classroom
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.lang.Exception
 
 class CreateClassroomViewModel(
     private val appRepository: AppRepository, classroomId: String?
@@ -90,13 +89,10 @@ class CreateClassroomViewModel(
                                 if (request.isSuccessful) {
                                     val data = request.body()
                                     Timber.wtf(data.toString())
-                                    data?.forEach {
-//                                        appRepository.insertClassroom(it.value)
-                                    }
-
-                                    withContext(Dispatchers.Main) {
-                                        hideProgressBar()
-                                        _navigateBackToClassroomFragment.value = 0
+                                    data?.let {
+                                        withContext(Dispatchers.Main) {
+                                            _navigateBackToClassroomFragment.value = 0
+                                        }
                                     }
                                 }
                             } catch (e: Exception) {
@@ -121,11 +117,9 @@ class CreateClassroomViewModel(
                                         .await()
                                 if (request.isSuccessful) {
                                     val data = request.body()
-                                    data?.forEach {
-//                                        appRepository.updateClassroom(it.value)
+                                    data?.let {
+                                        _navigateBackToClassroomFragment.value = 0
                                     }
-
-
                                 } else {
                                     Timber.wtf("${request.code()}${request.raw()}")
                                 }
@@ -134,7 +128,6 @@ class CreateClassroomViewModel(
                             } finally {
                                 withContext(Dispatchers.Main) {
                                     hideProgressBar()
-                                    _navigateBackToClassroomFragment.value = 0
                                 }
                             }
                         }

@@ -24,6 +24,8 @@
     <string name="classroom_description">Classroom Description</string>
     <string name="classroom_name">Classroom Name</string>
     <string name="progresee">ProgreSee</string>
+    <string name="finished_users">Finished Users</string>
+
     <string name="number_of_tasks">Open tasks: %1$d </string>
     <string name="last_login_date">Last seen: %1$s</string>
     <string name="completed_on">Completed on: %1$s</string>
@@ -56,8 +58,8 @@
     <string name="no_internet_connection">No Internet Found</string>
     <string name="signed_in">Signed In successfully</string>
     <string name="login">Login</string>
-    <string name="please_wait">Please wait ...</string>
-    <string name="saving">Saving...</string>
+    <string name="please_wait">Please wait …</string>
+    <string name="saving">Saving…</string>
     <string name="owner">Owner</string>
     <string name="add_user">Add user</string>
     <string name="leave_classroom">Leave classroom</string>
@@ -91,7 +93,7 @@
     <string name="no_tasks_available">No Tasks Available</string>
     <string name="no_exercises_available">No Exercises Available</string>
     <string name="refresh">Refresh</string>
-    <string name="no_user_has_completed_the_exercise_yet">No user has completed the exercise yet...</string>
+    <string name="no_user_has_completed_the_exercise_yet">No user has completed the exercise yet…</string>
 
 
 </resources>

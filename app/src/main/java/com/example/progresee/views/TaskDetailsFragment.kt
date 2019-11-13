@@ -24,8 +24,6 @@ import com.example.progresee.databinding.FragmentTaskDetailsBinding
 import com.example.progresee.viewmodels.TaskDetailsViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_classroom.*
-import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.android.synthetic.main.fragment_task_details.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -193,6 +191,19 @@ class TaskDetailsFragment : Fragment() {
             }
         })
 
+        taskDetailsViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                showSnackBar("Refreshing...")
+                taskDetailsViewModel.hideRefreshSnackBar()
+            }
+        })
+
+        taskDetailsViewModel.showSnackBarUpdatedExercise.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                showSnackBar("Exercise Updated")
+                taskDetailsViewModel.hideSnackBarUpdatedExercise()
+            }
+        })
         return binding.root
     }
 
@@ -214,6 +225,7 @@ class TaskDetailsFragment : Fragment() {
                 }
                 R.id.refresh_exercise -> {
                     taskDetailsViewModel.fetchExercisesFromFirebase()
+                    taskDetailsViewModel.showSnackBarRefresh()
                 }
             }
             true
@@ -221,7 +233,6 @@ class TaskDetailsFragment : Fragment() {
     }
 
 
-    //TODO updateStatus by exerciseID
     private fun setItemsClient() {
         (activity as? AppCompatActivity)?.progresee_toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -230,6 +241,7 @@ class TaskDetailsFragment : Fragment() {
                 }
                 R.id.refresh_client -> {
                     taskDetailsViewModel.fetchExercisesFromFirebase()
+                    taskDetailsViewModel.showSnackBarRefresh()
                 }
             }
 

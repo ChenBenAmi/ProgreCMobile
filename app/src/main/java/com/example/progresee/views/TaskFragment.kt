@@ -3,7 +3,9 @@ package com.example.progresee.views
 
 import android.os.Bundle
 import android.text.InputType
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,10 +22,7 @@ import com.example.progresee.databinding.FragmentTaskBinding
 import com.example.progresee.viewmodels.TaskViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_classroom.*
 import kotlinx.android.synthetic.main.fragment_task.*
-import kotlinx.android.synthetic.main.fragment_task.layout_progress_bar
-import kotlinx.android.synthetic.main.fragment_task_details.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -170,6 +169,13 @@ class TaskFragment : Fragment() {
                 taskViewModel.hideSnackBarClassroomDeleted()
             }
         })
+
+        taskViewModel.showSnackBarRefresh.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                showSnackBar("Refreshing...")
+                taskViewModel.hideRefreshSnackBar()
+            }
+        })
         return binding.root
 
     }
@@ -193,6 +199,7 @@ class TaskFragment : Fragment() {
                 }
                 R.id.refresh_task -> {
                     taskViewModel.fetchTasksFromFirebase()
+                    taskViewModel.showSnackBarRefresh()
                 }
             }
             true

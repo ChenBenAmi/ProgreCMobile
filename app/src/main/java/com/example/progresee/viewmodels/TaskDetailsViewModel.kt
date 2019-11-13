@@ -4,10 +4,11 @@ import android.content.Context
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.progresee.R
-import com.example.progresee.beans.*
+import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Exercise
+import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -89,6 +90,14 @@ class TaskDetailsViewModel constructor(
     private val _createExerciseAlert = MutableLiveData<Boolean?>()
     val createExerciseAlert
         get() = _createExerciseAlert
+
+    private val _showSnackBarRefresh = MutableLiveData<Boolean?>()
+    val showSnackBarRefresh
+        get() = _showSnackBarRefresh
+
+    private val _showSnackBarUpdatedExercise = MutableLiveData<Boolean?>()
+    val showSnackBarUpdatedExercise
+        get() = _showSnackBarUpdatedExercise
 
 
     init {
@@ -258,7 +267,9 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.let {
-                                navigate()
+                                withContext(Dispatchers.Main) {
+                                    navigate()
+                                }
                             }
                         }
                     } catch (e: Exception) {
@@ -290,15 +301,12 @@ class TaskDetailsViewModel constructor(
                             val data = response.body()
                             Timber.wtf(data.toString())
                             data?.let {
-                                data.forEach {
-                                    setExerciseListeners(it.key)
-                                }
+                                setExerciseListeners(it.uid)
                                 withContext(Dispatchers.Main) {
                                     _isEmpty.value = null
+                                    showSnackBar()
+
                                 }
-                            }
-                            withContext(Dispatchers.Main) {
-                                showSnackBar()
                             }
                         }
                     } catch (e: Exception) {
@@ -334,7 +342,7 @@ class TaskDetailsViewModel constructor(
                                 withContext(Dispatchers.Main) {
 
                                     adapterList.remove(uid)
-                                    exercises.value=adapterList.values.toList()
+                                    exercises.value = adapterList.values.toList()
                                 }
                                 fetchExercisesFromFirebase()
 
@@ -367,8 +375,10 @@ class TaskDetailsViewModel constructor(
                         ).await()
                         if (response.isSuccessful) {
                             val data = response.body()
-                            data?.forEach {
-
+                            data?.let {
+                                withContext(Dispatchers.Main) {
+                                    showSnackBarUpdatedExercise()
+                                }
                             }
                         }
                     } catch (e: Exception) {
@@ -399,10 +409,10 @@ class TaskDetailsViewModel constructor(
                             if (response.isSuccessful) {
                                 val data = response.body()
                                 Timber.wtf(data.toString())
-                               data?.let {
-                                   checkedList.clear()
-                                   Timber.wtf(checkedList.toString())
-                               }
+                                data?.let {
+                                    checkedList.clear()
+                                    Timber.wtf(checkedList.toString())
+                                }
                             }
                         }
                     } catch (e: Exception) {
@@ -525,6 +535,23 @@ class TaskDetailsViewModel constructor(
 
     fun hideCreateExerciseAlert() {
         _createExerciseAlert.value = null
+    }
+
+
+    fun showSnackBarRefresh() {
+        _showSnackBarRefresh.value = true
+    }
+
+    fun hideRefreshSnackBar() {
+        _showSnackBarRefresh.value = null
+    }
+
+    fun showSnackBarUpdatedExercise() {
+        _showSnackBarUpdatedExercise.value = true
+    }
+
+    fun hideSnackBarUpdatedExercise() {
+        _showSnackBarUpdatedExercise.value = null
     }
 
     override fun onCleared() {

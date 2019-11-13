@@ -1,8 +1,6 @@
 package com.example.progresee.viewmodels
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.Classroom
 import com.example.progresee.beans.FinishedUser
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
@@ -31,12 +29,16 @@ class UsersFinishedViewModel(
     val showProgressBar
         get() = _showProgressBar
 
+    private val _showSnackBarRefresh = MutableLiveData<Boolean?>()
+    val showSnackBarRefresh
+        get() = _showSnackBarRefresh
+
 
     init {
         getUsersFinished()
     }
 
-    private fun getUsersFinished() {
+    fun getUsersFinished() {
         uiScope.launch {
             showProgressBar()
             withContext(Dispatchers.IO) {
@@ -101,6 +103,14 @@ class UsersFinishedViewModel(
     override fun hideProgressBar() {
         super.hideProgressBar()
         _showProgressBar.value = null
+    }
+
+    fun showSnackBarRefresh() {
+        _showSnackBarRefresh.value = true
+    }
+
+    fun hideRefreshSnackBar() {
+        _showSnackBarRefresh.value = null
     }
 
 

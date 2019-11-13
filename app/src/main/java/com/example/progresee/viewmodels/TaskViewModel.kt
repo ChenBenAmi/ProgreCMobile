@@ -1,7 +1,8 @@
 package com.example.progresee.viewmodels
 
 import androidx.lifecycle.MutableLiveData
-import com.example.progresee.beans.*
+import com.example.progresee.beans.Classroom
+import com.example.progresee.beans.Task
 import com.example.progresee.data.AppRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -54,6 +55,10 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
     private val _navigateBackToClassroomFragment = MutableLiveData<Boolean?>()
     val navigateBackToClassroomFragment
         get() = _navigateBackToClassroomFragment
+
+    private val _showSnackBarRefresh = MutableLiveData<Boolean?>()
+    val showSnackBarRefresh
+        get() = _showSnackBarRefresh
 
 
     init {
@@ -221,11 +226,8 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
                         ).await()
                         if (response.isSuccessful) {
                             val data = response.body()
-                            if (data != null) {
-                                Timber.wtf(data.toString())
-                                data.forEach {
-                                    //                                    appRepository.insertClassroom(it.value)
-                                }
+                            Timber.wtf(data.toString())
+                            data?.let {
                                 withContext(Dispatchers.Main) {
                                     showSnackBar()
                                 }
@@ -292,6 +294,14 @@ class TaskViewModel(private val appRepository: AppRepository, private val classr
 
     fun hideSnackBarClassroomDeleted() {
         _showSnackBarClassroom.value = null
+    }
+
+    fun showSnackBarRefresh() {
+        _showSnackBarRefresh.value = true
+    }
+
+    fun hideRefreshSnackBar() {
+        _showSnackBarRefresh.value = null
     }
 
     override fun onCleared() {

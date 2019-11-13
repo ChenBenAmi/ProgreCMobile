@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.lang.Exception
 
 class ClassroomViewModel constructor(
     private val appRepository: AppRepository
@@ -43,6 +42,10 @@ class ClassroomViewModel constructor(
     private val _showProgressBar = MutableLiveData<Boolean?>()
     val showProgressBar
         get() = _showProgressBar
+
+    private val _showSnackBarRefresh = MutableLiveData<Boolean?>()
+    val showSnackBarRefresh
+        get() = _showSnackBarRefresh
 
 
     init {
@@ -83,7 +86,6 @@ class ClassroomViewModel constructor(
                 } catch (e: Exception) {
                     Timber.wtf("${e.message}${e.message}${e.stackTrace}")
                 }
-
             }
         }
 
@@ -93,7 +95,7 @@ class ClassroomViewModel constructor(
         val auth = FirebaseAuth.getInstance()
         val currentUser: FirebaseUser? = auth.currentUser
         if (appRepository.currentToken.value == null) {
-            if (currentUser?.email.equals("chen24201@gmail.com")) {
+            if (currentUser?.email.equals("hedsean@gmail.com")) {
                 _isAdmin.value = appRepository.isAdmin()
             } else {
                 _isAdmin.value = appRepository.notAdmin()
@@ -189,6 +191,13 @@ class ClassroomViewModel constructor(
         _showProgressBar.value = false
     }
 
+    fun showSnackBarRefresh() {
+        _showSnackBarRefresh.value = true
+    }
+
+    fun hideRefreshSnackBar() {
+        _showSnackBarRefresh.value = null
+    }
 
     override fun onCleared() {
         super.onCleared()
