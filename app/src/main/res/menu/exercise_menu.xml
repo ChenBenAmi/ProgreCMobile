@@ -17,6 +17,6 @@
 
     <item
         android:id="@+id/users_finished_list"
-        android:title="@string/see_progresee"
+        android:title="@string/see_progrec"
          />
 </menu>

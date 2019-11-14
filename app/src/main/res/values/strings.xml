@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProgreSee</string>
+    <string name="app_name">ProgreC</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="exercise_text">Exercise text</string>
@@ -13,17 +13,17 @@
     <string name="your_classrooms">Your classrooms:</string>
     <string name="logout">Logout</string>
     <string name="setting">Setting</string>
-    <string name="welcome_to_progresee">Welcome to ProgreSee</string>
+    <string name="welcome_to_progrec">Welcome to ProgreC</string>
     <string name="facebook_login">Facebook login</string>
     <string name="google_login">Google Login</string>
-    <string name="progresee_icon">ProgreSee Icon</string>
+    <string name="progrec_icon">ProgreC Icon</string>
     <string name="task_title">Task Title</string>
     <string name="due_by">Due by: %1$s</string>
     <string name="user_profile">User profile</string>
     <string name="create_classroom_title">Create Classroom</string>
     <string name="classroom_description">Classroom Description</string>
     <string name="classroom_name">Classroom Name</string>
-    <string name="progresee">ProgreSee</string>
+    <string name="progrec">ProgreC</string>
     <string name="finished_users">Finished Users</string>
 
     <string name="number_of_tasks">Open tasks: %1$d </string>
@@ -85,7 +85,7 @@
     <string name="edit_exercise">New exercise description</string>
     <string name="delete_exercise">Delete Exercise</string>
     <string name="seanhed22_gmail_com">seanhed22@gmail.com</string>
-    <string name="see_progresee">See ProgreSee</string>
+    <string name="see_progrec">See ProgreC</string>
     <string name="completed_list_title">Users Completed List</string>
     <string name="save_changes">Save Changes</string>
     <string name="update_exercises">Update exercises</string>
@@ -102,9 +102,9 @@
     <string name="task_has_been_deleted_msg">Task has been deleted :(</string>
     <string name="exercise_added">Exercise added</string>
     <string name="network_error">Network error :S</string>
-    <string name="failed_to_save_classroom">The system has failed to save the classroom...</string>
+    <string name="failed_to_save_classroom">The system has failed to save the classroom…</string>
     <string name="failed_to_save_task">The system has failed to save the Task</string>
-    <string name="no_users_finished">No users finished the exercise yet...</string>
+    <string name="no_users_finished">No users finished the exercise yet…</string>
     <string name="failed_to_complete_action">Failed to complete the requested action</string>
     <string name="no_user_in_system">No user with such email in the system</string>
 

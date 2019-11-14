@@ -6,7 +6,7 @@
 
         <variable
             name="exercise"
-            type="com.example.progresee.beans.Exercise" />
+            type="com.app.progrec.beans.Exercise" />
 
         <variable
             name="userEmail"
@@ -14,11 +14,11 @@
 
         <variable
             name="exerciseClickListener"
-            type="com.example.progresee.adapters.ExerciseClickListener" />
+            type="com.app.progrec.adapters.ExerciseClickListener" />
 
         <variable
             name="checkedListener"
-            type="com.example.progresee.adapters.CheckedListener" />
+            type="com.app.progrec.adapters.CheckedListener" />
 
     </data>
 
@@ -41,8 +41,12 @@
             android:orientation="horizontal">
 
             <TextView
+                android:gravity="center_vertical"
+                style="@style/progrec_font_body1"
                 android:id="@+id/exercise_text"
                 android:layout_width="0dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:text="@string/exercise_text"

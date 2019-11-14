@@ -7,11 +7,11 @@
 
         <variable
             name="classroom"
-            type="com.example.progresee.beans.Classroom" />
+            type="com.app.progrec.beans.Classroom" />
 
         <variable
             name="createClassroomViewModel"
-            type="com.example.progresee.viewmodels.CreateClassroomViewModel" />
+            type="com.app.progrec.viewmodels.CreateClassroomViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,14 +22,13 @@
         tools:layout_editor_absoluteY="1dp">
 
         <TextView
+            style="@style/progrec_font_title4"
             android:id="@+id/create_classroom_title"
-            android:layout_width="276dp"
-            android:layout_height="37dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/create_classroom_title"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/editText_classroom_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,14 +36,13 @@
 
         <EditText
             android:id="@+id/editText_classroom_name"
+            style="@style/progrec_font_body1"
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:ems="10"
             android:hint="@string/classroom_name"
             android:importantForAutofill="no"
             android:inputType="textCapWords"
             android:singleLine="true"
-            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/editText_classroom_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,12 +52,10 @@
             android:id="@+id/editText_classroom_description"
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:ems="10"
+            style="@style/progrec_font_body1"
             android:hint="@string/classroom_description"
             android:importantForAutofill="no"
             android:inputType="textCapWords"
-            android:singleLine="true"
-            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/save_classroom"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +71,7 @@
 
 
         <Button
+            style="@style/progrec_font_buttons"
             android:id="@+id/save_classroom"
             android:layout_width="100dp"
             android:layout_height="50dp"
@@ -104,7 +101,7 @@
             android:id="@+id/generated_link"
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:background="@drawable/shape"
+            android:background="@drawable/border"
             android:text="@string/generated_classroom_invite_link"
             android:textColor="@android:color/black"
             android:textSize="16sp"

@@ -8,7 +8,7 @@
 
         <variable
             name="usersFinishedViewModel"
-            type="com.example.progresee.viewmodels.UsersFinishedViewModel" />
+            type="com.app.progrec.viewmodels.UsersFinishedViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/empty_finished_users_list"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
+            style="@style/progrec_font_title3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

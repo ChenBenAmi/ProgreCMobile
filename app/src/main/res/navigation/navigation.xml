@@ -7,63 +7,74 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.progresee.views.HomeFragment"
+        android:name="com.app.progrec.views.HomeFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.example.progresee.views.HelpFragment"
+        android:name="com.app.progrec.views.HelpFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_help" />
     <fragment
-        android:id="@+id/settingFragment"
-        android:name="com.example.progresee.views.SettingFragment"
-        android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
-    <fragment
         android:id="@+id/classroomFragment"
-        android:name="com.example.progresee.views.ClassroomFragment"
+        android:name="com.app.progrec.views.ClassroomFragment"
         android:label="fragment_classroom"
         tools:layout="@layout/fragment_classroom">
         <action
             android:id="@+id/action_classroomFragment_to_createClassroomFragment"
             app:destination="@id/createClassroomFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:popEnterAnim="@anim/slide_in_right" />
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_classroomFragment_to_taskFragment"
             app:destination="@id/taskFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:popEnterAnim="@anim/slide_in_right" />
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_classroomFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.example.progresee.views.SplashScreenFragment"
+        android:name="com.app.progrec.views.SplashScreenFragment"
         android:label="SplashScreenFragment">
         <action
             android:id="@+id/action_splashScreenFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/navigation"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/createClassroomFragment"
-        android:name="com.example.progresee.views.CreateClassroomFragment"
+        android:name="com.app.progrec.views.CreateClassroomFragment"
         android:label="CreateClassroomFragment">
         <action
             android:id="@+id/action_createClassroomFragment_to_classroomFragment"
             app:destination="@id/classroomFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/classroomFragment"
             app:popUpToInclusive="false" />
         <argument
@@ -73,70 +84,121 @@
     </fragment>
     <fragment
         android:id="@+id/taskFragment"
-        android:name="com.example.progresee.views.TaskFragment"
+        android:name="com.app.progrec.views.TaskFragment"
         android:label="fragment_task">
         <argument
             android:name="classroomId"
             app:argType="string" />
         <action
             android:id="@+id/action_taskFragment_to_taskDetailsFragment"
-            app:destination="@id/taskDetailsFragment" />
+            app:destination="@id/taskDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_taskFragment_to_createClassroomFragment"
-            app:destination="@+id/createClassroomFragment" />
+            app:destination="@+id/createClassroomFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_taskFragment_to_classroomFragment"
             app:destination="@id/classroomFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/classroomFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_taskFragment_to_userFragment"
-            app:destination="@id/userFragment" />
+            app:destination="@id/userFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_taskFragment_to_createTask"
-            app:destination="@id/createTask" />
+            app:destination="@id/createTask"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/taskDetailsFragment"
-        android:name="com.example.progresee.views.TaskDetailsFragment"
-        android:label="ExerciseFragment" >
+        android:name="com.app.progrec.views.TaskDetailsFragment"
+        android:label="ExerciseFragment">
         <argument
             android:name="taskId"
             app:argType="string" />
         <action
             android:id="@+id/action_taskDetailsFragment_to_createTask"
-            app:destination="@id/createTask" />
+            app:destination="@id/createTask"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="classroomId"
             app:argType="string" />
         <action
             android:id="@+id/action_taskDetailsFragment_to_taskFragment"
-            app:destination="@id/taskFragment" />
+            app:destination="@id/taskFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_taskDetailsFragment_to_usersFinishedFragment"
-            app:destination="@id/usersFinishedFragment" />
+            app:destination="@id/usersFinishedFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_taskDetailsFragment_to_classroomFragment"
             app:destination="@id/classroomFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/classroomFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.progresee.views.LoginFragment"
-        android:label="LoginFragment" >
+        android:name="com.app.progrec.views.LoginFragment"
+        android:label="LoginFragment">
         <action
             android:id="@+id/action_loginFragment_to_classroomFragment"
             app:destination="@id/classroomFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.example.progresee.views.UserFragment"
-        android:label="UserFragment" >
+        android:name="com.app.progrec.views.UserFragment"
+        android:label="UserFragment">
         <action
             android:id="@+id/action_userFragment_to_classroomFragment"
             app:destination="@id/classroomFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/classroomFragment"
             app:popUpToInclusive="true" />
         <argument
@@ -145,15 +207,20 @@
     </fragment>
     <fragment
         android:id="@+id/createTask"
-        android:name="com.example.progresee.views.CreateTaskFragment"
+        android:name="com.app.progrec.views.CreateTaskFragment"
         android:label="CreateTask">
         <action
             android:id="@+id/action_createTask_to_taskFragment"
             app:destination="@id/taskFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@+id/taskFragment"
             app:popUpToInclusive="true" />
         <argument
+
             android:name="classroomId"
             app:argType="string" />
         <argument
@@ -163,8 +230,8 @@
     </fragment>
     <fragment
         android:id="@+id/usersFinishedFragment"
-        android:name="com.example.progresee.views.FinishedUsersFragment"
-        android:label="UsersFinishedFragment" >
+        android:name="com.app.progrec.views.FinishedUsersFragment"
+        android:label="UsersFinishedFragment">
         <argument
             android:name="classroomId"
             app:argType="string" />
@@ -173,6 +240,10 @@
             app:argType="string" />
         <action
             android:id="@+id/action_usersFinishedFragment_to_taskDetailsFragment"
-            app:destination="@id/taskDetailsFragment" />
+            app:destination="@id/taskDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 </navigation>

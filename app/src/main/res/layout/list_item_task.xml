@@ -7,11 +7,11 @@
 
         <variable
             name="task"
-            type="com.example.progresee.beans.Task" />
+            type="com.app.progrec.beans.Task" />
 
         <variable
             name="taskClickListener"
-            type="com.example.progresee.adapters.TaskClickListener" />
+            type="com.app.progrec.adapters.TaskClickListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -36,9 +36,10 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/progrec_font_title4"
                 android:id="@+id/task_title"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -52,6 +53,7 @@
                 app:taskTitle="@{task}" />
 
             <TextView
+                style="@style/progrec_font_caption"
                 android:id="@+id/due_by"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

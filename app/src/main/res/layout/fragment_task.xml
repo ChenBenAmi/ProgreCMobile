@@ -7,11 +7,11 @@
 
         <variable
             name="task"
-            type="com.example.progresee.beans.Task" />
+            type="com.app.progrec.beans.Task" />
 
         <variable
             name="taskViewModel"
-            type="com.example.progresee.viewmodels.TaskViewModel" />
+            type="com.app.progrec.viewmodels.TaskViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,7 @@
 
         <TextView
             android:id="@+id/empty_tasks_view"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
+            style="@style/progrec_font_title3"
             android:layout_width="wrap_content"
             android:visibility="gone"
             android:layout_height="wrap_content"

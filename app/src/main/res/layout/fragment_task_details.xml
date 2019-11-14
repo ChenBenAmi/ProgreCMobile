@@ -7,15 +7,15 @@
 
         <variable
             name="task"
-            type="com.example.progresee.beans.Task" />
+            type="com.app.progrec.beans.Task" />
 
         <variable
             name="exercise"
-            type="com.example.progresee.beans.Exercise" />
+            type="com.app.progrec.beans.Exercise" />
 
         <variable
             name="taskDetailsViewModel"
-            type="com.example.progresee.viewmodels.TaskDetailsViewModel" />
+            type="com.app.progrec.viewmodels.TaskDetailsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,102 +23,108 @@
         android:layout_height="match_parent"
         tools:context=".views.TaskFragment">
 
-        <TextView
-            android:id="@+id/desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/description"
-
-            app:layout_constraintBottom_toTopOf="@+id/task_desc"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.047"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/layout_progress_bar_task_details"
             layout="@layout/progress_bar_layout"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/desc"
+            style="@style/progrec_font_subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            app:layout_constraintBottom_toTopOf="@+id/task_desc"
+            app:layout_constraintEnd_toEndOf="@+id/task_desc"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/task_desc"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-
             android:id="@+id/task_desc"
+            style="@style/progrec_font_body1"
             android:layout_width="380dp"
-            android:layout_height="125dp"
-            app:layout_constraintBottom_toTopOf="@+id/resource_link"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border"
+            app:layout_constraintBottom_toTopOf="@+id/link"
+            app:layout_constraintEnd_toEndOf="@+id/link"
+            app:layout_constraintStart_toStartOf="@+id/link"
             app:layout_constraintTop_toBottomOf="@+id/desc"
             app:taskDescription="@{task}"
             tools:text="@string/task_desc_long_255" />
 
-        <TextView
-            android:id="@+id/task_due_by"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/exercises"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/link"
-            app:taskDueDate="@{task}"
-            tools:text="@string/due_by" />
-
-        <TextView
-            android:id="@+id/resource_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/links"
-            app:layout_constraintBottom_toTopOf="@+id/link"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_desc" />
 
         <TextView
             android:id="@+id/link"
             android:layout_width="380dp"
             android:layout_height="34dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border"
             android:lines="1"
-            app:layout_constraintBottom_toTopOf="@+id/task_due_by"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/resource_link"
+            app:layout_constraintBottom_toTopOf="@+id/number_of_exercises"
+            app:layout_constraintEnd_toEndOf="@+id/exercise_list"
+            app:layout_constraintStart_toStartOf="@+id/exercise_list"
+            app:layout_constraintTop_toBottomOf="@+id/task_desc"
             app:setLinks="@{task}" />
 
         <TextView
-            android:id="@+id/exercises"
+            android:id="@+id/task_due_by"
+            style="@style/progrec_font_caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/exercise_list"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/number_of_exercises"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/number_of_exercises"
+            app:layout_constraintTop_toTopOf="@+id/number_of_exercises"
+            app:taskDueDate="@{task}"
+            tools:text="@string/due_by" />
+
+        <TextView
+            android:id="@+id/number_of_exercises"
+            style="@style/progrec_font_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/exercise_list"
+            app:layout_constraintEnd_toStartOf="@+id/task_due_by"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_due_by"
+            app:layout_constraintTop_toBottomOf="@+id/link"
             tools:text="@string/number_of_exercises" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exercise_list"
-            android:layout_width="387dp"
-            android:layout_height="398dp"
+            android:layout_width="380dp"
+            android:layout_height="296dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exercises" />
+            app:layout_constraintTop_toBottomOf="@+id/number_of_exercises" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/empty_exercises_list"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
+            style="@style/progrec_font_title3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_exercises_available"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.639" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/createExercise_button"
@@ -130,10 +136,10 @@
             android:src="@drawable/fab"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.923"
+            app:layout_constraintHorizontal_bias="0.929"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.945" />
+            app:layout_constraintVertical_bias="0.952" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

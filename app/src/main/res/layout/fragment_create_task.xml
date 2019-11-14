@@ -8,11 +8,11 @@
 
         <variable
             name="task"
-            type="com.example.progresee.beans.Task" />
+            type="com.app.progrec.beans.Task" />
 
         <variable
             name="createTaskViewModel"
-            type="com.example.progresee.viewmodels.CreateTaskViewModel" />
+            type="com.app.progrec.viewmodels.CreateTaskViewModel" />
     </data>
 
 
@@ -26,58 +26,41 @@
             android:id="@+id/layout_progress_bar_create_task"
             layout="@layout/progress_bar_layout"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/create_classroom_title"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-
-        <Button
-            android:id="@+id/pick_date"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:onClick="@{()->createTaskViewModel.onPressedDatePick()}"
-            android:text="@string/end_date"
-            app:layout_constraintBottom_toTopOf="@+id/current_end_date_string"
-            app:layout_constraintEnd_toEndOf="@+id/current_end_date_string"
-            app:layout_constraintStart_toStartOf="@+id/current_end_date_string"
-            app:layout_constraintTop_toBottomOf="@+id/add_link_task" />
 
         <TextView
-            android:id="@+id/current_end_date_string"
+            android:id="@+id/create_task_title"
+            style="@style/progrec_font_title4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/current_end_date_string"
-            app:layout_constraintBottom_toTopOf="@+id/current_end_date"
-            app:layout_constraintEnd_toEndOf="@+id/current_end_date"
-            app:layout_constraintStart_toStartOf="@+id/current_end_date"
-            app:layout_constraintTop_toBottomOf="@+id/pick_date" />
-
-        <TextView
-            android:id="@+id/current_end_date"
-            setCurrentDate="@{1}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date_mock"
-            app:layout_constraintBottom_toTopOf="@+id/save_task"
-            app:layout_constraintEnd_toEndOf="@+id/save_task"
-            app:layout_constraintStart_toStartOf="@+id/save_task"
-            app:layout_constraintTop_toBottomOf="@+id/current_end_date_string" />
+            android:gravity="center"
+            android:text="@string/create_task"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_task_title"
+            app:layout_constraintEnd_toEndOf="@+id/edit_text_task_title"
+            app:layout_constraintStart_toStartOf="@+id/edit_text_task_title"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-
-            android:id="@+id/add_link_task"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:hint="@string/resource_link"
+            android:id="@+id/edit_text_task_title"
+            style="@style/progrec_font_body1"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/task_title"
             android:importantForAutofill="no"
-            android:inputType="textUri"
-            app:layout_constraintBottom_toTopOf="@+id/pick_date"
-            app:layout_constraintEnd_toEndOf="@+id/pick_date"
-            app:layout_constraintStart_toStartOf="@+id/pick_date"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_task_description" />
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_task_description"
+            app:layout_constraintEnd_toEndOf="@+id/edit_text_task_description"
+            app:layout_constraintStart_toStartOf="@+id/edit_text_task_description"
+            app:layout_constraintTop_toBottomOf="@+id/create_task_title" />
 
         <EditText
             android:id="@+id/edit_text_task_description"
+            style="@style/progrec_font_body1"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:hint="@string/task_description_max_255_characters"
@@ -89,35 +72,61 @@
             app:layout_constraintTop_toBottomOf="@+id/edit_text_task_title" />
 
         <EditText
-            android:id="@+id/edit_text_task_title"
+            android:id="@+id/add_link_task"
+            style="@style/progrec_font_body1"
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:hint="@string/task_title"
+            android:hint="@string/resource_link"
             android:importantForAutofill="no"
-            android:inputType="textCapWords"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_task_description"
-            app:layout_constraintEnd_toEndOf="@+id/edit_text_task_description"
-            app:layout_constraintStart_toStartOf="@+id/edit_text_task_description"
-            app:layout_constraintTop_toBottomOf="@+id/create_task_title" />
+            android:inputType="textUri"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@+id/pick_date"
+            app:layout_constraintEnd_toEndOf="@+id/pick_date"
+            app:layout_constraintStart_toStartOf="@+id/pick_date"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_task_description" />
+
+        <Button
+            android:id="@+id/pick_date"
+            style="@style/progrec_font_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->createTaskViewModel.onPressedDatePick()}"
+            android:text="@string/end_date"
+            app:layout_constraintBottom_toTopOf="@+id/current_end_date_string"
+            app:layout_constraintEnd_toEndOf="@+id/current_end_date_string"
+            app:layout_constraintStart_toStartOf="@+id/current_end_date_string"
+            app:layout_constraintTop_toBottomOf="@+id/add_link_task" />
+
 
         <TextView
-            android:id="@+id/create_task_title"
-            android:layout_width="276dp"
-            android:layout_height="37dp"
-            android:gravity="center"
-            android:text="@string/create_task"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_task_title"
-            app:layout_constraintEnd_toEndOf="@+id/edit_text_task_title"
-            app:layout_constraintStart_toStartOf="@+id/edit_text_task_title"
-            app:layout_constraintTop_toTopOf="parent" />
+            style="@style/progrec_font_caption"
+            android:id="@+id/current_end_date_string"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_end_date_string"
+            app:layout_constraintBottom_toTopOf="@+id/current_end_date"
+            app:layout_constraintEnd_toEndOf="@+id/current_end_date"
+            app:layout_constraintStart_toStartOf="@+id/current_end_date"
+            app:layout_constraintTop_toBottomOf="@+id/pick_date" />
+
+
+        <TextView
+            style="@style/progrec_font_caption"
+            android:id="@+id/current_end_date"
+            setCurrentDate="@{1}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_mock"
+            app:layout_constraintBottom_toTopOf="@+id/save_task"
+            app:layout_constraintEnd_toEndOf="@+id/save_task"
+            app:layout_constraintStart_toStartOf="@+id/save_task"
+            app:layout_constraintTop_toBottomOf="@+id/current_end_date_string" />
 
         <Button
             android:id="@+id/save_task"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
+            style="@style/progrec_font_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:onClick="@{()->createTaskViewModel.onSavePressed(editTextTaskTitle.getText().toString(),editTextTaskDescription.getText().toString(),addLinkTask.getText().toString(),currentEndDate.getText().toString())}"
             android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -8,7 +8,7 @@
 
         <variable
             name="userViewModel"
-            type="com.example.progresee.viewmodels.UserViewModel" />
+            type="com.app.progrec.viewmodels.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

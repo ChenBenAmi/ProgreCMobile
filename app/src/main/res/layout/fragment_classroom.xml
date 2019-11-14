@@ -7,7 +7,7 @@
 
         <variable
             name="classroomViewModel"
-            type="com.example.progresee.viewmodels.ClassroomViewModel" />
+            type="com.app.progrec.viewmodels.ClassroomViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,10 +38,10 @@
 
         <TextView
             android:id="@+id/empty_classroom_view"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
+            style="@style/progrec_font_title3"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="@string/no_classrooms_available"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

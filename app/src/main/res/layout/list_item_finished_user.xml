@@ -8,7 +8,7 @@
 
         <variable
             name="userFinished"
-            type="com.example.progresee.beans.FinishedUser" />
+            type="com.app.progrec.beans.FinishedUser" />
 
     </data>
 
@@ -25,50 +25,61 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardElevation="4dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="403dp"
+            android:layout_height="94dp">
 
 
             <TextView
                 android:id="@+id/email"
+                style="@style/progrec_font_body1"
+                userFinishedEmail="@{userFinished}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="2"
-                android:width="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/seanhed22_gmail_com"
-                userFinishedEmail="@{userFinished}"
-                 />
+                app:layout_constraintBottom_toTopOf="@+id/completed_on_timestamp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.036"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/completed_on_timestamp"
-                android:layout_width="wrap_content"
+                style="@style/progrec_font_body1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="2"
-                android:width="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/completed_on"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.695"
-                app:layout_constraintStart_toEndOf="@+id/email"
-                app:layout_constraintTop_toBottomOf="@+id/full_name"
-                app:layout_constraintVertical_bias="0.8"
+                app:layout_constraintEnd_toStartOf="@+id/exercise_status_finishedUserListItem"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
                 app:userFinishedTimestamp="@{userFinished}" />
 
             <CheckBox
                 android:id="@+id/exercise_status_finishedUserListItem"
-                android:layout_width="wrap_content"
+                userFinishedRadio="@{userFinished}"
+                android:layout_width="48dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                android:width="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:clickable="false"
-                userFinishedRadio="@{userFinished}"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/completed_on_timestamp"
+                app:layout_constraintTop_toBottomOf="@+id/email"
+                app:layout_constraintVertical_bias="1.0" />
 
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
